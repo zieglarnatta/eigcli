@@ -9,6 +9,7 @@ Library                SSHLibrary
 Suite Setup            Open Connection And Log In
 Suite Teardown         Close All Connections
 Resource          resource.robot
+Resource            resource.robot
 
 *** Test Cases ***
 Execute Hello World Echo Command And Verify Output
