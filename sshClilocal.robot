@@ -8,7 +8,6 @@ Documentation          This example demonstrates executing a command on a remote
 Library                SSHLibrary
 Suite Setup            Open Connection And Log In
 Suite Teardown         Close All Connections
-Resource          resource.robot
 Resource            resourceLocal.robot
 
 *** Test Cases ***
