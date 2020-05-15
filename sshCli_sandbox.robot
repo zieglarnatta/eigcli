@@ -11,14 +11,15 @@ Suite Teardown         Close All Connections
 Resource            resource.robot
 
 *** Test Cases ***
-Execute Help
-    [Tags]              Global
-    [Documentation]    Execute Help command and report all help topics
-    ${execute}=          Write              ps
-    Set client configuration  prompt=#
-    ${output}=         Read Until prompt
-    Sleep                5
+Execute configure
+    [Tags]              Configure
+    [Documentation]     Execute the show iptables & return all of the processes
+    ${execute}=          write              configure
+    set client configuration  prompt=#
+    ${output}=         read until prompt
     should not be empty     ${output}
+    should not contain   ${output}           -ash: help: not found
+    should contain  ${output}   (configure) #
 
 *** Keywords ***
 Open Connection And Log In
