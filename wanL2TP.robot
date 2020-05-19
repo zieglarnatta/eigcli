@@ -200,6 +200,17 @@ Enter options   #has problems, snow showing
     should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
+#exit from L2TP
+Exit from L2TP
+    [Tags]                     Config       WAN     wan0    conn_L2TP     exit_L2TP
+    [Documentation]            Exit the WAN L2TP Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write   top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
 #Execute template
 #    [Tags]                      template
 #    [Documentation]             Update , apply and then show -
