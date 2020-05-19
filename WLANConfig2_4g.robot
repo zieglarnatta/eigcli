@@ -85,7 +85,7 @@ Enter enable
    #should be empty             ${output}
    should contain              ${output}   (config-if-wlan-2.4g)#
    should not contain          ${output}   (config)#   (global)#
-   #need to incorporate a UI robot to check on this in teh admin
+   #need to incorporate a UI robot to check on this in the admin
 
 #enter all the security wpa and then back out
 Enter security WPA and then back out
