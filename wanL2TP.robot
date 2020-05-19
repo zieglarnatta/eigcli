@@ -14,18 +14,18 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-Enter PPTP and then back out to Global
-    [Tags]                      Config       WAN     wan0    conn_pptp  conn_pptp_in_out    pptp
-    [Documentation]             Fire off the conn pptp and then back out via top and then back in and back out via 3 exits
-    #configure -> interface ethernet wan0 -> conn pptp
+Enter L2TP and then back out to Global
+    [Tags]                      Config       WAN     wan0    conn_l2tp  conn_l2tp_in_out    l2tp
+    [Documentation]             Fire off the conn l2tp and then back out via top and then back in and back out via 3 exits
+    #configure -> interface ethernet wan0 -> conn l2tp
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     #sleep                       1
-    ${output}=                 write   conn pptp
+    ${output}=                 write   conn l2tp
     set client configuration  prompt=#
     ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-pptp)#
+    should contain              ${output}   (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
     #use top to go all the way back into Global Config
     ${output}=                  write   top
@@ -34,13 +34,13 @@ Enter PPTP and then back out to Global
     ${output}=         read until prompt
     should contain              ${output}   (global)#
     should not be empty         ${output}
-    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
     #use 3 exits to get back to global
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     sleep                       1
-    ${output}=                 write   conn pptp
+    ${output}=                 write   conn l2tp
     sleep                       1
     ${output}=                 write   exit
     sleep                       1
@@ -52,60 +52,60 @@ Enter PPTP and then back out to Global
     ${output}=         read until prompt
     should contain              ${output}   (global)#
     should not be empty         ${output}
-    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
 
-Execute conn pptp to Enter PPTP
-    [Tags]                      Config       WAN     wan0    conn_pptp
-    [Documentation]             Fire off the conn pptp and then verify it's in PPTP
-    #configure -> interface ethernet wan0 -> conn pptp
+Execute conn l2tp to Enter l2tp
+    [Tags]                      Config       WAN     wan0    conn_l2tp
+    [Documentation]             Fire off the conn l2tp and then verify it's in l2tp
+    #configure -> interface ethernet wan0 -> conn l2tp
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     #sleep                       1
-    ${output}=                 write   conn pptp
+    ${output}=                 write   conn l2tp
     set client configuration  prompt=#
     ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-pptp)#
+    should contain              ${output}   (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
-Enter mtu 1433   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_mtu
-    [Documentation]             Fire off the conn pptp and then set the mtu
-    ${output}=                  write  mtu 1433
+Enter mtu 1432   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_mtu
+    [Documentation]             Fire off the conn l2tp and then set the mtu
+    ${output}=                  write  mtu 1432
     sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   MTU=1433    (config-if-wan0-pptp)#
+    should contain              ${output}   MTU=1432    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
 Enter DNS
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_dns
-    [Documentation]             Fire off the conn pptp and then set the dns
-    ${output}=                  write  dns 8.8.8.8
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_dns
+    [Documentation]             Fire off the conn l2tp and then set the dns
+    ${output}=                  write  dns 192.168.0.205
     sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   DNS_SERVER1=8.8.8.8    (config-if-wan0-pptp)#
+    should contain              ${output}   DNS_SERVER1=192.168.0.205    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
-Enter PPTP IP
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_ip
+Enter l2tp IP
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_ip
     [Documentation]             Fire off the ip and then set the ip
-    ${output}=                  write  ip 192.168.0.204
+    ${output}=                  write  ip 192.168.0.206
     sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   IP_ADDR=192.168.0.204    (config-if-wan0-pptp)#
+    should contain              ${output}   IP_ADDR=192.168.0.206    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
 Enter netmask   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_netmask
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_netmask
     [Documentation]             Fire off the netmask and then set the netmask
     ${output}=                  write  netmask 255.255.0.0
     sleep                       1
@@ -113,11 +113,11 @@ Enter netmask   #has issues, not working, not showing
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   NETMASK=255.255.0.0    (config-if-wan0-pptp)#
+    should contain              ${output}   NETMASK=255.255.0.0    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
 Enter gateway   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_gateway
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_gateway
     [Documentation]             Fire off the netmask and then set the gateway
     ${output}=                  write  gateway 255.255.0.0
     sleep                       1
@@ -125,59 +125,59 @@ Enter gateway   #has issues, not working, not showing
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-pptp)#
+    should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
 Enter username   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_username
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_username
     [Documentation]             Fire off the username and then set the username
-    ${output}=                  write  username paul_dirac
+    ${output}=                  write  username ziegler_natta
     sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   USER_NAME=paul_dirac    (config-if-wan0-pptp)#
+    should contain              ${output}   USER_NAME=ziegler_natta    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
 Enter password   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_password
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_password
     [Documentation]             Fire off the password and then set the password
-    ${output}=                  write  password futurePurplePeopleEater
+    ${output}=                  write  password reduxProcessChemistry
     sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   PASSWORD=futurePurplePeopleEater    (config-if-wan0-pptp)#
+    should contain              ${output}   PASSWORD=reduxProcessChemistry    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
 Enter vpn   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_vpn
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_vpn
     [Documentation]             Fire off the vpn and then set the vpn
-    ${output}=                  write  vpn symantec.com
+    ${output}=                  write  vpn macaffee.com
     sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   VPN_SERVER=symantec.com    (config-if-wan0-pptp)#
+    should contain              ${output}   VPN_SERVER=macaffee.com    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
 Enter hostname
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_hostname
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_hostname
     [Documentation]             Fire off the hostname and then set the hostname
-    ${output}=                  write  host yeehaw2
+    ${output}=                  write  host yeehaw3
     sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   Hostname=yeehaw2    (config-if-wan0-pptp)#
+    should contain              ${output}   Hostname=yeehaw3    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
-Enter default route: enable  #has problems
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_defaultroute
+Enter default route: enable  #has problems not enabled
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_defaultroute
     [Documentation]             Fire off the default route and then set the default route
     ${output}=                  write  defaultroute enable
     sleep                       1
@@ -185,22 +185,10 @@ Enter default route: enable  #has problems
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-pptp)#
+    should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
-Enter Encrypt mppe128  #has problems, nothing shown
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_encrypt
-    [Documentation]             Fire off the encrypt and then set the encrytion to mppe128
-    ${output}=                  write  encrypt mppe128
-    sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   encrypt    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-
-Enter options   #has issues
+Enter options   #has problems, snow showing
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_options
     [Documentation]             Fire off the options and then set the options as ttyname
     ${output}=                  write  options ttyname
@@ -209,7 +197,7 @@ Enter options   #has issues
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-pptp)#
+    should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
 
 #Execute template
@@ -243,14 +231,14 @@ Enter options   #has issues
 #    sleep                       1
 #    should contain              ${output}   Connection to 192.168.0.1 closed.
 #    should be empty             ${output}
-#    should not contain          ${output}   (global)#   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
+#    should not contain          ${output}   (global)#   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
 #    #double ceck by firing off a "show" command and get back error as proof you're logged out
 #    ${output}=                 write   show
 #    ${output}=                  read
 #    sleep                       1
 #    should contain              ${output}   OSError: Socket is closed
 #    should not be empty             ${output}
-#    should not contain          ${output}   (global)#   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
+#    should not contain          ${output}   (global)#   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
 
 #Execute reboot
 #    [Tags]              Global     reboot
