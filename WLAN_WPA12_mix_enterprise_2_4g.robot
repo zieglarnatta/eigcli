@@ -34,13 +34,13 @@ Enter wpa12_mix_enterprise
 Set SSID for wpa12_mix_enterprise WLAN 2.4g
     [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
-    ${output}=                 write   ssid Smurfs
+    ${output}=                 write   ssid Snorks
     sleep                       1
     ${output}=                 write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
-    should contain              ${output}   SSID=Smurfs
+    should contain              ${output}   SSID=Snorks
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
 
 SSID Hide enabled
@@ -70,50 +70,50 @@ SSID broadcast
 Server IP
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_server
     [Documentation]             Fire off the password and check that password is updated
-    ${output}=                  write  server 192.168.0.253
+    ${output}=                  write  server 192.168.0.252
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  SERVER_IP=192.168.0.253
+    should contain              ${output}  SERVER_IP=192.168.0.252
 
 Port forwarding
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_port
     [Documentation]             Fire off the password and check that password is updated
-    ${output}=                  write  port 1809
+    ${output}=                  write  port 1808
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  PORT_FORWARD=1809
+    should contain              ${output}  PORT_FORWARD=1808
 
 Connection secret
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
-    ${output}=                  write  secret Gargamel321
+    ${output}=                  write  secret BestUnderwaterLife
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  CONNECTION_SECRET=Gargamel321
+    should contain              ${output}  CONNECTION_SECRET=BestUnderwaterLife
 
 maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
-    ${output}=                  write  maxclient 118
+    ${output}=                  write  maxclient 117
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=118
+    should contain              ${output}  MAX_CLIENTS=117
 
 Rekey key rotation interval
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_rekey
@@ -133,14 +133,14 @@ Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  rekey must between 600 - 86400
     #happy path 3596
-    ${output}=                  write  rekey 3580
+    ${output}=                  write  rekey 3579
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  KEY_ROTATION_INTERVAL=3580s
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
 
 #exit from WLAN wpa12_mix_enterprise 2.4g
 Exit from WLAN 2.4g wpa12_mix_enterprise
