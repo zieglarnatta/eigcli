@@ -15,7 +15,7 @@ Resource            resourceLocal.robot
 
 *** Test Cases ***
 #WLAN 5g WPA23 Mix personal
-WLAN 5g: Enter wpa23_mix personal
+WLAN 5g WPA23 mix personal: Enter wpa23_mix personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa23_mix_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> seecurity wpa23_mix
@@ -32,7 +32,7 @@ WLAN 5g: Enter wpa23_mix personal
     ${exit}=                  write   top
 
 
-WLAN 5g: Set SSID for wpa23_mix Personal WLAN 5g
+WLAN 5g WPA23 mix personal: Set SSID for wpa23_mix Personal WLAN 5g
     [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa23_mix_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
@@ -50,7 +50,7 @@ WLAN 5g: Set SSID for wpa23_mix Personal WLAN 5g
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
     ${exit}=                  write   top
 
-WLAN 5g: SSID Hide enabled
+WLAN 5g WPA23 mix personal: SSID Hide enabled
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa23_mix_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
     ${output}=                  write   top
@@ -68,7 +68,7 @@ WLAN 5g: SSID Hide enabled
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
     ${exit}=                  write   top
 
-WLAN 5g: SSID broadcast
+WLAN 5g WPA23 mix personal: SSID broadcast
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa23_mix_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
@@ -86,7 +86,7 @@ WLAN 5g: SSID broadcast
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}=                  write   top
 
-WLAN 5g: Password
+WLAN 5g WPA23 mix personal: Password
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa23_mix_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -104,7 +104,7 @@ WLAN 5g: Password
     should contain              ${output}  PASSWORD=GottaCatchThemAll
     ${exit}=                  write   top
 
-WLAN 5g: maxclient
+WLAN 5g WPA23 mix personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa23_mix_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
     ${output}=                  write   top
@@ -122,7 +122,7 @@ WLAN 5g: maxclient
     should contain              ${output}  MAX_CLIENTS=123
     ${exit}=                  write   top
 
-WLAN 5g: Rekey key rotation interval
+WLAN 5g WPA23 mix personal: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa23_mix_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
