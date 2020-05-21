@@ -2499,7 +2499,7 @@ WLAN 2.4g: Enter wpa12_mix personal
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g-wpa12-mix)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 
 WLAN 2.4g: Set SSID for wpa12_mix Personal WLAN 2.4g
@@ -2518,7 +2518,7 @@ WLAN 2.4g: Set SSID for wpa12_mix Personal WLAN 2.4g
     should not be empty         ${output}
     should contain              ${output}   SSID=Pikachu
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 2.4g: SSID Hide enabled
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_hide
@@ -2536,7 +2536,7 @@ WLAN 2.4g: SSID Hide enabled
     should not be empty         ${output}
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 2.4g: SSID broadcast
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_broadcast
@@ -2554,7 +2554,7 @@ WLAN 2.4g: SSID broadcast
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  HIDE_SSID=Disable
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 2.4g: Password
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_password
@@ -2572,7 +2572,7 @@ WLAN 2.4g: Password
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  PASSWORD=IchooseYou
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 2.4g: maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_maxclient
@@ -2590,7 +2590,7 @@ WLAN 2.4g: maxclient
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  MAX_CLIENTS=123
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 2.4g: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_rekey
@@ -2608,7 +2608,7 @@ WLAN 2.4g: Rekey key rotation interval
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 #exit from WLAN wpa12_mix 2.4g
 Exit from WLAN 2.4g wpa12_mix personal
@@ -2625,7 +2625,7 @@ Exit from WLAN 2.4g wpa12_mix personal
     set client configuration  prompt=#
     ${output}=         read until prompt
     should contain              ${output}   (global)#
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 #WLAN 2.4g WPA23 Mix personal
 WLAN 2.4g: Enter wpa23_mix personal
@@ -3346,7 +3346,7 @@ WLAN 2.4g WPA12 mix enterprise: Exit from WLAN 2.4g wpa12_mix_enterprise
 
 #WLAN 5g
 WLAN 5g: Enter Wifi 5g and then back out to Global
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_in_out
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> conn
     ${output}=                  write   top
@@ -3383,7 +3383,7 @@ WLAN 5g: Enter Wifi 5g and then back out to Global
     should not contain          ${output}   (config)#   (config-if-wlan-5g)#
 
 WLAN 5g: Enter disable
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_disable
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_disable
     [Documentation]             Fire off the disable and check that wifi 5g is disabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3400,7 +3400,7 @@ WLAN 5g: Enter disable
     ${exit}                     write  top
 
 WLAN 5g: Enter enable
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_enable
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_enable
     [Documentation]             Fire off the enable and check that wifi 5g is enabled
     ${exit}                     write  top
     ${output}=                  write   top
@@ -3420,7 +3420,7 @@ WLAN 5g: Enter enable
 
 #5g: Enter all the security wpa and then back out
 WLAN 5g: Enter security WPA and then back out
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                  write   top
@@ -3460,7 +3460,7 @@ WLAN 5g: Enter security WPA and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA2 and then back out
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa2_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa2_in_out
     [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3499,7 +3499,7 @@ WLAN 5g: Enter security WPA2 and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA3 and then back out
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa3_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa3_in_out
     [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3538,7 +3538,7 @@ WLAN 5g: Enter security WPA3 and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa3)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA12 Mix and then back out
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa12_mix_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa12_mix_in_out
     [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3577,7 +3577,7 @@ WLAN 5g: Enter security WPA12 Mix and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA23 mix and then back out
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa23_mix_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3616,7 +3616,7 @@ WLAN 5g: Enter security WPA23 mix and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA2 enterprise and then back out
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa2_enterprise_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa2_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3655,7 +3655,7 @@ WLAN 5g: Enter security WPA2 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA3 enterprise and then back out
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa3_enterprise_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3694,7 +3694,7 @@ WLAN 5g: Enter security WPA3 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa3-ent)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA12 mix enterprise and then back out
-    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa12_mix_enterprise_in_out
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa12_mix_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3735,7 +3735,7 @@ WLAN 5g: Enter security WPA12 mix enterprise and then back out
 
 #exit from WLAN 5g
 Exit from WLAN 5g
-    [Tags]                      Config  interface_wifi5g     interface_wifi5g_exit
+    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
     ${output}=                 write    top
     sleep                       1
@@ -4574,7 +4574,7 @@ WLAN 5g WPA12 mix personal: Enter wpa12_mix personal
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g-wpa12-mix)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 
 WLAN 5g WPA12 mix personal: Set SSID for wpa12_mix Personal WLAN 5g
@@ -4593,7 +4593,7 @@ WLAN 5g WPA12 mix personal: Set SSID for wpa12_mix Personal WLAN 5g
     should not be empty         ${output}
     should contain              ${output}   SSID=Pikachu
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: SSID Hide enabled
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_ssid_hide
@@ -4611,7 +4611,7 @@ WLAN 5g WPA12 mix personal: SSID Hide enabled
     should not be empty         ${output}
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: SSID broadcast
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_ssid_broadcast
@@ -4629,7 +4629,7 @@ WLAN 5g WPA12 mix personal: SSID broadcast
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  HIDE_SSID=Disable
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: Password
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_password
@@ -4647,7 +4647,7 @@ WLAN 5g WPA12 mix personal: Password
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  PASSWORD=IchooseYou
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_maxclient
@@ -4665,7 +4665,7 @@ WLAN 5g WPA12 mix personal: maxclient
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  MAX_CLIENTS=123
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_rekey
@@ -4683,7 +4683,7 @@ WLAN 5g WPA12 mix personal: Rekey key rotation interval
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 #exit from WLAN wpa12_mix 5g
 Exit from WLAN 5g wpa12_mix personal
@@ -4700,7 +4700,7 @@ Exit from WLAN 5g wpa12_mix personal
     set client configuration  prompt=#
     ${output}=         read until prompt
     should contain              ${output}   (global)#
-    ${exit}=                    write top
+    ${exit}=                    write   top
 
 #WLAN 5g WPA23 Mix personal
 WLAN 5g WPA23 mix personal: Enter wpa23_mix personal
@@ -5945,6 +5945,8 @@ Exit from WLAN Guest 2.4g WPA
     set client configuration  prompt=#
     ${output}=         read until prompt
     should contain              ${output}   (global)#
+
+
 
 #Execute template
 #    [Tags]                      template
