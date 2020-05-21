@@ -15,6 +15,7 @@ Resource            resourceLocal.robot
 Execute connect static Wan & then back out
     [Tags]                     Config       WAN     wan0    conn static     conn_static_in_out
     [Documentation]            Enters the WAN Static Configuration Mode, then use top & 3 exits to go back to Global Configuration
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -34,6 +35,7 @@ Execute connect static Wan & then back out
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
     #use 3 exits to get back to global
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -55,6 +57,7 @@ Execute connect static Wan & then back out
 Execute the mtu for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     mtu_static
     [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -75,6 +78,7 @@ Execute the mtu for WAN Static
 Execute the dns for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     dns_static
     [Documentation]            Enters the WAN Static Configuration Mode and to set dns as 8.8.8.8
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -95,6 +99,7 @@ Execute the dns for WAN Static
 Execute the ip for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     ip_static
     [Documentation]            Enters the WAN Static Configuration Mode and to set ip as 192.168.0.200
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -115,6 +120,7 @@ Execute the ip for WAN Static
 Execute the netmask for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     netmask_static
     [Documentation]            Enters the WAN Static Configuration Mode and to set netmask as 255.255.0.0
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -135,6 +141,7 @@ Execute the netmask for WAN Static
 Execute the gateway for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     gateway_static
     [Documentation]            Enters the WAN Static Configuration Mode and to set gateway as DEFAULT_GATEWAY=192.168.0.203
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static

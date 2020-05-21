@@ -8,18 +8,36 @@ Documentation          This example demonstrates executing a command on a remote
 Library                SSHLibrary
 Suite Setup            Open Connection And Log In
 Suite Teardown         Close All Connections
-Resource            resource.robot
+Resource            resourceLocal.robot
 
 *** Test Cases ***
-Execute configure
-    [Tags]              Configure
-    [Documentation]     Execute the show iptables & return all of the processes
-    ${execute}=          write              configure
+Execute conn pptp to Enter PPTP
+    [Tags]
+    [Documentation]             Fire off the conn pptp and then verify it's in wifi
+    #configure -> interface ethernet wan0 -> conn pptp
+   ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    #sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
     set client configuration  prompt=#
     ${output}=         read until prompt
-    should not be empty     ${output}
-    should not contain   ${output}           -ash: help: not found
-    should contain  ${output}   (configure) #
+    should contain              ${output}   (config-if-wlan-2.4g-wpa)#
+    should not contain          ${output}   (global)#   (config)#
+
+Set SSID for WPA Personal WLAN 2.4g
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    #configure -> interface wifi 2.4g -> conn
+    ${output}=                 write   ssid Super_Mario_Brothers
+    #sleep                       1
+    ${output}=                 write   show
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   SSID=Super_Mario_Brothers
+    should not contain          ${output}   (config)#   (global)#
 
 *** Keywords ***
 Open Connection And Log In

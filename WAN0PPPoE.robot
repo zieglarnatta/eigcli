@@ -15,6 +15,7 @@ Resource            resourceLocal.robot
 Execute connect PPPoE Wan & then back out
     [Tags]                     Config       WAN     wan0    conn pppoe     conn_pppoe_in_out
     [Documentation]            Enters the WAN PPPoE Configuration Mode, then use top & 3 exits to go back to Global Configuration
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -34,6 +35,7 @@ Execute connect PPPoE Wan & then back out
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pppoe)#
     #use 3 exits to get back to global
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -56,6 +58,7 @@ Execute connect PPPoE Wan & then back out
 Execute conn PPPoE to enter Wan PPPoE
     [Tags]                     Config       WAN     wan0    conn pppoe  conn_pppoe  enter_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and show default values
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -77,6 +80,7 @@ Execute conn PPPoE to enter Wan PPPoE
 Execute the mtu for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn pppoe  conn_pppoe     mtu_pppoe
     [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -98,6 +102,7 @@ Execute the mtu for WAN PPPoE
 Execute the dns for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     dns_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set dns as 8.8.8.8
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -119,6 +124,7 @@ Execute the dns for WAN PPPoE
 Execute the username for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     username_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set username as leroy_jenkins
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -140,6 +146,7 @@ Execute the username for WAN PPPoE
 Execute the password for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     password_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set password as atLeastWeHaveChicken
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -161,6 +168,7 @@ Execute the password for WAN PPPoE
 Execute the servicename for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     servicename_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -182,6 +190,7 @@ Execute the servicename for WAN PPPoE
 Execute the acname for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     acname_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -203,6 +212,7 @@ Execute the acname for WAN PPPoE
 Execute the options for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     options_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe

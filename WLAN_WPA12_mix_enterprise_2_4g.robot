@@ -18,6 +18,7 @@ Enter wpa12_mix_enterprise
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> seecurity wpa12_mix_enterprise
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -37,6 +38,7 @@ Enter wpa12_mix_enterprise
 Set SSID for wpa12_mix_enterprise WLAN 2.4g
     [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
@@ -56,6 +58,7 @@ Set SSID for wpa12_mix_enterprise WLAN 2.4g
 SSID Hide enabled
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
@@ -74,6 +77,7 @@ SSID Hide enabled
 SSID broadcast
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
@@ -91,6 +95,7 @@ SSID broadcast
 Server IP
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_server
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
@@ -108,6 +113,7 @@ Server IP
 Port forwarding
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_port
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
@@ -125,6 +131,7 @@ Port forwarding
 Connection secret
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
@@ -142,6 +149,7 @@ Connection secret
 maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
@@ -159,6 +167,7 @@ maxclient
 Rekey key rotation interval
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_rekey
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
     ${output}=                  write  security wpa12_mix_enterprise

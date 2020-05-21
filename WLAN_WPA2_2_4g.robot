@@ -18,10 +18,9 @@ Enter wpa2 personal
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> seecurity wpa2
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    #sleep                       1
     ${output}=                  write  security wpa2
     sleep                       1
     set client configuration    prompt=#
@@ -29,11 +28,17 @@ Enter wpa2 personal
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g-wpa2)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    ${exit}                     write  top
 
 
 Set SSID for wpa2 Personal WLAN 2.4g
     [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
     ${output}=                 write   ssid Wario_Brothers
     sleep                       1
     ${output}=                 write   show
@@ -46,6 +51,11 @@ Set SSID for wpa2 Personal WLAN 2.4g
 SSID Hide enabled
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
     ${output}=                  write  ssid hide
     sleep                       1
     ${output}=                 write   show
@@ -58,6 +68,11 @@ SSID Hide enabled
 SSID broadcast
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
     ${output}=                  write  ssid bcast
     sleep                       1
     ${output}=                 write   show
@@ -70,6 +85,11 @@ SSID broadcast
 Password
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_password
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
     ${output}=                  write  password PrincessPeach
     sleep                       1
     ${output}=                  write   show
@@ -82,6 +102,11 @@ Password
 PMF protected Management Frames
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_pmf
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
     ${output}=                  write  pmf required
     sleep                       1
     ${output}=                  write   show
@@ -94,6 +119,11 @@ PMF protected Management Frames
 maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
     ${output}=                  write  maxclient 120
     sleep                       1
     ${output}=                  write   show
@@ -106,6 +136,11 @@ maxclient
 Rekey key rotation interval
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_rekey
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
     ${output}=                  write  rekey 3599
     sleep                       1
     ${output}=                  write   show

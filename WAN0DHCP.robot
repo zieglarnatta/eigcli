@@ -15,6 +15,7 @@ Resource            resourceLocal.robot
 Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out & back out via top and 3 exits
     [Tags]                      Config      WAN     wan0    dhcp    conn_dhcp
     [Documentation]             Enters the WAN DHCP Configuration Mode
+    ${output}=                  write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp
@@ -35,6 +36,7 @@ Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out 
     should not contain          ${output}   -ash: show ntp: not found
     should contain              ${output}   (global)#
     #3 exits to get back to global
+    ${output}=                  write   top
     ${output}=                 write   configure
     #sleep                       1
     ${output}=                 write   interface ethernet wan0
@@ -56,6 +58,7 @@ Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out 
 Execute update DHCP mtu, apply and then show DHCP
     [Tags]                      Config      WAN     wan0    dhcp   mtu_dhcp
     [Documentation]             Update mtu, apply and then show DHCP
+    ${output}=                  write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp
@@ -77,6 +80,7 @@ Execute update DHCP mtu, apply and then show DHCP
 Execute update DHCP DNS and then show the applied result
     [Tags]                      Config      WAN     wan0    dhcp   dns_dhcp
     [Documentation]             Update DNS, apply and then show new DNS
+    ${output}=                  write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write    conn dhcp
@@ -100,6 +104,7 @@ Execute update DHCP DNS and then show the applied result
 Execute update DHCP host name & then show the applied result
     [Tags]                      Config      WAN     wan0    dhcp   host_DHCP
     [Documentation]             update host name as yeehaw, apply & then show it
+    ${output}=                  write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp
@@ -122,6 +127,7 @@ Execute update DHCP host name & then show the applied result
 Execute update DHCP querymode to normal (from aggresive default) & then show the applied result
     [Tags]                      Config      WAN     wan0    dhcp   querymode_DHCP
     [Documentation]             update query mode from Aggresive to Normal
+    ${output}=                  write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp

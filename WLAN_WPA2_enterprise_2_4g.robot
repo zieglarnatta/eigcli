@@ -18,10 +18,9 @@ Enter wpa2_enterprise
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> seecurity wpa2_enterprise
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
-    #sleep                       1
     ${output}=                  write  security wpa2_enterprise
     sleep                       1
     set client configuration    prompt=#
@@ -29,11 +28,16 @@ Enter wpa2_enterprise
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g-wpa2-ent)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    ${exit}=                    write   top
 
 
 Set SSID for wpa2_enterprise WLAN 2.4g
     [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     ${output}=                 write   ssid Pokemon
     sleep                       1
     ${output}=                 write   show
@@ -42,10 +46,15 @@ Set SSID for wpa2_enterprise WLAN 2.4g
     should not be empty         ${output}
     should contain              ${output}   SSID=Pokemon
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+    ${exit}=                  write   top
 
 SSID Hide enabled
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     ${output}=                  write  ssid hide
     sleep                       1
     ${output}=                 write   show
@@ -54,10 +63,15 @@ SSID Hide enabled
     should not be empty         ${output}
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-2.4g)#
+    ${exit}=                  write   top
 
 SSID broadcast
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     ${output}=                  write  ssid bcast
     sleep                       1
     ${output}=                 write   show
@@ -66,10 +80,15 @@ SSID broadcast
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  HIDE_SSID=Disable
+    ${exit}=                  write   top
 
 Server IP
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_server
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     ${output}=                  write  server 192.168.0.253
     sleep                       1
     ${output}=                  write   show
@@ -78,10 +97,15 @@ Server IP
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  SERVER_IP=192.168.0.253
+    ${exit}=                  write   top
 
 Port forwarding
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_port
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     ${output}=                  write  port 1811
     sleep                       1
     ${output}=                  write   show
@@ -90,10 +114,15 @@ Port forwarding
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  PORT_FORWARD=1811
+    ${exit}=                  write   top
 
 Connection secret
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     ${output}=                  write  secret PowerExtreme!
     sleep                       1
     ${output}=                  write   show
@@ -102,10 +131,15 @@ Connection secret
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  CONNECTION_SECRET=PowerExtreme!
+    ${exit}=                  write   top
 
 PMF protected Management Frames
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_pmf
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     ${output}=                  write  pmf required
     sleep                       1
     ${output}=                  write   show
@@ -114,10 +148,15 @@ PMF protected Management Frames
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
+    ${exit}=                  write   top
 
 maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     ${output}=                  write  maxclient 123
     sleep                       1
     ${output}=                  write   show
@@ -126,10 +165,15 @@ maxclient
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  MAX_CLIENTS=123
+    ${exit}=                  write   top
 
 Rekey key rotation interval
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_rekey
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa2_enterprise
     #lower limit 600 test
     ${output}=                  write  rekey 400
     sleep                       1
@@ -153,6 +197,7 @@ Rekey key rotation interval
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
+    ${exit}=                  write   top
 
 #exit from WLAN wpa2_enterprise 2.4g
 Exit from WLAN 2.4g wpa2_enterprise

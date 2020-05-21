@@ -14,6 +14,7 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
+#PPTP
 Enter PPTP and then back out to Global
     [Tags]                      Config       WAN     wan0    conn_pptp  conn_pptp_in_out    pptp
     [Documentation]             Fire off the conn pptp and then back out via top and then back in and back out via 3 exits
@@ -59,18 +60,21 @@ Execute conn pptp to Enter PPTP
     [Documentation]             Fire off the conn pptp and then verify it's in PPTP
     #configure -> interface ethernet wan0 -> conn pptp
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    #sleep                       1
     ${output}=                 write   conn pptp
+    sleep                       1
     set client configuration  prompt=#
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter mtu 1433   #has problems not showing
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_mtu
     [Documentation]             Fire off the conn pptp and then set the mtu
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
     ${output}=                  write  mtu 1433
     sleep                       1
     ${output}=                  write  show
@@ -79,10 +83,16 @@ Enter mtu 1433   #has problems not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   MTU=1433    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter DNS
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_dns
     [Documentation]             Fire off the conn pptp and then set the dns
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  dns 8.8.8.8
     sleep                       1
     ${output}=                  write  show
@@ -91,10 +101,15 @@ Enter DNS
     ${output}=                  read    #until prompt
     should contain              ${output}   DNS_SERVER1=8.8.8.8    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter PPTP IP
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_ip
     [Documentation]             Fire off the ip and then set the ip
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  ip 192.168.0.204
     sleep                       1
     ${output}=                  write  show
@@ -103,10 +118,16 @@ Enter PPTP IP
     ${output}=                  read    #until prompt
     should contain              ${output}   IP_ADDR=192.168.0.204    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter netmask   #has issues, not working, not showing
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_netmask
     [Documentation]             Fire off the netmask and then set the netmask
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  netmask 255.255.0.0
     sleep                       1
     ${output}=                  write  show
@@ -115,10 +136,16 @@ Enter netmask   #has issues, not working, not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   NETMASK=255.255.0.0    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter gateway   #has issues, not working, not showing
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_gateway
     [Documentation]             Fire off the netmask and then set the gateway
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  gateway 255.255.0.0
     sleep                       1
     ${output}=                  write  show
@@ -127,10 +154,16 @@ Enter gateway   #has issues, not working, not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter username   #has problems not showing
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_username
     [Documentation]             Fire off the username and then set the username
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  username paul_dirac
     sleep                       1
     ${output}=                  write  show
@@ -139,10 +172,16 @@ Enter username   #has problems not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   USER_NAME=paul_dirac    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter password   #has problems not showing
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_password
     [Documentation]             Fire off the password and then set the password
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  password futurePurplePeopleEater
     sleep                       1
     ${output}=                  write  show
@@ -151,10 +190,16 @@ Enter password   #has problems not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   PASSWORD=futurePurplePeopleEater    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter vpn   #has problems not showing
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_vpn
     [Documentation]             Fire off the vpn and then set the vpn
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  vpn symantec.com
     sleep                       1
     ${output}=                  write  show
@@ -163,10 +208,16 @@ Enter vpn   #has problems not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   VPN_SERVER=symantec.com    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter hostname
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_hostname
     [Documentation]             Fire off the hostname and then set the hostname
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  host yeehaw2
     sleep                       1
     ${output}=                  write  show
@@ -175,10 +226,16 @@ Enter hostname
     ${output}=                  read    #until prompt
     should contain              ${output}   Hostname=yeehaw2    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter default route: enable  #has problems
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_defaultroute
     [Documentation]             Fire off the default route and then set the default route
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  defaultroute enable
     sleep                       1
     ${output}=                  write  show
@@ -187,10 +244,16 @@ Enter default route: enable  #has problems
     ${output}=                  read    #until prompt
     should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter Encrypt mppe128  #has problems, nothing shown
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_encrypt
     [Documentation]             Fire off the encrypt and then set the encrytion to mppe128
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  encrypt mppe128
     sleep                       1
     ${output}=                  write  show
@@ -199,10 +262,16 @@ Enter Encrypt mppe128  #has problems, nothing shown
     ${output}=                  read    #until prompt
     should contain              ${output}   encrypt    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter options   #has issues
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_options
     [Documentation]             Fire off the options and then set the options as ttyname
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
     ${output}=                  write  options ttyname
     sleep                       1
     ${output}=                  write  show
@@ -211,6 +280,7 @@ Enter options   #has issues
     ${output}=                  read    #until prompt
     should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 #exit from pptp
 Exit from PPPoE

@@ -19,6 +19,7 @@ Enter Wifi 2.4g and then back out to Global
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> conn 
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -36,6 +37,7 @@ Enter Wifi 2.4g and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config)#   (config-if-wlan-2.4g)#
     #use 3 exits to get back to global
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
@@ -71,6 +73,7 @@ Enter enable
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_enable
     [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
     ${exit}                     write  top
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
     sleep                       1
@@ -90,6 +93,7 @@ Enter security WPA and then back out
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
     sleep                       1
@@ -109,6 +113,7 @@ Enter security WPA and then back out
     should contain              ${output}   (global)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
@@ -147,6 +152,7 @@ Enter security WPA2 and then back out
     should contain              ${output}   (global)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
@@ -185,6 +191,7 @@ Enter security WPA3 and then back out
     should contain              ${output}   (global)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa3)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
@@ -223,6 +230,7 @@ Enter security WPA12 Mix and then back out
     should contain              ${output}   (global)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
@@ -261,6 +269,7 @@ Enter security WPA23 mix and then back out
     should contain              ${output}   (global)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
@@ -279,7 +288,7 @@ Enter security WPA23 mix and then back out
 Enter security WPA2 enterprise and then back out
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa2_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
-    ${exit}                     write  top
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
     sleep                       1
@@ -299,6 +308,7 @@ Enter security WPA2 enterprise and then back out
     should contain              ${output}   (global)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
@@ -317,7 +327,7 @@ Enter security WPA2 enterprise and then back out
 Enter security WPA3 enterprise and then back out
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
-    ${exit}                     write  top
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
     sleep                       1
@@ -337,6 +347,7 @@ Enter security WPA3 enterprise and then back out
     should contain              ${output}   (global)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa3-ent)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
@@ -355,7 +366,7 @@ Enter security WPA3 enterprise and then back out
 Enter security WPA12 mix enterprise and then back out
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa12_mix_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
-    ${exit}                     write  top
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
     sleep                       1
@@ -375,6 +386,7 @@ Enter security WPA12 mix enterprise and then back out
     should contain              ${output}   (global)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g

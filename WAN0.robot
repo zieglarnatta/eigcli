@@ -14,6 +14,7 @@ Resource            resourceLocal.robot
 WAN Configuration Wan0 Mode and back out via exit & top
     [Tags]                      WAN     wan0    wan_configuration
     [Documentation]             Enters the WAN Configuration Mode and retrest to global with top and then repeat but with two exits
+    ${output}=                  write   top
     ${output}=                 write   configure
     #sleep                       1
     ${output}=                 write   interface ethernet wan0
@@ -33,6 +34,7 @@ WAN Configuration Wan0 Mode and back out via exit & top
     should not contain          ${output}   (config)#   (config-if-wan0)#
     should contain              ${output}   (global)#
     #use two exits to get back to global configuration
+    ${output}=                  write   top
     ${output}=                 write   configure
     #sleep                       1
     ${output}=                 write   interface ethernet wan0

@@ -14,15 +14,16 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
+#L2TP
 Enter L2TP and then back out to Global
     [Tags]                      Config       WAN     wan0    conn_l2tp  conn_l2tp_in_out    l2tp
     [Documentation]             Fire off the conn l2tp and then back out via top and then back in and back out via 3 exits
     #configure -> interface ethernet wan0 -> conn l2tp
+    ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    #sleep                       1
     ${output}=                 write   conn l2tp
+    sleep                       1
     set client configuration  prompt=#
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-l2tp)#
@@ -58,6 +59,7 @@ Execute conn l2tp to Enter l2tp
     [Tags]                      Config       WAN     wan0    conn_l2tp
     [Documentation]             Fire off the conn l2tp and then verify it's in l2tp
     #configure -> interface ethernet wan0 -> conn l2tp
+    ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -67,10 +69,16 @@ Execute conn l2tp to Enter l2tp
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter mtu 1432   #has problems not showing
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_mtu
     [Documentation]             Fire off the conn l2tp and then set the mtu
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  mtu 1432
     sleep                       1
     ${output}=                  write  show
@@ -79,10 +87,16 @@ Enter mtu 1432   #has problems not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   MTU=1432    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter DNS
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_dns
     [Documentation]             Fire off the conn l2tp and then set the dns
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  dns 192.168.0.205
     sleep                       1
     ${output}=                  write  show
@@ -91,10 +105,16 @@ Enter DNS
     ${output}=                  read    #until prompt
     should contain              ${output}   DNS_SERVER1=192.168.0.205    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter l2tp IP
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_ip
     [Documentation]             Fire off the ip and then set the ip
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  ip 192.168.0.206
     sleep                       1
     ${output}=                  write  show
@@ -103,10 +123,16 @@ Enter l2tp IP
     ${output}=                  read    #until prompt
     should contain              ${output}   IP_ADDR=192.168.0.206    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter netmask   #has issues, not working, not showing
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_netmask
     [Documentation]             Fire off the netmask and then set the netmask
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  netmask 255.255.0.0
     sleep                       1
     ${output}=                  write  show
@@ -115,10 +141,16 @@ Enter netmask   #has issues, not working, not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   NETMASK=255.255.0.0    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter gateway   #has issues, not working, not showing
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_gateway
     [Documentation]             Fire off the netmask and then set the gateway
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  gateway 255.255.0.0
     sleep                       1
     ${output}=                  write  show
@@ -127,10 +159,17 @@ Enter gateway   #has issues, not working, not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+    ${exit}                     write  top
 
 Enter username   #has problems not showing
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_username
     [Documentation]             Fire off the username and then set the username
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  username ziegler_natta
     sleep                       1
     ${output}=                  write  show
@@ -139,10 +178,16 @@ Enter username   #has problems not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   USER_NAME=ziegler_natta    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter password   #has problems not showing
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_password
     [Documentation]             Fire off the password and then set the password
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  password reduxProcessChemistry
     sleep                       1
     ${output}=                  write  show
@@ -151,10 +196,16 @@ Enter password   #has problems not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   PASSWORD=reduxProcessChemistry    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter vpn   #has problems not showing
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_vpn
     [Documentation]             Fire off the vpn and then set the vpn
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  vpn macaffee.com
     sleep                       1
     ${output}=                  write  show
@@ -163,10 +214,16 @@ Enter vpn   #has problems not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   VPN_SERVER=macaffee.com    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter hostname
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_hostname
     [Documentation]             Fire off the hostname and then set the hostname
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  host yeehaw3
     sleep                       1
     ${output}=                  write  show
@@ -175,10 +232,16 @@ Enter hostname
     ${output}=                  read    #until prompt
     should contain              ${output}   Hostname=yeehaw3    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter default route: enable  #has problems not enabled
     [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_defaultroute
     [Documentation]             Fire off the default route and then set the default route
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  defaultroute enable
     sleep                       1
     ${output}=                  write  show
@@ -187,10 +250,16 @@ Enter default route: enable  #has problems not enabled
     ${output}=                  read    #until prompt
     should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 Enter options   #has problems, snow showing
     [Tags]                      Config       WAN     wan0    conn_pptp  pptp_options
     [Documentation]             Fire off the options and then set the options as ttyname
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
     ${output}=                  write  options ttyname
     sleep                       1
     ${output}=                  write  show
@@ -199,6 +268,7 @@ Enter options   #has problems, snow showing
     ${output}=                  read    #until prompt
     should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
 
 #exit from L2TP
 Exit from L2TP
