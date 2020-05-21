@@ -3149,6 +3149,200 @@ Exit from WLAN 2.4g wpa3_enterprise
     ${output}=         read until prompt
     should contain              ${output}   (global)#
 
+#WLAN 2.4g WPA12 mix enterprise
+WLAN 2.4g: Enter wpa12_mix_enterprise
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_enter
+    [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 2.4g -> seecurity wpa12_mix_enterprise
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    ${exit}                     write  top
+    #${exit}                     read
+    #should contain              ${exit}   (global)#
+
+
+WLAN 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    ${output}=                 write   ssid Snorks
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}   SSID=Snorks
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+    ${exit}                     write  top
+    #${exit}                     read
+    #should contain              ${exit}   (global)#
+
+WLAN 2.4g WPA12 mix enterprise: SSID Hide enabled
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix_enterprise
+    ${output}=                  write  ssid hide
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}  HIDE_SSID=Enable
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-2.4g)#
+    ${exit}                     write  top
+    #${exit}                     read
+    #should contain              ${exit}   (global)#
+
+WLAN 2.4g WPA12 mix enterprise: SSID broadcast
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix_enterprise
+    ${output}=                  write  ssid bcast
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  HIDE_SSID=Disable
+    ${exit}                     write  top
+    #should contain              ${exit}   (global)#
+
+WLAN 2.4g WPA12 mix enterprise: Server IP
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_server
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix_enterprise
+    ${output}=                  write  server 192.168.0.252
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  SERVER_IP=192.168.0.252
+    ${exit}                     write  top
+    #should contain              ${exit}   (global)#
+
+WLAN 2.4g WPA12 mix enterprise: Port forwarding
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_port
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix_enterprise
+    ${output}=                  write  port 1808
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  PORT_FORWARD=1808
+    ${exit}                     write  top
+    #should contain              ${exit}   (global)#
+
+WLAN 2.4g WPA12 mix enterprise: Connection secret
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_secret
+    [Documentation]             Fire off the secret and check that secret is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix_enterprise
+    ${output}=                  write  secret BestUnderwaterLife
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  CONNECTION_SECRET=BestUnderwaterLife
+    ${exit}                     write  top
+    #should contain              ${exit}   (global)#
+
+WLAN 2.4g WPA12 mix enterprise: maxclient
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_maxclient
+    [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix_enterprise
+    ${output}=                  write  maxclient 117
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  MAX_CLIENTS=117
+    ${exit}                     write  top
+    #should contain              ${exit}   (global)#
+
+WLAN 2.4g WPA12 mix enterprise: Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_rekey
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix_enterprise
+    #lower limit 600 test
+    ${output}=                  write  rekey 400
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  rekey must between 600 - 86400
+    #upper limit 86400 test
+    ${output}=                  write  rekey 90000
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  rekey must between 600 - 86400
+    #happy path 3596
+    ${output}=                  write  rekey 3579
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
+    ${exit}                     write  top
+    #should contain              ${exit}   (global)#
+
+#exit from WLAN wpa12_mix_enterprise 2.4g
+WLAN 2.4g WPA12 mix enterprise: Exit from WLAN 2.4g wpa12_mix_enterprise
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_exit
+    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global configuration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
 
 #WLAN 5g
 WLAN 5g: Enter Wifi 5g and then back out to Global
