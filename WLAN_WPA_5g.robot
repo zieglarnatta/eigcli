@@ -14,33 +14,25 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-#WLAN 2.4g: WPA
-WLAN 2.4g: WPA Enter WPA personal
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_enter
-    [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa
+WLAN 5g: WPA Enter WPA personal
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_enter
+    [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 5g -> seecurity wpa
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
-    sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     ${output}=                  write  security wpa
     sleep                       1
     set client configuration    prompt=#
     ${output}=                  read until prompt
     should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-2.4g-wpa)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
-    ${exit}=                  write   top
+    should contain              ${output}   (config-if-wlan-5g-wpa)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
 
 
-WLAN 2.4g: WPA Set SSID for WPA Personal WLAN 2.4g
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa_ssid
+WLAN 5g: WPA Set SSID for WPA Personal WLAN 5g
+    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
-    ${output}=                  write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
-    ${output}=                  write  security wpa
-    sleep                       1
     ${output}=                 write   ssid Super_Mario_Brothers
     sleep                       1
     ${output}=                 write   show
@@ -48,17 +40,11 @@ WLAN 2.4g: WPA Set SSID for WPA Personal WLAN 2.4g
     ${output}=                  read
     should not be empty         ${output}
     should contain              ${output}   SSID=Super_Mario_Brothers
-    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
-    ${exit}=                  write   top
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
 
-WLAN 2.4g: WPA SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
-    ${output}=                  write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
-    ${output}=                  write  security wpa
-    sleep                       1
+WLAN 5g: WPA SSID Hide enabled
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
     ${output}=                  write  ssid hide
     sleep                       1
     ${output}=                 write   show
@@ -66,85 +52,60 @@ WLAN 2.4g: WPA SSID Hide enabled
     ${output}=                  read
     should not be empty         ${output}
     should contain              ${output}  HIDE_SSID=Enable
-    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
-    ${exit}=                  write   top
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
 
-WLAN 2.4g: WPA SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_broadcast
-    [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
-    ${output}=                  write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
-    ${output}=                  write  security wpa
-    sleep                       1
+WLAN 5g: WPA SSID broadcast
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write  ssid bcast
     sleep                       1
     ${output}=                 write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
-    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  HIDE_SSID=Disable
-    ${exit}=                  write   top
 
-WLAN 2.4g: WPA Password
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_password
+WLAN 5g: WPA Password
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_password
     [Documentation]             Fire off the password and check that password is updated
-    ${output}=                  write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
-    ${output}=                  write  security wpa
-    sleep                       1
     ${output}=                  write  password YoshiYoshi
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
-    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  PASSWORD=YoshiYoshi
-    ${exit}=                  write   top
 
-WLAN 2.4g: WPA maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_maxclient
+WLAN 5g: WPA maxclient
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
-    ${output}=                  write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
-    ${output}=                  write  security wpa
-    sleep                       1
     ${output}=                  write  maxclient 120
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
-    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  MAX_CLIENTS=120
-    ${exit}=                  write   top
 
-WLAN 2.4g: WPA Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_rekey
+WLAN 5g: WPA Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_rekey
     [Documentation]             Fire off the password and check that password is updated
-    ${output}=                  write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
-    ${output}=                  write  security wpa
-    sleep                       1
     ${output}=                  write  rekey 3599
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
-    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
-    ${exit}=                  write   top
 
-#exit from WLAN WPA 2.4g
-Exit from WLAN 2.4g WPA
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
+#exit from WLAN WPA 5g
+Exit from WLAN 5g WPA
+    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa_exit
+    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
     ${output}=                 write    top
     sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -183,14 +144,14 @@ Exit from WLAN 2.4g WPA
 #    sleep                       1
 #    should contain              ${output}   Connection to 192.168.0.1 closed.
 #    should be empty             ${output}
-#    should not contain          ${output}   (global)#   (config)#   (config-if-wlan-2.4g)#
+#    should not contain          ${output}   (global)#   (config)#   (config-if-wlan-5g)#
 #    #double ceck by firing off a "show" command and get back error as proof you're logged out
 #    ${output}=                 write   show
 #    ${output}=                  read
 #    sleep                       1
 #    should contain              ${output}   OSError: Socket is closed
 #    should not be empty             ${output}
-#    should not contain          ${output}   (global)#   (config)#   (config-if-wlan-2.4g)#
+#    should not contain          ${output}   (global)#   (config)#   (config-if-wlan-5g)#
 
 #Execute reboot
 #    [Tags]              Global     reboot

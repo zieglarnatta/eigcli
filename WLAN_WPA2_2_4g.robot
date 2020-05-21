@@ -14,7 +14,8 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-Enter wpa2 personal
+#WLAN WPA2 2.4g
+WLAN WPA2 2.4g: wpa2 personal
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> seecurity wpa2
@@ -31,7 +32,7 @@ Enter wpa2 personal
     ${exit}                     write  top
 
 
-Set SSID for wpa2 Personal WLAN 2.4g
+WLAN WPA2 2.4g: Set SSID for wpa2 Personal WLAN 2.4g
     [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
@@ -48,7 +49,7 @@ Set SSID for wpa2 Personal WLAN 2.4g
     should contain              ${output}   SSID=Wario_Brothers
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
 
-SSID Hide enabled
+WLAN WPA2 2.4g: SSID Hide enabled
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
     ${output}=                  write   top
@@ -65,7 +66,7 @@ SSID Hide enabled
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
 
-SSID broadcast
+WLAN WPA2 2.4g: SSID broadcast
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
@@ -82,7 +83,7 @@ SSID broadcast
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  HIDE_SSID=Disable
 
-Password
+WLAN WPA2 2.4g: Password
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -99,7 +100,7 @@ Password
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  PASSWORD=PrincessPeach
 
-PMF protected Management Frames
+WLAN WPA2 2.4g: PMF protected Management Frames
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_pmf
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -116,7 +117,7 @@ PMF protected Management Frames
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
 
-maxclient
+WLAN WPA2 2.4g: maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
     ${output}=                  write   top
@@ -133,7 +134,7 @@ maxclient
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  MAX_CLIENTS=120
 
-Rekey key rotation interval
+WLAN WPA2 2.4g: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top

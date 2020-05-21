@@ -2062,6 +2062,1359 @@ Exit from WLAN 2.4g
     ${output}=         read until prompt
     should contain              ${output}   (global)#
 
+#WLAN 2.4g: WPA
+WLAN 2.4g: WPA Enter WPA personal
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_enter
+    [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 2.4g -> seecurity wpa
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    ${exit}=                  write   top
+
+
+WLAN 2.4g: WPA Set SSID for WPA Personal WLAN 2.4g
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                 write   ssid Super_Mario_Brothers
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}   SSID=Super_Mario_Brothers
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+    ${exit}=                  write   top
+
+WLAN 2.4g: WPA SSID Hide enabled
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write  ssid hide
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}  HIDE_SSID=Enable
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+    ${exit}=                  write   top
+
+WLAN 2.4g: WPA SSID broadcast
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write  ssid bcast
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  HIDE_SSID=Disable
+    ${exit}=                  write   top
+
+WLAN 2.4g: WPA Password
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_password
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write  password YoshiYoshi
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  PASSWORD=YoshiYoshi
+    ${exit}=                  write   top
+
+WLAN 2.4g: WPA maxclient
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_maxclient
+    [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write  maxclient 120
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  MAX_CLIENTS=120
+    ${exit}=                  write   top
+
+WLAN 2.4g: WPA Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_rekey
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write  rekey 3599
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
+    ${exit}=                  write   top
+
+#exit from WLAN WPA 2.4g
+Exit from WLAN 2.4g WPA
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa_exit
+    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#WLAN WPA2 2.4g
+WLAN WPA2 2.4g: wpa2 personal
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enter
+    [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 2.4g -> seecurity wpa2
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa2)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    ${exit}                     write  top
+
+
+WLAN WPA2 2.4g: Set SSID for wpa2 Personal WLAN 2.4g
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                 write   ssid Wario_Brothers
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}   SSID=Wario_Brothers
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+
+WLAN WPA2 2.4g: SSID Hide enabled
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  ssid hide
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}  HIDE_SSID=Enable
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+
+WLAN WPA2 2.4g: SSID broadcast
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  ssid bcast
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  HIDE_SSID=Disable
+
+WLAN WPA2 2.4g: Password
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_password
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  password PrincessPeach
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  PASSWORD=PrincessPeach
+
+WLAN WPA2 2.4g: PMF protected Management Frames
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_pmf
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  pmf required
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
+
+WLAN WPA2 2.4g: maxclient
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_maxclient
+    [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  maxclient 120
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  MAX_CLIENTS=120
+
+WLAN WPA2 2.4g: Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_rekey
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  rekey 3599
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
+
+#exit from WLAN wpa2 2.4g
+Exit from WLAN 2.4g wpa2
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_exit
+    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#WLAN 2.4g WPA3
+WLAN 2.4g WPA3: Enter wpa3 personal
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enter
+    [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 2.4g -> seecurity wpa3
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa3)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    ${exit}=                    write   top
+
+WLAN 2.4g WPA3: Set SSID for wpa3 Personal WLAN 2.4g
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa3_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${exit}=                    write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                 write   ssid Luigi
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}   SSID=Luigi
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+    ${exit}=                    write   top
+
+WLAN 2.4g WPA3: SSID Hide enabled
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  ssid hide
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}  HIDE_SSID=Enable
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+    ${exit}=                  write   top
+
+WLAN 2.4g WPA3: SSID broadcast
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  ssid bcast
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  HIDE_SSID=Disable
+    ${exit}=                  write   top
+
+WLAN 2.4g WPA3: Password
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_password
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  password MaMaMiaHereIGoAgain
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  PASSWORD=MaMaMiaHereIGoAgain
+    ${exit}=                  write   top
+
+WLAN 2.4g WPA3: maxclient
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_maxclient
+    [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  maxclient 122
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  MAX_CLIENTS=122
+    ${exit}=                  write   top
+
+WLAN 2.4g WPA3: Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_rekey
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  rekey 3597
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3597s
+    ${exit}=                  write   top
+
+#exit from WLAN wpa3 2.4g
+Exit from WLAN 2.4g wpa3
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa3_exit
+    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#WLAN WPA 12 mix personal 2.4g
+WLAN 2.4g: Enter wpa12_mix personal
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enter
+    [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 2.4g -> seecurity wpa12_mix
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa12-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    ${exit}=                    write top
+
+
+WLAN 2.4g: Set SSID for wpa12_mix Personal WLAN 2.4g
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                 write   ssid Pikachu
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}   SSID=Pikachu
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+    ${exit}=                    write top
+
+WLAN 2.4g: SSID Hide enabled
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  ssid hide
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}  HIDE_SSID=Enable
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
+    ${exit}=                    write top
+
+WLAN 2.4g: SSID broadcast
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  ssid bcast
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  HIDE_SSID=Disable
+    ${exit}=                    write top
+
+WLAN 2.4g: Password
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_password
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  password IchooseYou
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  PASSWORD=IchooseYou
+    ${exit}=                    write top
+
+WLAN 2.4g: maxclient
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_maxclient
+    [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  maxclient 123
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  MAX_CLIENTS=123
+    ${exit}=                    write top
+
+WLAN 2.4g: Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_rekey
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  rekey 3596
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
+    ${exit}=                    write top
+
+#exit from WLAN wpa12_mix 2.4g
+Exit from WLAN 2.4g wpa12_mix personal
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_exit
+    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    ${exit}=                    write top
+
+#WLAN 5g
+WLAN 5g: Enter Wifi 5g and then back out to Global
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_in_out
+    [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 5g -> conn
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config)#   (global)#
+    #use top to go all the way back into Global Config
+    ${output}=                  write   top
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config)#   (config-if-wlan-5g)#
+    #use 3 exits to get back to global
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config)#   (config-if-wlan-5g)#
+
+WLAN 5g: Enter disable
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_disable
+    [Documentation]             Fire off the disable and check that wifi 5g is disabled
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  disable
+    sleep                       10
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    #sleep                       1
+    should contain              ${output}  (config-if-wlan-5g)#
+    should not contain          ${output}   (config)#   (global)#
+    #need to incorporate a UI robot to check on this in teh admin
+    ${exit}                     write  top
+
+WLAN 5g: Enter enable
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_enable
+    [Documentation]             Fire off the enable and check that wifi 5g is enabled
+    ${exit}                     write  top
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  enable
+    sleep                       10
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    sleep                       1
+    #should be empty             ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config)#   (global)#
+    #need to incorporate a UI robot to check on this in the admin
+    ${exit}                     write  top
+
+#5g: Enter all the security wpa and then back out
+WLAN 5g: Enter security WPA and then back out
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa_in_out
+    [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
+    ${exit}                     write  top
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa)#     (config)#   (config-if-wlan-5g)#
+    #use one exit to go back to (config-if-wlan-5g)#
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    #sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write   exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa)#     (config)#    (global)#
+
+WLAN 5g: Enter security WPA2 and then back out
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa2_in_out
+    [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  security wpa2
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa2)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#   (config-if-wlan-5g)#
+    #use one exit to go back to (config-if-wlan-5g)#
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    #sleep                       1
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#    (global)#
+
+WLAN 5g: Enter security WPA3 and then back out
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa3_in_out
+    [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  security wpa3
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa3)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa3)#     (config)#   (config-if-wlan-5g)#
+    #use one exit to go back to (config-if-wlan-5g)#
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    #sleep                       1
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa3)#     (config)#    (global)#
+
+WLAN 5g: Enter security WPA12 Mix and then back out
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa12_mix_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa12-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#     (config)#   (config-if-wlan-5g)#
+    #use one exit to go back to (config-if-wlan-5g)#
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#     (config)#    (global)#
+
+WLAN 5g: Enter security WPA23 mix and then back out
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa23_mix_in_out
+    [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  security wpa23_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa23-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#     (config)#   (config-if-wlan-5g)#
+    #use one exit to go back to (config-if-wlan-5g)#
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#     (config)#    (global)#
+
+WLAN 5g: Enter security WPA2 enterprise and then back out
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa2_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa2-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config)#   (config-if-wlan-5g)#
+    #use one exit to go back to (config-if-wlan-5g)#
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    #sleep                       1
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config)#    (global)#
+
+WLAN 5g: Enter security WPA3 enterprise and then back out
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa3_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa3-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa3-ent)#     (config)#   (config-if-wlan-5g)#
+    #use one exit to go back to (config-if-wlan-5g)#
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    #sleep                       1
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa3-ent)#     (config)#    (global)#
+
+WLAN 5g: Enter security WPA12 mix enterprise and then back out
+    [Tags]                      Config  interface_wifi5g  interface_wifi5g_security_wpa12_mix_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa12-mix-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa12-mix-ent)#     (config)#   (config-if-wlan-5g)#
+    #use one exit to go back to (config-if-wlan-5g)#
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> WLAN 5g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa12-mix-ent)#     (config)#    (global)#
+
+
+#exit from WLAN 5g
+Exit from WLAN 5g
+    [Tags]                      Config  interface_wifi5g     interface_wifi5g_exit
+    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#WLAN Guest 5g
+WLAN 5g Guest: Enter WLAN Guest 5g and then back out to Global
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_in_out
+    [Documentation]             Fire off the interface wifi guest 5g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi guest 5g -> conn
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config)#   (global)#
+    #use top to go all the way back into Global Config
+    ${output}=                  write   top
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config)#   (config-if-wlan-guest-5g)#
+    #use 3 exits to get back to global
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config)#   (config-if-wlan-guest-5g)#
+
+WLAN 5g Guest: Enter disable
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_disable
+    [Documentation]             Fire off the disable and check that wifi 5g is disabled
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  disable
+    sleep                       10
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    #sleep                       1
+    should contain              ${output}  (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config)#   (global)#
+    #need to incorporate a UI robot to check on this in the admin
+    ${exit}                     write  top
+
+WLAN 5g Guest: Enter enable
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_enable
+    [Documentation]             Fire off the enable and check that wifi 5g is enabled
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  enable
+    sleep                       10
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    sleep                       1
+    #should be empty             ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config)#   (global)#
+    #need to incorporate a UI robot to check on this in the admin
+    ${exit}                     write  top
+
+#WLAN 5g: Enter all the security wpa and then back out
+WLAN 5g Guest: Enter security WPA and then back out
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
+    [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#    (config-if-wlan-5g-wpa)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa)#     (config)#   (config-if-wlan-guest-5g)#
+    #use one exit to go back to (config-if-wlan-guest-5g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    #sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write   exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config-if-wlan-guest-5g-wpa)#  (config-if-wlan-5g-wpa)#     (config)#    (global)#
+
+WLAN 5g Guest: Enter security WPA2 and then back out
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa2_in_out
+    [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa2
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa2)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#   (config-if-wlan-guest-5g-wpa2)#
+    #use one exit to go back to (config-if-wlan-guest-5g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    #sleep                       1
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#    (global)#
+
+WLAN 5g Guest: Enter security WPA3 and then back out
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa3_in_out
+    [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa3
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa3)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa3)#     (config)#   (config-if-wlan-guest-5g-wpa3)#
+    #use one exit to go back to (config-if-wlan-guest-5g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    #sleep                       1
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config-if-wlan-guest-5g-wpa3)#    (config-if-wlan-5g-wpa3)#     (config)#    (global)#
+
+WLAN 5g Guest: Enter security WPA12 Mix and then back out
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa12_mix_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa12-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-5g)#  (config-if-wlan-5g-wpa12-mix)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#     (config)#   (config-if-wlan-guest-5g-wpa12-mix)#
+    #use one exit to go back to (config-if-wlan-guest-5g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#    (config-if-wlan-5gx)#     (config)#    (global)#
+
+WLAN 5g Guest: Enter security WPA23 mix and then back out
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa23_mix_in_out
+    [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa23_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa23-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-5g)#  (config-if-wlan-5g-wpa23-mix)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#     (config)#   (config-if-wlan-guest-5g-wpa23-mix)#
+    #use one exit to go back to (config-if-wlan-guest-5g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    #sleep                       1
+    ${output}=                  write  security wpa23_mix
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#    (config-if-wlan-guest-5g-wpa23-mix)#     (config)#    (global)#
+
+WLAN 5g Guest: Enter security WPA2 enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa2_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa2-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-5g)#  (config-if-wlan-5g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config)#   (config-if-wlan-guest-5g)#    (config-if-wlan-guest-5g-wpa2-ent)#
+    #use one exit to go back to (config-if-wlan-guest-5g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    #sleep                       1
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config-if-wlan-guest-5g-wpa2-ent)#     (config)#    (global)#
+
+WLAN 5g Guest: Enter security WPA3 enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa3_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa3-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-5g)#  (config-if-wlan-5g-wpa3-ent)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa3-ent)#     (config)#   (config-if-wlan-guest-5g)#    (config-if-wlan-guest-5g-wpa3-ent)#
+    #use one exit to go back to (config-if-wlan-guest-5g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    #sleep                       1
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config-if-wlan-guest-5g-wpa3-ent)#     (config-if-wlan-5g-wpa3-ent)#     (config)#    (global)#
+
+WLAN 5g Guest: Enter security WPA12 mix enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa12_mix_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa12-mix-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-5g)#  (config-if-wlan-5g-wpa12-mix-ent)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-5g-wpa12-mix-ent)#     (config)#   (config-if-wlan-guest-5g)#   (config-if-wlan-guest-5g-wpa12-mix-ent)#
+    #use one exit to go back to (config-if-wlan-guest-5g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g)#
+    should not contain          ${output}   (config-if-wlan-guest-5g-wpa12-mix-ent)#    (config-if-wlan-5g-wpa12-mix-ent)#     (config)#    (global)#
+
+
+#exit from WLAN 5g Guest
+Exit from WLAN 5g Guest
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_exit
+    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
 #Execute template
 #    [Tags]                      template
 #    [Documentation]             Update , apply and then show -
