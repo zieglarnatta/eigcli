@@ -14,8 +14,8 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-#WLAN 5g WPA3
-WLAN 5g WPA3: Enter wpa3 personal
+#WLAN 5g WPA3 personal
+WLAN 5g WPA3 personal: Enter wpa3 personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> seecurity wpa3
@@ -31,7 +31,7 @@ WLAN 5g WPA3: Enter wpa3 personal
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
     ${exit}=                    write   top
 
-WLAN 5g WPA3: Set SSID for wpa3 Personal WLAN 5g
+WLAN 5g WPA3 personal: Set SSID for wpa3 Personal WLAN 5g
     [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa3_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${exit}=                    write   top
@@ -49,7 +49,7 @@ WLAN 5g WPA3: Set SSID for wpa3 Personal WLAN 5g
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
     ${exit}=                    write   top
 
-WLAN 5g WPA3: SSID Hide enabled
+WLAN 5g WPA3 personal: SSID Hide enabled
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
     ${output}=                  write   top
@@ -67,7 +67,7 @@ WLAN 5g WPA3: SSID Hide enabled
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
     ${exit}=                  write   top
 
-WLAN 5g WPA3: SSID broadcast
+WLAN 5g WPA3 personal: SSID broadcast
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
@@ -85,7 +85,7 @@ WLAN 5g WPA3: SSID broadcast
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}=                  write   top
 
-WLAN 5g WPA3: Password
+WLAN 5g WPA3 personal: Password
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -103,9 +103,9 @@ WLAN 5g WPA3: Password
     should contain              ${output}  PASSWORD=MaMaMiaHereIGoAgain
     ${exit}=                  write   top
 
-WLAN 5g WPA3: maxclient
+WLAN 5g WPA3 personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -121,9 +121,9 @@ WLAN 5g WPA3: maxclient
     should contain              ${output}  MAX_CLIENTS=122
     ${exit}=                  write   top
 
-WLAN 5g WPA3: Rekey key rotation interval
+WLAN 5g WPA3 personal: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_rekey
-    [Documentation]             Fire off the password and check that password is updated
+    [Documentation]             Fire off the rekey and check that rekey is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
