@@ -14,7 +14,8 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-WLAN 5g: WPA Enter WPA personal
+#WLAN 5g WPA Personal
+WLAN 5g WPA personal: Enter WPA personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> seecurity wpa
@@ -28,11 +29,17 @@ WLAN 5g: WPA Enter WPA personal
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g-wpa)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    ${exit}=                  write   top
 
 
-WLAN 5g: WPA Set SSID for WPA Personal WLAN 5g
+WLAN 5g WPA personal: Set SSID for WPA Personal WLAN 5g
     [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa
+    sleep                       1
     ${output}=                 write   ssid Super_Mario_Brothers
     sleep                       1
     ${output}=                 write   show
@@ -41,10 +48,16 @@ WLAN 5g: WPA Set SSID for WPA Personal WLAN 5g
     should not be empty         ${output}
     should contain              ${output}   SSID=Super_Mario_Brothers
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
+    ${exit}=                  write   top
 
-WLAN 5g: WPA SSID Hide enabled
+WLAN 5g WPA personal: SSID Hide enabled
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa
+    sleep                       1
     ${output}=                  write  ssid hide
     sleep                       1
     ${output}=                 write   show
@@ -53,10 +66,16 @@ WLAN 5g: WPA SSID Hide enabled
     should not be empty         ${output}
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
+    ${exit}=                  write   top
 
-WLAN 5g: WPA SSID broadcast
+WLAN 5g WPA personal: SSID broadcast
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa
+    sleep                       1
     ${output}=                  write  ssid bcast
     sleep                       1
     ${output}=                 write   show
@@ -65,10 +84,16 @@ WLAN 5g: WPA SSID broadcast
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  HIDE_SSID=Disable
+    ${exit}=                  write   top
 
-WLAN 5g: WPA Password
+WLAN 5g WPA personal: Password
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_password
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa
+    sleep                       1
     ${output}=                  write  password YoshiYoshi
     sleep                       1
     ${output}=                  write   show
@@ -77,10 +102,16 @@ WLAN 5g: WPA Password
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  PASSWORD=YoshiYoshi
+    ${exit}=                  write   top
 
-WLAN 5g: WPA maxclient
+WLAN 5g WPA personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa
+    sleep                       1
     ${output}=                  write  maxclient 120
     sleep                       1
     ${output}=                  write   show
@@ -89,10 +120,16 @@ WLAN 5g: WPA maxclient
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  MAX_CLIENTS=120
+    ${exit}=                  write   top
 
-WLAN 5g: WPA Rekey key rotation interval
+WLAN 5g WPA personal: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_rekey
     [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                  write  security wpa
+    sleep                       1
     ${output}=                  write  rekey 3599
     sleep                       1
     ${output}=                  write   show
@@ -101,9 +138,10 @@ WLAN 5g: WPA Rekey key rotation interval
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
+    ${exit}=                  write   top
 
 #exit from WLAN WPA 5g
-Exit from WLAN 5g WPA
+Exit from WLAN 5g WPA personal
     [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
     ${output}=                 write    top

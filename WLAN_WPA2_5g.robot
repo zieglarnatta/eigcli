@@ -14,8 +14,8 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-#WLAN WPA2 5g
-WLAN WPA2 5g: wpa2 personal
+#WLAN WPA2 personal 5g
+WLAN WPA2 5g personal: wpa2 personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> seecurity wpa2
@@ -32,7 +32,7 @@ WLAN WPA2 5g: wpa2 personal
     ${exit}                     write  top
 
 
-WLAN WPA2 5g: Set SSID for wpa2 Personal WLAN 5g
+WLAN WPA2 5g personal: Set SSID for wpa2 Personal WLAN 5g
     [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa2_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
@@ -48,8 +48,9 @@ WLAN WPA2 5g: Set SSID for wpa2 Personal WLAN 5g
     should not be empty         ${output}
     should contain              ${output}   SSID=Wario_Brothers
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
+    ${exit}                     write  top
 
-WLAN WPA2 5g: SSID Hide enabled
+WLAN WPA2 5g personal: SSID Hide enabled
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
     ${output}=                  write   top
@@ -65,8 +66,9 @@ WLAN WPA2 5g: SSID Hide enabled
     should not be empty         ${output}
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
+    ${exit}                     write  top
 
-WLAN WPA2 5g: SSID broadcast
+WLAN WPA2 5g personal: SSID broadcast
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
@@ -82,8 +84,9 @@ WLAN WPA2 5g: SSID broadcast
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  HIDE_SSID=Disable
+    ${exit}                     write  top
 
-WLAN WPA2 5g: Password
+WLAN WPA2 5g personal: Password
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -99,8 +102,9 @@ WLAN WPA2 5g: Password
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  PASSWORD=PrincessPeach
+    ${exit}                     write  top
 
-WLAN WPA2 5g: PMF protected Management Frames
+WLAN WPA2 5g personal: PMF protected Management Frames
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_pmf
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -116,8 +120,9 @@ WLAN WPA2 5g: PMF protected Management Frames
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
+    ${exit}                     write  top
 
-WLAN WPA2 5g: maxclient
+WLAN WPA2 5g personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
     ${output}=                  write   top
@@ -133,8 +138,9 @@ WLAN WPA2 5g: maxclient
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  MAX_CLIENTS=120
+    ${exit}                     write  top
 
-WLAN WPA2 5g: Rekey key rotation interval
+WLAN WPA2 5g personal: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -150,9 +156,10 @@ WLAN WPA2 5g: Rekey key rotation interval
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
+    ${exit}                     write  top
 
 #exit from WLAN wpa2 5g
-Exit from WLAN 5g wpa2
+Exit from WLAN 5g wpa2 personal
     [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa2_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
     ${output}=                 write    top
