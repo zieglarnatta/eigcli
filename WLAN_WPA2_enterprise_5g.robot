@@ -15,7 +15,7 @@ Resource            resourceLocal.robot
 
 *** Test Cases ***
 #WLAN 5g WPA2 enterprise
-Enter wpa2_enterprise
+WLAN 5g WPA2 Enterprise: Enter wpa2_enterprise
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> seecurity wpa2_enterprise
@@ -32,7 +32,7 @@ Enter wpa2_enterprise
     ${exit}=                    write   top
 
 
-Set SSID for wpa2_enterprise WLAN 5g
+WLAN 5g WPA2 Enterprise: Set SSID for wpa2_enterprise WLAN 5g
     [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa2_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
@@ -49,7 +49,7 @@ Set SSID for wpa2_enterprise WLAN 5g
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
     ${exit}=                  write   top
 
-SSID Hide enabled
+WLAN 5g WPA2 Enterprise: SSID Hide enabled
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
     ${output}=                  write   top
@@ -66,7 +66,7 @@ SSID Hide enabled
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-5g)#
     ${exit}=                  write   top
 
-SSID broadcast
+WLAN 5g WPA2 Enterprise: SSID broadcast
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
@@ -83,7 +83,7 @@ SSID broadcast
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}=                  write   top
 
-Server IP
+WLAN 5g WPA2 Enterprise: Server IP
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_server
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -100,7 +100,7 @@ Server IP
     should contain              ${output}  SERVER_IP=192.168.0.253
     ${exit}=                  write   top
 
-Port forwarding
+WLAN 5g WPA2 Enterprise: Port forwarding
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_port
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -117,7 +117,7 @@ Port forwarding
     should contain              ${output}  PORT_FORWARD=1811
     ${exit}=                  write   top
 
-Connection secret
+WLAN 5g WPA2 Enterprise: Connection secret
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
     ${output}=                  write   top
@@ -134,7 +134,7 @@ Connection secret
     should contain              ${output}  CONNECTION_SECRET=PowerExtreme!
     ${exit}=                  write   top
 
-PMF protected Management Frames
+WLAN 5g WPA2 Enterprise: PMF protected Management Frames
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_pmf
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
@@ -151,7 +151,7 @@ PMF protected Management Frames
     should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
     ${exit}=                  write   top
 
-maxclient
+WLAN 5g WPA2 Enterprise: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
     ${output}=                  write   top
@@ -168,7 +168,7 @@ maxclient
     should contain              ${output}  MAX_CLIENTS=123
     ${exit}=                  write   top
 
-Rekey key rotation interval
+WLAN 5g WPA2 Enterprise: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_rekey
     [Documentation]             Fire off the key rotattion and check that upper & lower limits tested & key rotataion is updated
     ${output}=                  write   top

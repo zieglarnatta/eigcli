@@ -4840,6 +4840,203 @@ Exit from WLAN 5g wpa23_mix
     ${output}=         read until prompt
     should contain              ${output}   (global)#
 
+#WLAN 5g WPA2 enterprise
+WLAN 5g WPA2 Enterprise: Enter wpa2_enterprise
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_enter
+    [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 5g -> seecurity wpa2_enterprise
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-5g-wpa2-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    ${exit}=                    write   top
+
+
+WLAN 5g WPA2 Enterprise: Set SSID for wpa2_enterprise WLAN 5g
+    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa2_enterprise_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                 write   ssid Pokemon
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}   SSID=Pokemon
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
+    ${exit}=                  write   top
+
+WLAN 5g WPA2 Enterprise: SSID Hide enabled
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  ssid hide
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}  HIDE_SSID=Enable
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-5g)#
+    ${exit}=                  write   top
+
+WLAN 5g WPA2 Enterprise: SSID broadcast
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  ssid bcast
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  HIDE_SSID=Disable
+    ${exit}=                  write   top
+
+WLAN 5g WPA2 Enterprise: Server IP
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_server
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  server 192.168.0.253
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  SERVER_IP=192.168.0.253
+    ${exit}=                  write   top
+
+WLAN 5g WPA2 Enterprise: Port forwarding
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_port
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  port 1811
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  PORT_FORWARD=1811
+    ${exit}=                  write   top
+
+WLAN 5g WPA2 Enterprise: Connection secret
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_secret
+    [Documentation]             Fire off the secret and check that secret is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  secret PowerExtreme!
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  CONNECTION_SECRET=PowerExtreme!
+    ${exit}=                  write   top
+
+WLAN 5g WPA2 Enterprise: PMF protected Management Frames
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_pmf
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  pmf required
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
+    ${exit}=                  write   top
+
+WLAN 5g WPA2 Enterprise: maxclient
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_maxclient
+    [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  maxclient 123
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  MAX_CLIENTS=123
+    ${exit}=                  write   top
+
+WLAN 5g WPA2 Enterprise: Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_rekey
+    [Documentation]             Fire off the key rotattion and check that upper & lower limits tested & key rotataion is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
+    ${output}=                  write  security wpa2_enterprise
+    #lower limit 600 test
+    ${output}=                  write  rekey 400
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  rekey must between 600 - 86400
+    #upper limit 86400 test
+    ${output}=                  write  rekey 90000
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  rekey must between 600 - 86400
+    #happy path 3596
+    ${output}=                  write  rekey 3596
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
+    ${exit}=                  write   top
+
+#exit from WLAN wpa2_enterprise 5g
+Exit from WLAN 5g wpa2_enterprise
+    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa2_enterprise_exit
+    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global configuration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
 
 
 #Execute template
