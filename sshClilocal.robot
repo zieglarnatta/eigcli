@@ -164,10 +164,10 @@ Global ntp server configuration and show it (has problem matching with double sp
     #set client configuration   prompt=(config)#
     ${ntp}=                 read     #until prompt        loglevel=WARN
     #${ntp}=                  read until      www.yahoo.com        loglevel=WARN
-    should not be empty         ${output}
-    should not contain          ${output}   -ash: ntp: not found    -ash: show ntp: not found
-    should contain              ${output}   (config)#     www.yahoo.com
-    should contain             ${output}   NTP Server1 www.yahoo.com    loglevel=WARN
+    should not be empty         ${ntp}
+    should not contain          ${ntp}   -ash: ntp: not found    -ash: show ntp: not found
+    should contain              ${ntp}   (config)#     www.yahoo.com
+    should contain             ${ntp}   NTP Server1 www.yahoo.com    loglevel=WARN
     ${exit}                     write  top
     ${exit}                     read
     should contain              ${exit}   (global)#
