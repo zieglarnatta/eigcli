@@ -5,6 +5,7 @@ Documentation          This example demonstrates executing a command on a remote
 ...                    Notice how connections are handled as part of the suite setup and
 ...                    teardown. This saves some time when executing several test cases.
 
+Library                Process
 Library                SSHLibrary
 Suite Setup            Open Connection And Log In
 Suite Teardown         Close All Connections
@@ -49,29 +50,41 @@ Global Ping on 8.8.8.8
     ${output}=              read until      0% packet loss
     should not be empty     ${output}
     should not contain      ${output}       -ash: help: not found
+    should contain              ${output}   0% packet loss
+
+#Start python http server
+#    [Tags]                      Global     ar_ping     ar  ping     python_http_server
+#    [Documentation]             Start the http python on localhost on port 7272
+#    run process                 python  ${server}   timeout=3min	on_timeout=continue
 
 Global AR Ping
     [Tags]                      Global     ar_ping     ar  ping
     [Documentation]             Execute Ap Ping and report ping stats
-    write                       ping 8.8.8.8 -I 172.16.23.166 repeat 3
-    Sleep                       6
-    ${read}=                    read
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    ${output}=                  read
+    #Start the http python on localhost on port 7272
+    run process                 python  ${server}   timeout=3min	on_timeout=continue
+    #start ar ping
+    write                       ping ip localhost:7272 source 192.168.0.1 repeat 3
+    Sleep                       2
+    ${output}=                  read until      0% packet loss
     should not be empty         ${output}
-    should not contain          ${output}       -ash: help: not found
-    should not contain          ${output}   Syntax error: Illegal command line
+    should not contain          ${output}   Syntax error: Illegal command line    -ash: help: not found
+    should contain              ${output}   0% packet loss
 
 Global Traceroute
     [Tags]                      Global  traceroute
     [Documentation]             Execute Traceroute and report traceroute stats
-    ${execute}=                 write       traceroute 8.8.8.8 resolve source 172.16.23.166 interface eth0
-    Sleep                       6
-    set client configuration    prompt=#
-    ${output}=                  read until   traceroute: can't set multicast source interface
-    should not contain          ${output}    Usage: ping [OPTIONS] HOST
-    should not Be Equal         ${output}    traceroute: can't set multicast source interface    #has issues
+    #Start the http python on localhost on port 7272
+    #run process                 python  ${server}   timeout=3min	on_timeout=continue
+    #start traceroute
+    #${execute}=                 write       traceroute 8.8.8.8 resolve source localhost:7272 interface eth0
+    #${execute}=                 write       traceroute localhost:7272
+    ${execute}=                 write       traceroute 192.168.1.250
+    Sleep                       12
+    set client configuration    prompt=(global)#
+    ${output}=                  read until prompt   #traceroute: can't set multicast source interface
+    should not contain          ${output}    Usage: ping [OPTIONS] HOST     Syntax error: Illegal parameter
+    should not contain          ${output}   traceroute: can't set multicast source interface    Illegal command line
+    #should not Be Equal         ${output}    traceroute: can't set multicast source interface    #has issues
 
 Global ps Processes
     [Tags]                      Global   ps
@@ -107,8 +120,9 @@ Global show iptables
     [Tags]                      Global  show    iptables    show_iptables
     [Documentation]             Execute the show iptables & return all of the processes
     ${execute}=                 write   show iptables
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
+    sleep                       2
+    #set client configuration    prompt=(global)#
+    ${output}=                  read    #until prompt
     should not be empty         ${output}
     should not contain          ${output}   -ash: help: not found
 
@@ -141,26 +155,30 @@ Execute "configure" and then "exit", then back to "confgiure" and use "top" to g
 Global ntp server configuration and show it (has problem matching with double space, also ntp updated on server 6 rather than 1)
     [Tags]                      System_Configuration    ntp     show_ntp
     [Documentation]             Execute the ntp & confirm ntp servers are updated & shown
+    ${execute}=                 write   top
     ${execute}=                 write   configure
     ${execute}=                 write   ntp server1 www.yahoo.com server2 www.google.com        loglevel=DEBUG
-    ${output}=                  write   show ntp       loglevel=DEBUG
-    #set client configuration   prompt=#
-    #${output}=                 read until prompt        loglevel=DEBUG
-    ${output}=                  read until      www.yahoo.com        loglevel=DEBUG
+    sleep                       1
+    ${ntp}=                  write   show ntp       loglevel=DEBUG
+    sleep                       2
+    #set client configuration   prompt=(config)#
+    ${ntp}=                 read     #until prompt        loglevel=WARN
+    #${ntp}=                  read until      www.yahoo.com        loglevel=WARN
     should not be empty         ${output}
-    should not contain          ${output}   -ash: ntp: not found
-    should not contain          ${output}   -ash: show ntp: not found
-    should contain              ${output}   (config)#
+    should not contain          ${output}   -ash: ntp: not found    -ash: show ntp: not found
     should contain              ${output}   (config)#     www.yahoo.com
-    should contain             ${output}   NTP Server1 www.yahoo.com
+    should contain             ${output}   NTP Server1 www.yahoo.com    loglevel=WARN
     ${exit}                     write  top
     ${exit}                     read
     should contain              ${exit}   (global)#
+    ${output}=                 write   echo Stahp it NTP!
+    should be equal             ${output} Stahp it NTP!
 
 #WAN0
 WAN Configuration Wan0 Mode and back out via exit & top
     [Tags]                      WAN     wan0    wan_configuration
     [Documentation]             Enters the WAN Configuration Mode and retrest to global with top and then repeat but with two exits
+    ${execute}=                 write   top
     ${output}=                 write   configure
     sleep                       1
     ${output}=                 write   interface ethernet wan0
@@ -209,6 +227,7 @@ WAN Configuration Wan0 Mode and back out via exit & top
 Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out & back out via top and 3 exits
     [Tags]                      Config      WAN     wan0    dhcp    conn_dhcp
     [Documentation]             Enters the WAN DHCP Configuration Mode
+    ${execute}=                 write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp
@@ -250,6 +269,7 @@ Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out 
 Execute update DHCP mtu, apply and then show DHCP
     [Tags]                      Config      WAN     wan0    dhcp   mtu_dhcp
     [Documentation]             Update mtu, apply and then show DHCP
+    ${execute}=                 write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp
@@ -270,6 +290,7 @@ Execute update DHCP mtu, apply and then show DHCP
 Execute update DHCP DNS and then show the applied result
     [Tags]                      Config      WAN     wan0    dhcp   dns_dhcp
     [Documentation]             Update DNS, apply and then show new DNS
+    ${execute}=                 write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write    conn dhcp
@@ -292,6 +313,7 @@ Execute update DHCP DNS and then show the applied result
 Execute update DHCP host name & then show the applied result
     [Tags]                      Config      WAN     wan0    dhcp   host_DHCP
     [Documentation]             update host name as yeehaw, apply & then show it
+    ${execute}=                 write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp
@@ -315,6 +337,7 @@ Execute update DHCP host name & then show the applied result
 Execute update DHCP querymode to normal (from aggresive default) & then show the applied result
     [Tags]                      Config      WAN     wan0    dhcp   querymode_DHCP
     [Documentation]             update query mode from Aggresive to Normal
+    ${execute}=                 write   top
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp
@@ -341,6 +364,7 @@ Execute update DHCP querymode to normal (from aggresive default) & then show the
 Execute connect static Wan & then back out
     [Tags]                     Config       WAN     wan0    conn static     conn_static_in_out
     [Documentation]            Enters the WAN Static Configuration Mode, then use top & 3 exits to go back to Global Configuration
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -381,6 +405,7 @@ Execute connect static Wan & then back out
 Execute the mtu for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     mtu_static
     [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -401,6 +426,7 @@ Execute the mtu for WAN Static
 Execute the dns for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     dns_static
     [Documentation]            Enters the WAN Static Configuration Mode and to set dns as 8.8.8.8
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -421,6 +447,7 @@ Execute the dns for WAN Static
 Execute the ip for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     ip_static
     [Documentation]            Enters the WAN Static Configuration Mode and to set ip as 192.168.0.200
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -441,6 +468,7 @@ Execute the ip for WAN Static
 Execute the netmask for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     netmask_static
     [Documentation]            Enters the WAN Static Configuration Mode and to set netmask as 255.255.0.0
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -461,6 +489,7 @@ Execute the netmask for WAN Static
 Execute the gateway for WAN Static
     [Tags]                     Config       WAN     wan0    conn_static     gateway_static
     [Documentation]            Enters the WAN Static Configuration Mode and to set gateway as DEFAULT_GATEWAY=192.168.0.203
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
@@ -482,6 +511,7 @@ Execute the gateway for WAN Static
 Execute connect PPPoE Wan & then back out
     [Tags]                     Config       WAN     wan0    conn pppoe     conn_pppoe_in_out
     [Documentation]            Enters the WAN PPPoE Configuration Mode, then use top & 3 exits to go back to Global Configuration
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -523,6 +553,7 @@ Execute connect PPPoE Wan & then back out
 Execute conn PPPoE to enter Wan PPPoE
     [Tags]                     Config       WAN     wan0    conn pppoe  conn_pppoe  enter_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and show default values
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -544,6 +575,7 @@ Execute conn PPPoE to enter Wan PPPoE
 Execute the mtu for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn pppoe  conn_pppoe     mtu_pppoe
     [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -565,6 +597,7 @@ Execute the mtu for WAN PPPoE
 Execute the dns for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     dns_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set dns as 8.8.8.8
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -586,6 +619,7 @@ Execute the dns for WAN PPPoE
 Execute the username for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     username_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set username as leroy_jenkins
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -607,6 +641,7 @@ Execute the username for WAN PPPoE
 Execute the password for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     password_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set password as atLeastWeHaveChicken
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -628,6 +663,7 @@ Execute the password for WAN PPPoE
 Execute the servicename for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     servicename_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -649,6 +685,7 @@ Execute the servicename for WAN PPPoE
 Execute the acname for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     acname_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -670,6 +707,7 @@ Execute the acname for WAN PPPoE
 Execute the options for WAN PPPoE
     [Tags]                     Config       WAN     wan0    conn_pppoe     options_pppoe
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+    ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
@@ -698,22 +736,1353 @@ Exit from PPPoE
     ${output}=         read until prompt
     should contain              ${output}   (global)#
 
-Execute template
-    [Tags]                      template
-    [Documentation]             Update , apply and then show -
-    ${output}=                 write   show
-    sleep                       1   loglevel=NONE
-    ${output}=                 write   apply
-    #sleep                      1
-    ${output}=                 write   show
-    sleep                       1   loglevel=NONE
-    ${output}=                  read
-    should contain              ${output}   DNS
+#PPTP
+Enter PPTP and then back out to Global
+    [Tags]                      Config       WAN     wan0    conn_pptp  conn_pptp_in_out    pptp
+    [Documentation]             Fire off the conn pptp and then back out via top and then back in and back out via 3 exits
+    #configure -> interface ethernet wan0 -> conn pptp
+    ${execute}=                 write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    #sleep                       1
+    ${output}=                 write   conn pptp
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    #use top to go all the way back into Global Config
+    ${output}=                  write   top
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
     should not be empty         ${output}
-    should not contain          ${output}   ©
-    should not contain          ${output}   ®
-    should contain              ${output}   DNS
-    #should contain             ${output}   (config-if-wan0-dhcp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
+    #use 3 exits to get back to global
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    sleep                       1
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
+
+Execute conn pptp to Enter PPTP
+    [Tags]                      Config       WAN     wan0    conn_pptp
+    [Documentation]             Fire off the conn pptp and then verify it's in PPTP
+    #configure -> interface ethernet wan0 -> conn pptp
+    ${execute}=                 write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter mtu 1433   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_mtu
+    [Documentation]             Fire off the conn pptp and then set the mtu
+    ${execute}=                 write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    ${output}=                  write  mtu 1433
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   MTU=1433    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter DNS
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_dns
+    [Documentation]             Fire off the conn pptp and then set the dns
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  dns 8.8.8.8
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   DNS_SERVER1=8.8.8.8    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter PPTP IP
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_ip
+    [Documentation]             Fire off the ip and then set the ip
+    ${execute}=                 write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  ip 192.168.0.204
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   IP_ADDR=192.168.0.204    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter netmask   #has issues, not working, not showing
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_netmask
+    [Documentation]             Fire off the netmask and then set the netmask
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  netmask 255.255.0.0
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   NETMASK=255.255.0.0    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter gateway   #has issues, not working, not showing
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_gateway
+    [Documentation]             Fire off the netmask and then set the gateway
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  gateway 255.255.0.0
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter username   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_username
+    [Documentation]             Fire off the username and then set the username
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  username paul_dirac
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   USER_NAME=paul_dirac    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter password   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_password
+    [Documentation]             Fire off the password and then set the password
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  password futurePurplePeopleEater
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   PASSWORD=futurePurplePeopleEater    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter vpn   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_vpn
+    [Documentation]             Fire off the vpn and then set the vpn
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  vpn symantec.com
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   VPN_SERVER=symantec.com    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter hostname
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_hostname
+    [Documentation]             Fire off the hostname and then set the hostname
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  host yeehaw2
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   Hostname=yeehaw2    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter default route: enable  #has problems
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_defaultroute
+    [Documentation]             Fire off the default route and then set the default route
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  defaultroute enable
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter Encrypt mppe128  #has problems, nothing shown
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_encrypt
+    [Documentation]             Fire off the encrypt and then set the encrytion to mppe128
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  encrypt mppe128
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   encrypt    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter options   #has issues
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_options
+    [Documentation]             Fire off the options and then set the options as ttyname
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn pptp
+    sleep                       1
+    ${output}=                  write  options ttyname
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-pptp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+#exit from pptp
+Exit from PPPoE
+    [Tags]                     Config       WAN     wan0    conn_pptp     exit_pptp
+    [Documentation]            Exit the WAN L2TP Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write   top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#L2TP
+Enter L2TP and then back out to Global
+    [Tags]                      Config       WAN     wan0    conn_l2tp  conn_l2tp_in_out    l2tp
+    [Documentation]             Fire off the conn l2tp and then back out via top and then back in and back out via 3 exits
+    #configure -> interface ethernet wan0 -> conn l2tp
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    #use top to go all the way back into Global Config
+    ${output}=                  write   top
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
+    #use 3 exits to get back to global
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    sleep                       1
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
+
+Execute conn l2tp to Enter l2tp
+    [Tags]                      Config       WAN     wan0    conn_l2tp
+    [Documentation]             Fire off the conn l2tp and then verify it's in l2tp
+    #configure -> interface ethernet wan0 -> conn l2tp
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    #sleep                       1
+    ${output}=                 write   conn l2tp
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter mtu 1432   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_mtu
+    [Documentation]             Fire off the conn l2tp and then set the mtu
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  mtu 1432
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   MTU=1432    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter DNS
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_dns
+    [Documentation]             Fire off the conn l2tp and then set the dns
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  dns 192.168.0.205
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   DNS_SERVER1=192.168.0.205    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter l2tp IP
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_ip
+    [Documentation]             Fire off the ip and then set the ip
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  ip 192.168.0.206
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   IP_ADDR=192.168.0.206    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter netmask   #has issues, not working, not showing
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_netmask
+    [Documentation]             Fire off the netmask and then set the netmask
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  netmask 255.255.0.0
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   NETMASK=255.255.0.0    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter gateway   #has issues, not working, not showing
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_gateway
+    [Documentation]             Fire off the netmask and then set the gateway
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  gateway 255.255.0.0
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+    ${exit}                     write  top
+
+Enter username   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_username
+    [Documentation]             Fire off the username and then set the username
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  username ziegler_natta
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   USER_NAME=ziegler_natta    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter password   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_password
+    [Documentation]             Fire off the password and then set the password
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  password reduxProcessChemistry
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   PASSWORD=reduxProcessChemistry    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter vpn   #has problems not showing
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_vpn
+    [Documentation]             Fire off the vpn and then set the vpn
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  vpn macaffee.com
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   VPN_SERVER=macaffee.com    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter hostname
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_hostname
+    [Documentation]             Fire off the hostname and then set the hostname
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  host yeehaw3
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   Hostname=yeehaw3    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter default route: enable  #has problems not enabled
+    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_defaultroute
+    [Documentation]             Fire off the default route and then set the default route
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  defaultroute enable
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+Enter options   #has problems, snow showing
+    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_options
+    [Documentation]             Fire off the options and then set the options as ttyname
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    ${output}=                 write   conn l2tp
+    sleep                       1
+    ${output}=                  write  options ttyname
+    sleep                       1
+    ${output}=                  write  show
+    sleep                       1
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-l2tp)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#
+    ${exit}                     write  top
+
+#exit from L2TP
+Exit from L2TP
+    [Tags]                     Config       WAN     wan0    conn_L2TP     exit_L2TP
+    [Documentation]            Exit the WAN L2TP Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write   top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#WLAN 2.4g
+Enter Wifi 2.4g and then back out to Global
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_in_out
+    [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 2.4g -> conn
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config)#   (global)#
+    #use top to go all the way back into Global Config
+    ${output}=                  write   top
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config)#   (config-if-wlan-2.4g)#
+    #use 3 exits to get back to global
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config)#   (config-if-wlan-2.4g)#
+
+Enter disable
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_disable
+    [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  disable
+    sleep                       10
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    #sleep                       1
+    should contain              ${output}  (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config)#   (global)#
+    #need to incorporate a UI robot to check on this in teh admin
+    ${exit}                     write  top
+
+Enter enable
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_enable
+    [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  enable
+    sleep                       10
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    sleep                       1
+    #should be empty             ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config)#   (global)#
+    #need to incorporate a UI robot to check on this in the admin
+    ${exit}                     write  top
+
+#enter all the security wpa and then back out
+Enter security WPA and then back out
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa_in_out
+    [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#   (config-if-wlan-2.4g)#
+    #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write   exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
+
+Enter security WPA2 and then back out
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa2_in_out
+    [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa2
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa2)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#   (config-if-wlan-2.4g)#
+    #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
+
+Enter security WPA3 and then back out
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_in_out
+    [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa3
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa3)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa3)#     (config)#   (config-if-wlan-2.4g)#
+    #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
+
+Enter security WPA12 Mix and then back out
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa12_mix_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa12-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#   (config-if-wlan-2.4g)#
+    #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#    (global)#
+
+Enter security WPA23 mix and then back out
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa23_mix_in_out
+    [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa23_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa23-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#     (config)#   (config-if-wlan-2.4g)#
+    #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#     (config)#    (global)#
+
+Enter security WPA2 enterprise and then back out
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa2_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa2-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#   (config-if-wlan-2.4g)#
+    #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#    (global)#
+
+Enter security WPA3 enterprise and then back out
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa3-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa3-ent)#     (config)#   (config-if-wlan-2.4g)#
+    #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
+
+Enter security WPA12 mix enterprise and then back out
+    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa12_mix_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#   (config-if-wlan-2.4g)#
+    #use one exit to go back to (config-if-wlan-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#    (global)#
+
+
+#exit from WLAN 2.4g
+Exit from WLAN 2.4g
+    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_exit
+    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#WLAN Guest 2.4g
+Enter WLAN Guest 2.4g and then back out to Global
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_in_out
+    [Documentation]             Fire off the interface wifi guest 2.4g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi guest 2.4g -> conn
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config)#   (global)#
+    #use top to go all the way back into Global Config
+    ${output}=                  write   top
+    #sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
+    #use 3 exits to get back to global
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    ${output}=                 write   exit
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
+
+Enter disable
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_disable
+    [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  disable
+    sleep                       10
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    #sleep                       1
+    should contain              ${output}  (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config)#   (global)#
+    #need to incorporate a UI robot to check on this in the admin
+    ${exit}                     write  top
+
+Enter enable
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_enable
+    [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  enable
+    sleep                       10
+    #set client configuration    prompt=#
+    ${output}=                  read    #until prompt
+    sleep                       1
+    #should be empty             ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config)#   (global)#
+    #need to incorporate a UI robot to check on this in the admin
+    ${exit}                     write  top
+
+#enter all the security wpa and then back out
+Enter security WPA and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
+    [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#    (config-if-wlan-2.4g-wpa)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#   (config-if-wlan-guest-2.4g)#
+    #use one exit to go back to (config-if-wlan-guest-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa
+    sleep                       1
+    ${output}=                  write   exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
+
+Enter security WPA2 and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_in_out
+    [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa2
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa2)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#   (config-if-wlan-guest-2.4g-wpa2)#
+    #use one exit to go back to (config-if-wlan-guest-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa2
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
+
+Enter security WPA3 and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_in_out
+    [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa3
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa3)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa3)#     (config)#   (config-if-wlan-guest-2.4g-wpa3)#
+    #use one exit to go back to (config-if-wlan-guest-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3)#    (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
+
+Enter security WPA12 Mix and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa12-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g-wpa12-mix)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#   (config-if-wlan-guest-2.4g-wpa12-mix)#
+    #use one exit to go back to (config-if-wlan-guest-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#    (config-if-wlan-2.4gx)#     (config)#    (global)#
+
+Enter security WPA23 mix and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa23_mix_in_out
+    [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa23_mix
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa23-mix)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g-wpa23-mix)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#     (config)#   (config-if-wlan-guest-2.4g-wpa23-mix)#
+    #use one exit to go back to (config-if-wlan-guest-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa23_mix
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#    (config-if-wlan-guest-2.4g-wpa23-mix)#     (config)#    (global)#
+
+Enter security WPA2 enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa2-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#   (config-if-wlan-guest-2.4g)#    (config-if-wlan-guest-2.4g-wpa2-ent)#
+    #use one exit to go back to (config-if-wlan-guest-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config-if-wlan-guest-2.4g-wpa2-ent)#     (config)#    (global)#
+
+Enter security WPA3 enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa3-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g-wpa3-ent)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa3-ent)#     (config)#   (config-if-wlan-guest-2.4g)#    (config-if-wlan-guest-2.4g-wpa3-ent)#
+    #use one exit to go back to (config-if-wlan-guest-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3-ent)#     (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
+
+Enter security WPA12 mix enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
+    ${exit}                     write  top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g-wpa12-mix-ent)#
+    #use top to go all the way to global configuration
+    ${output}=                  write  top
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (global)#
+    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#   (config-if-wlan-guest-2.4g)#   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#
+    #use one exit to go back to (config-if-wlan-guest-2.4g)#
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    #sleep                       1
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    #sleep                       1
+    ${output}=                  write  security wpa12_mix_enterprise
+    sleep                       1
+    ${output}=                  write  exit
+    ${output}=                  read
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#    (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#    (global)#
+
+
+#exit from WLAN 2.4g
+Exit from WLAN 2.4g
+    [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_exit
+    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#Execute template
+#    [Tags]                      template
+#    [Documentation]             Update , apply and then show -
+#    ${exit}                     write  top
+#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+#    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+#    sleep                       1
+#    ${output}=                 write   show
+#    sleep                       1   loglevel=NONE
+#    ${output}=                 write   apply
+#    #sleep                      1
+#    ${output}=                 write   show
+#    sleep                       1   loglevel=NONE
+#    ${output}=                  read
+#    should contain              ${output}   DNS
+#    should not be empty         ${output}
+#    should not contain          ${output}   ©
+#    should not contain          ${output}   ®
+#    should contain              ${output}   DNS
+#    #should contain             ${output}   (config-if-wan0-dhcp)#
+#    ${exit}                     write  top
 
 #Execute reboot
 #    [Tags]              Global     reboot
