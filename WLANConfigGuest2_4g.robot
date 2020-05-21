@@ -15,7 +15,7 @@ Resource            resourceLocal.robot
 
 *** Test Cases ***
 #WLAN Guest 2.4g
-WLAN 2.4g: Enter  WLAN Guest 2.4g and then back out to Global
+WLAN Guest 2.4g: Enter  WLAN Guest 2.4g and then back out to Global
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_in_out
     [Documentation]             Fire off the interface wifi guest 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi guest 2.4g -> conn
@@ -50,7 +50,7 @@ WLAN 2.4g: Enter  WLAN Guest 2.4g and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
 
-WLAN 2.4g: Enter  disable
+WLAN Guest 2.4g: Enter  disable
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_disable
     [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
     ${exit}                     write  top
@@ -67,7 +67,7 @@ WLAN 2.4g: Enter  disable
     #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
-WLAN 2.4g: Enter  enable
+WLAN Guest 2.4g: Enter  enable
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_enable
     [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
     ${exit}                     write  top
@@ -85,8 +85,8 @@ WLAN 2.4g: Enter  enable
     #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
-#WLAN 2.4g: Enter  all the security wpa and then back out
-WLAN 2.4g: Enter  security WPA and then back out
+#WLAN Guest 2.4g: Enter  all the security wpa and then back out
+WLAN Guest 2.4g: Enter  security WPA and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
@@ -124,7 +124,7 @@ WLAN 2.4g: Enter  security WPA and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
 
-WLAN 2.4g: Enter  security WPA2 and then back out
+WLAN Guest 2.4g: Enter  security WPA2 and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_in_out
     [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
     ${exit}                     write  top
@@ -162,7 +162,7 @@ WLAN 2.4g: Enter  security WPA2 and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
 
-WLAN 2.4g: Enter  security WPA3 and then back out
+WLAN Guest 2.4g: Enter  security WPA3 and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_in_out
     [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
     ${exit}                     write  top
@@ -200,7 +200,7 @@ WLAN 2.4g: Enter  security WPA3 and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3)#    (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
 
-WLAN 2.4g: Enter  security WPA12 Mix and then back out
+WLAN Guest 2.4g: Enter  security WPA12 Mix and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_in_out
     [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
     ${exit}                     write  top
@@ -238,7 +238,7 @@ WLAN 2.4g: Enter  security WPA12 Mix and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#    (config-if-wlan-2.4gx)#     (config)#    (global)#
 
-WLAN 2.4g: Enter  security WPA23 mix and then back out
+WLAN Guest 2.4g: Enter  security WPA23 mix and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
@@ -276,14 +276,14 @@ WLAN 2.4g: Enter  security WPA23 mix and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#    (config-if-wlan-guest-2.4g-wpa23-mix)#     (config)#    (global)#
 
-WLAN 2.4g: Enter  security WPA2 WLAN 2.4g: Enter prise and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_WLAN 2.4g: Enter prise_in_out
-    [Documentation]             Fire off the "security" for wpa2_WLAN 2.4g: Enter prise - WPA2 WLAN 2.4g: Enter prise and then back out
+WLAN Guest 2.4g: Enter  security WPA2 WLAN Guest 2.4g: Enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 WLAN Guest 2.4g: Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     sleep                       1
-    ${output}=                  write  security wpa2_WLAN 2.4g: Enter prise
+    ${output}=                  write  security wpa2_enterprise
     sleep                       1
     set client configuration    prompt=#
     ${output}=                  read until prompt
@@ -303,7 +303,7 @@ WLAN 2.4g: Enter  security WPA2 WLAN 2.4g: Enter prise and then back out
     #sleep                       1
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
     #sleep                       1
-    ${output}=                  write  security wpa2_WLAN 2.4g: Enter prise
+    ${output}=                  write  security wpa2_enterprise
     sleep                       1
     ${output}=                  write  exit
     ${output}=                  read
@@ -314,14 +314,14 @@ WLAN 2.4g: Enter  security WPA2 WLAN 2.4g: Enter prise and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config-if-wlan-guest-2.4g-wpa2-ent)#     (config)#    (global)#
 
-WLAN 2.4g: Enter  security WPA3 WLAN 2.4g: Enter prise and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_WLAN 2.4g: Enter prise_in_out
-    [Documentation]             Fire off the "security" for wpa3_WLAN 2.4g: Enter prise - WPA3 WLAN 2.4g: Enter prise and then back out
+WLAN Guest 2.4g: Enter  security WPA3 WLAN Guest 2.4g: Enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 WLAN Guest 2.4g: Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     sleep                       1
-    ${output}=                  write  security wpa3_WLAN 2.4g: Enter prise
+    ${output}=                  write  security wpa3_enterprise
     sleep                       1
     set client configuration    prompt=#
     ${output}=                  read until prompt
@@ -341,7 +341,7 @@ WLAN 2.4g: Enter  security WPA3 WLAN 2.4g: Enter prise and then back out
     #sleep                       1
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
     #sleep                       1
-    ${output}=                  write  security wpa3_WLAN 2.4g: Enter prise
+    ${output}=                  write  security wpa3_enterprise
     sleep                       1
     ${output}=                  write  exit
     ${output}=                  read
@@ -352,14 +352,14 @@ WLAN 2.4g: Enter  security WPA3 WLAN 2.4g: Enter prise and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3-ent)#     (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
 
-WLAN 2.4g: Enter  security WPA12 mix WLAN 2.4g: Enter prise and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_WLAN 2.4g: Enter prise_in_out
-    [Documentation]             Fire off the "security" for wpa12_mix_WLAN 2.4g: Enter prise - WPA/WPA2 Mix Mode WLAN 2.4g: Enter prise
+WLAN Guest 2.4g: Enter  security WPA12 mix WLAN Guest 2.4g: Enterprise and then back out
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_enterprise_in_out
+    [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode WLAN Guest 2.4g: Enterprise
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     sleep                       1
-    ${output}=                  write  security wpa12_mix_WLAN 2.4g: Enter prise
+    ${output}=                  write  security wpa12_mix_enterprise
     sleep                       1
     set client configuration    prompt=#
     ${output}=                  read until prompt
@@ -379,7 +379,7 @@ WLAN 2.4g: Enter  security WPA12 mix WLAN 2.4g: Enter prise and then back out
     #sleep                       1
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
     #sleep                       1
-    ${output}=                  write  security wpa12_mix_WLAN 2.4g: Enter prise
+    ${output}=                  write  security wpa12_mix_enterprise
     sleep                       1
     ${output}=                  write  exit
     ${output}=                  read
