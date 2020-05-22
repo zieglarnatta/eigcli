@@ -138,18 +138,18 @@ WLAN Guest 5g WPA23 mix personal: Rekey key rotation interval
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
-    ${exit}=                  write   top
+    ${exit}=                    write   top
 
 
 #exit from WLAN wpa23_mix 5g
-Exit from WLAN 5g wpa23_mix
+WLAN Guest 5g WPA23 mix personal: Exit from WLAN 5g wpa23_mix
     [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa23_mix_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global configuration level
     ${output}=                 write    top
     sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
+    #set client configuration  prompt=#
+    ${output}=              read     #until prompt
     should contain              ${output}   (global)#
 
 #Execute template
