@@ -2155,7 +2155,7 @@ WLAN 2.4g: WPA Password
 
 WLAN 2.4g: WPA maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
@@ -2305,7 +2305,7 @@ WLAN WPA2 2.4g: PMF protected Management Frames
 
 WLAN WPA2 2.4g: maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -2439,7 +2439,7 @@ WLAN 2.4g WPA3: Password
 
 WLAN 2.4g WPA3: maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2576,7 +2576,7 @@ WLAN 2.4g: Password
 
 WLAN 2.4g: maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2719,7 +2719,7 @@ WLAN 2.4g: Password
 
 WLAN 2.4g: maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2903,7 +2903,7 @@ PMF protected Management Frames
 
 maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3089,7 +3089,7 @@ WLAN 2.4g WPA3 enterprise: Connection secret
 
 WLAN 2.4g WPA3 enterprise: maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3284,7 +3284,7 @@ WLAN 2.4g WPA12 mix enterprise: Connection secret
 
 WLAN 2.4g WPA12 mix enterprise: maxclient
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -4223,7 +4223,7 @@ WLAN 5g WPA personal: Password
 
 WLAN 5g WPA personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -4378,7 +4378,7 @@ WLAN WPA2 5g personal: PMF protected Management Frames
 
 WLAN WPA2 5g personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -4651,7 +4651,7 @@ WLAN 5g WPA12 mix personal: Password
 
 WLAN 5g WPA12 mix personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -4794,7 +4794,7 @@ WLAN 5g WPA23 mix personal: Password
 
 WLAN 5g WPA23 mix personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa23_mix_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -4979,7 +4979,7 @@ WLAN 5g WPA2 Enterprise: PMF protected Management Frames
 
 WLAN 5g WPA2 Enterprise: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -5165,7 +5165,7 @@ WLAN 5g WPA3 enterprise: Connection secret
 
 WLAN 5g WPA3 enterprise: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -5360,7 +5360,7 @@ WLAN 5g WPA12 mix enterprise: Connection secret
 
 WLAN 5g WPA12 mix enterprise: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -5421,7 +5421,7 @@ WLAN 5g WPA12 mix enterprise: Exit from WLAN 5g wpa12_mix_enterprise
     should contain              ${output}   (global)#
 
 #WLAN Guest 2.4g
-WLAN Guest 2.4g: Enter  WLAN Guest 2.4g and then back out to Global
+WLAN Guest 2.4g: Enter WLAN Guest 2.4g and then back out to Global
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_in_out
     [Documentation]             Fire off the interface wifi guest 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi guest 2.4g -> conn
@@ -5456,7 +5456,7 @@ WLAN Guest 2.4g: Enter  WLAN Guest 2.4g and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
 
-WLAN Guest 2.4g: Enter  disable
+WLAN Guest 2.4g: Enter disable
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_disable
     [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
     ${exit}                     write  top
@@ -5473,7 +5473,7 @@ WLAN Guest 2.4g: Enter  disable
     #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
-WLAN Guest 2.4g: Enter  enable
+WLAN Guest 2.4g: Enter enable
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_enable
     [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
     ${exit}                     write  top
@@ -5492,7 +5492,7 @@ WLAN Guest 2.4g: Enter  enable
     ${exit}                     write  top
 
 #WLAN Guest 2.4g: Enter  all the security wpa and then back out
-WLAN Guest 2.4g: Enter  security WPA and then back out
+WLAN Guest 2.4g: Enter security WPA and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
@@ -5530,7 +5530,7 @@ WLAN Guest 2.4g: Enter  security WPA and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
 
-WLAN Guest 2.4g: Enter  security WPA2 and then back out
+WLAN Guest 2.4g: Enter security WPA2 and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_in_out
     [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
     ${exit}                     write  top
@@ -5568,7 +5568,7 @@ WLAN Guest 2.4g: Enter  security WPA2 and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
 
-WLAN Guest 2.4g: Enter  security WPA3 and then back out
+WLAN Guest 2.4g: Enter security WPA3 and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_in_out
     [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
     ${exit}                     write  top
@@ -5606,7 +5606,7 @@ WLAN Guest 2.4g: Enter  security WPA3 and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3)#    (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
 
-WLAN Guest 2.4g: Enter  security WPA12 Mix and then back out
+WLAN Guest 2.4g: Enter security WPA12 Mix and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_in_out
     [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
     ${exit}                     write  top
@@ -5644,7 +5644,7 @@ WLAN Guest 2.4g: Enter  security WPA12 Mix and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#    (config-if-wlan-2.4gx)#     (config)#    (global)#
 
-WLAN Guest 2.4g: Enter  security WPA23 mix and then back out
+WLAN Guest 2.4g: Enter security WPA23 mix and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
@@ -5682,7 +5682,7 @@ WLAN Guest 2.4g: Enter  security WPA23 mix and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#    (config-if-wlan-guest-2.4g-wpa23-mix)#     (config)#    (global)#
 
-WLAN Guest 2.4g: Enter  security WPA2 WLAN Guest 2.4g: Enterprise and then back out
+WLAN Guest 2.4g: Enter security WPA2 WLAN Guest 2.4g: Enterprise and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 WLAN Guest 2.4g: Enterprise and then back out
     ${exit}                     write  top
@@ -5720,7 +5720,7 @@ WLAN Guest 2.4g: Enter  security WPA2 WLAN Guest 2.4g: Enterprise and then back 
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config-if-wlan-guest-2.4g-wpa2-ent)#     (config)#    (global)#
 
-WLAN Guest 2.4g: Enter  security WPA3 WLAN Guest 2.4g: Enterprise and then back out
+WLAN Guest 2.4g: Enter security WPA3 WLAN Guest 2.4g: Enterprise and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 WLAN Guest 2.4g: Enterprise and then back out
     ${exit}                     write  top
@@ -5758,7 +5758,7 @@ WLAN Guest 2.4g: Enter  security WPA3 WLAN Guest 2.4g: Enterprise and then back 
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3-ent)#     (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
 
-WLAN Guest 2.4g: Enter  security WPA12 mix WLAN Guest 2.4g: Enterprise and then back out
+WLAN Guest 2.4g: Enter security WPA12 mix WLAN Guest 2.4g: Enterprise and then back out
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode WLAN Guest 2.4g: Enterprise
     ${exit}                     write  top
@@ -5901,7 +5901,7 @@ WLAN Guest 2.4g: WPA Password
 
 WLAN Guest 2.4g: WPA maxclient
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration WLAN Guest 2.4g
@@ -6037,7 +6037,7 @@ WLAN Guest 2.4g WPA3: Password
 
 WLAN Guest 2.4g WPA3: maxclient
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6174,7 +6174,7 @@ WLAN Guest 2.4g: Password
 
 WLAN Guest 2.4g: maxclient
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6317,7 +6317,7 @@ WLAN Guest 2.4g WPA23 Mix: Password
 
 WLAN Guest 2.4g WPA23 Mix: maxclient
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa23_mix_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6501,7 +6501,7 @@ WLAN 2.4g WPA2 enterprise Guest: PMF protected Management Frames
 
 WLAN 2.4g WPA2 enterprise Guest: maxclient
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa2_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6687,7 +6687,7 @@ WLAN Guest 2.4g WPA3 enterprise: Connection secret
 
 WLAN Guest 2.4g WPA3 enterprise: maxclient
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
