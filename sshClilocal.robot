@@ -7040,6 +7040,142 @@ WLAN WPA2 guest 5g personal: Exit from WLAN 5g wpa2 personal
     ${output}=         read until prompt
     should contain              ${output}   (global)#
 
+#WLAN Guest 5g WPA3 personal
+WLAN Guest 5g WPA3 personal: Enter wpa3 personal
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enter
+    [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi 5g -> seecurity wpa3
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa3)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    ${exit}=                    write   top
+
+WLAN Guest 5g WPA3 personal: Set SSID for wpa3 Personal WLAN 5g
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa3_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${exit}=                    write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                 write   ssid Luigi
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}   SSID=Luigi
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
+    ${exit}=                    write   top
+
+WLAN Guest 5g WPA3 personal: SSID Hide enabled
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  ssid hide
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}  HIDE_SSID=Enable
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA3 personal: SSID broadcast
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  ssid bcast
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  HIDE_SSID=Disable
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA3 personal: Password
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_password
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  password MaMaMiaHereIGoAgain
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  PASSWORD=MaMaMiaHereIGoAgain
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA3 personal: maxclient
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_maxclient
+    [Documentation]             Fire off the maxclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  maxclient 122
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  MAX_CLIENTS=122
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA3 personal: Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_rekey
+    [Documentation]             Fire off the rekey and check that rekey is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa3
+    sleep                       1
+    ${output}=                  write  rekey 3597
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3597s
+    ${exit}=                  write   top
+
+#exit from WLAN wpa3 5g
+WLAN Guest 5g WPA3 personal: Exit from WLAN 5g wpa3
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa3_exit
+    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
 #Execute template
 #    [Tags]                      template
 #    [Documentation]             Update , apply and then show -

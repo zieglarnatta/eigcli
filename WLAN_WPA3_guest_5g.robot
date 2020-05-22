@@ -14,9 +14,9 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-#WLAN 5g WPA3 personal
+#WLAN Guest 5g WPA3 personal
 WLAN Guest 5g WPA3 personal: Enter wpa3 personal
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_5g_wpa3_enter
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> seecurity wpa3
     ${output}=                  write   top
@@ -32,7 +32,7 @@ WLAN Guest 5g WPA3 personal: Enter wpa3 personal
     ${exit}=                    write   top
 
 WLAN Guest 5g WPA3 personal: Set SSID for wpa3 Personal WLAN 5g
-    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_5g_wpa3_ssid
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa3_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${exit}=                    write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -50,7 +50,7 @@ WLAN Guest 5g WPA3 personal: Set SSID for wpa3 Personal WLAN 5g
     ${exit}=                    write   top
 
 WLAN Guest 5g WPA3 personal: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_5g_wpa3_ssid_hide
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -68,7 +68,7 @@ WLAN Guest 5g WPA3 personal: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 personal: SSID broadcast
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_5g_wpa3_ssid_broadcast
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -86,7 +86,7 @@ WLAN Guest 5g WPA3 personal: SSID broadcast
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 personal: Password
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_5g_wpa3_password
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -104,7 +104,7 @@ WLAN Guest 5g WPA3 personal: Password
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 personal: maxclient
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_5g_wpa3_maxclient
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -122,7 +122,7 @@ WLAN Guest 5g WPA3 personal: maxclient
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 personal: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_5g_wpa3_rekey
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_rekey
     [Documentation]             Fire off the rekey and check that rekey is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -140,8 +140,8 @@ WLAN Guest 5g WPA3 personal: Rekey key rotation interval
     ${exit}=                  write   top
 
 #exit from WLAN wpa3 5g
-Exit from WLAN 5g wpa3
-    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_5g_wpa3_exit
+WLAN Guest 5g WPA3 personal: Exit from WLAN 5g wpa3
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa3_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
     ${output}=                 write    top
     sleep                       1
