@@ -6386,7 +6386,7 @@ Exit from WLAN 2.4g wpa23_mix
     ${output}=         read until prompt
     should contain              ${output}   (global)#
 
-#WLAN 2.4g WPA2 enterprise Guest:
+#WLAN 2.4g WPA2 enterprise Guest
 WLAN 2.4g WPA2 enterprise Guest: Enter wpa2_enterprise
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa2_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
@@ -6530,15 +6530,27 @@ WLAN 2.4g WPA2 enterprise Guest: maxclient
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa2_enterprise
-    ${output}=                  write  maxclient 123
+    #test upper boundary >50
+    ${output}=                  write   maxclient 300
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
+    #test lower boundary <1
+    ${output}=                  write   maxclient 0
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
+    sleep                       1
+    #test happy path
+    ${output}=                  write  maxclient 25
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
-    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=123
-    ${exit}=                  write   top
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  MAX_CLIENTS=25
+    ${exit}                     write  top
 
 WLAN 2.4g WPA2 enterprise Guest: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa2_enterprise_rekey
@@ -7901,6 +7913,215 @@ WLAN Guest 5g WPA12 mix enterprise: Rekey key rotation interval
 #exit from WLAN wpa12_mix_enterprise 5g
 WLAN Guest 5g WPA12 mix enterprise: Exit from WLAN 5g wpa12_mix_enterprise
     [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa12_mix_enterprise_exit
+    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global configuration level
+    ${output}=                 write    top
+    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+
+#WLAN Guest 5g WPA2 enterprise
+WLAN Guest 5g WPA2 enterprise: Enter wpa2_enterprise
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_enter
+    [Documentation]             Fire off the interface wifi guest 5g and then back out via top and then back in and back out via 3 exits
+    #configure -> interface wifi guest 5g -> seecurity wpa2_enterprise
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    should not be empty         ${output}
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa2-ent)#
+    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
+    ${exit}=                    write   top
+
+
+WLAN Guest 5g WPA2 enterprise: Set SSID for wpa2_enterprise WLAN 5g
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa2_enterprise_ssid
+    [Documentation]             Fire off the ssid  and then verify it's reflected
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                 write   ssid Pokemon
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}   SSID=Pokemon
+    should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA2 enterprise: SSID Hide enabled
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_ssid_hide
+    [Documentation]             Fire off the disable and check that wifi guest 5g is SSID is hidden disabled
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  ssid hide
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should contain              ${output}  HIDE_SSID=Enable
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-5g)#
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA2 enterprise: SSID broadcast
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_ssid_broadcast
+    [Documentation]             Fire off the bcast and check that wifi guest 5g is SSID is now broadcasting
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  ssid bcast
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  HIDE_SSID=Disable
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA2 enterprise: Server IP
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_server
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  server 192.168.0.253
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  SERVER_IP=192.168.0.253
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA2 enterprise: Port forwarding
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_port
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  port 1811
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  PORT_FORWARD=1811
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA2 enterprise: Connection secret
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_secret
+    [Documentation]             Fire off the secret and check that secret is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  secret PowerExtreme!
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  CONNECTION_SECRET=PowerExtreme!
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA2 enterprise: PMF protected Management Frames
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_pmf
+    [Documentation]             Fire off the password and check that password is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    ${output}=                  write  pmf required
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
+    ${exit}=                  write   top
+
+WLAN Guest 5g WPA2 enterprise: maxclient
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_maxclient
+    [Documentation]             Fire off the maclient and check that max clients is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    #test upper boundary >50
+    ${output}=                  write   maxclient 300
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
+    #test lower boundary <1
+    ${output}=                  write   maxclient 0
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
+    sleep                       1
+    #test happy path
+    ${output}=                  write  maxclient 26
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  MAX_CLIENTS=26
+    ${exit}                     write  top
+
+WLAN Guest 5g WPA2 enterprise: Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_rekey
+    [Documentation]             Fire off the key rotattion and check that upper & lower limits tested & key rotataion is updated
+    ${output}=                  write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa2_enterprise
+    #lower limit 600 test
+    ${output}=                  write  rekey 400
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  rekey must between 600 - 86400
+    #upper limit 86400 test
+    ${output}=                  write  rekey 90000
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  rekey must between 600 - 86400
+    #happy path 3596
+    ${output}=                  write  rekey 3596
+    sleep                       1
+    ${output}=                  write   show
+    sleep                       1
+    ${output}=                  read
+    should not be empty         ${output}
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
+    ${exit}=                  write   top
+
+#exit from WLAN wpa2_enterprise 5g
+Exit from WLAN 5g wpa2_enterprise
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa2_enterprise_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global configuration level
     ${output}=                 write    top
     sleep                       1

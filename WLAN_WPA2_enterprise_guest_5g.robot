@@ -158,15 +158,27 @@ WLAN Guest 5g WPA2 enterprise: maxclient
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
     ${output}=                  write  security wpa2_enterprise
-    ${output}=                  write  maxclient 123
+    #test upper boundary >50
+    ${output}=                  write   maxclient 300
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
+    #test lower boundary <1
+    ${output}=                  write   maxclient 0
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
+    sleep                       1
+    #test happy path
+    ${output}=                  write  maxclient 26
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
-    should contain              ${output}  MAX_CLIENTS=123
-    ${exit}=                  write   top
+    should contain              ${output}  MAX_CLIENTS=26
+    ${exit}                     write  top
 
 WLAN Guest 5g WPA2 enterprise: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa2_enterprise_rekey

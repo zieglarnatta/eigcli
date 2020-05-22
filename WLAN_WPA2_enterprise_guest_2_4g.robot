@@ -14,7 +14,7 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-#WLAN 2.4g WPA2 enterprise Guest:
+#WLAN 2.4g WPA2 enterprise Guest
 WLAN 2.4g WPA2 enterprise Guest: Enter wpa2_enterprise
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa2_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
@@ -158,15 +158,27 @@ WLAN 2.4g WPA2 enterprise Guest: maxclient
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa2_enterprise
-    ${output}=                  write  maxclient 123
+    #test upper boundary >50
+    ${output}=                  write   maxclient 300
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
+    #test lower boundary <1
+    ${output}=                  write   maxclient 0
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
+    sleep                       1
+    #test happy path
+    ${output}=                  write  maxclient 25
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
-    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=123
-    ${exit}=                  write   top
+    should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
+    should contain              ${output}  MAX_CLIENTS=25
+    ${exit}                     write  top
 
 WLAN 2.4g WPA2 enterprise Guest: Rekey key rotation interval
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa2_enterprise_rekey
