@@ -14,34 +14,34 @@ Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
-#WLAN 2.4g WPA12 mix enterprise
-WLAN 2.4g: Enter wpa12_mix_enterprise
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_enter
+#WLAN Guest 2.4g WPA12 mix enterprise
+WLAN Guest 2.4g WPA12 mix enterprise: Enter wpa12_mix_enterprise
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> seecurity wpa12_mix_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     #sleep                       1
     ${output}=                  write  security wpa12_mix_enterprise
     sleep                       1
     set client configuration    prompt=#
     ${output}=                  read until prompt
     should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#
+    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
     #${exit}                     read
     #should contain              ${exit}   (global)#
 
 
-WLAN 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_ssid
+WLAN Guest 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
+    [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa12_mix_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
     sleep                       1
     ${output}=                 write   ssid Snorks
@@ -56,12 +56,12 @@ WLAN 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     #${exit}                     read
     #should contain              ${exit}   (global)#
 
-WLAN 2.4g WPA12 mix enterprise: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_hide
+WLAN Guest 2.4g WPA12 mix enterprise: SSID Hide enabled
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
     ${output}=                  write  ssid hide
     sleep                       1
@@ -75,12 +75,12 @@ WLAN 2.4g WPA12 mix enterprise: SSID Hide enabled
     #${exit}                     read
     #should contain              ${exit}   (global)#
 
-WLAN 2.4g WPA12 mix enterprise: SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_broadcast
+WLAN Guest 2.4g WPA12 mix enterprise: SSID broadcast
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
     ${output}=                  write  ssid bcast
     sleep                       1
@@ -93,12 +93,12 @@ WLAN 2.4g WPA12 mix enterprise: SSID broadcast
     ${exit}                     write  top
     #should contain              ${exit}   (global)#
 
-WLAN 2.4g WPA12 mix enterprise: Server IP
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_server
+WLAN Guest 2.4g WPA12 mix enterprise: Server IP
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_server
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
     ${output}=                  write  server 192.168.0.252
     sleep                       1
@@ -111,12 +111,12 @@ WLAN 2.4g WPA12 mix enterprise: Server IP
     ${exit}                     write  top
     #should contain              ${exit}   (global)#
 
-WLAN 2.4g WPA12 mix enterprise: Port forwarding
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_port
+WLAN Guest 2.4g WPA12 mix enterprise: Port forwarding
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_port
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
     ${output}=                  write  port 1808
     sleep                       1
@@ -129,12 +129,12 @@ WLAN 2.4g WPA12 mix enterprise: Port forwarding
     ${exit}                     write  top
     #should contain              ${exit}   (global)#
 
-WLAN 2.4g WPA12 mix enterprise: Connection secret
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_secret
+WLAN Guest 2.4g WPA12 mix enterprise: Connection secret
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
     ${output}=                  write  secret BestUnderwaterLife
     sleep                       1
@@ -147,42 +147,42 @@ WLAN 2.4g WPA12 mix enterprise: Connection secret
     ${exit}                     write  top
     #should contain              ${exit}   (global)#
 
-WLAN 2.4g WPA12 mix enterprise: maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_maxclient
+WLAN Guest 2.4g WPA12 mix enterprise: maxclient
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
-    #test upper boundary >128
+    #test upper boundary >50
     ${output}=                  write   maxclient 300
     sleep                       1
     ${output}=                  read
-    should contain              ${output}   maxclient must between 1 - 128  Syntax error: Illegal parameter
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
     #test lower boundary <1
     ${output}=                  write   maxclient 0
     sleep                       1
     ${output}=                  read
-    should contain              ${output}   maxclient must between 1 - 128  Syntax error: Illegal parameter
+    should contain              ${output}   maxclient must between 1 - 50  Syntax error: Illegal parameter
     sleep                       1
     #test happy path
-    ${output}=                  write  maxclient 117
+    ${output}=                  write  maxclient 23
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=117
+    should contain              ${output}  MAX_CLIENTS=23
     ${exit}                     write  top
     #should contain              ${exit}   (global)#
 
-WLAN 2.4g WPA12 mix enterprise: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_rekey
+WLAN Guest 2.4g WPA12 mix enterprise: Rekey key rotation interval
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
+    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix_enterprise
     #lower limit 600 test
     ${output}=                  write  rekey 400
@@ -211,8 +211,8 @@ WLAN 2.4g WPA12 mix enterprise: Rekey key rotation interval
     #should contain              ${exit}   (global)#
 
 #exit from WLAN wpa12_mix_enterprise 2.4g
-WLAN 2.4g WPA12 mix enterprise: Exit from WLAN 2.4g wpa12_mix_enterprise
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_exit
+WLAN Guest 2.4g WPA12 mix enterprise: Exit from WLAN 2.4g wpa12_mix_enterprise
+    [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa12_mix_enterprise_exit
     [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global configuration level
     ${output}=                 write    top
     sleep                       1

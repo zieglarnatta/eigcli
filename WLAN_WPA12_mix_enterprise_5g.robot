@@ -154,6 +154,18 @@ WLAN 5g WPA12 mix enterprise: maxclient
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
     ${output}=                  write  security wpa12_mix_enterprise
+    #test upper boundary >128
+    ${output}=                  write   maxclient 300
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 128  Syntax error: Illegal parameter
+    #test lower boundary <1
+    ${output}=                  write   maxclient 0
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}   maxclient must between 1 - 128  Syntax error: Illegal parameter
+    sleep                       1
+    #test happy path
     ${output}=                  write  maxclient 117
     sleep                       1
     ${output}=                  write   show
