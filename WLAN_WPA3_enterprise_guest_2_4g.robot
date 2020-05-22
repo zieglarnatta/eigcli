@@ -16,7 +16,7 @@ Resource            resourceLocal.robot
 *** Test Cases ***
 #WLAN Guest 2.4g WPA3 enterprise
 WLAN Guest 2.4g WPA3 enterprise: Enter wpa3_enterprise
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_2_4g_wpa3_enterprise_enter
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_enter
     [Documentation]             Fire off the interface wifi guest 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi guest 2.4g -> seecurity wpa3_enterprise
     ${output}=                  write   top
@@ -33,7 +33,7 @@ WLAN Guest 2.4g WPA3 enterprise: Enter wpa3_enterprise
 
 
 WLAN Guest 2.4g WPA3 enterprise: Set SSID
-    [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_2_4g_wpa3_enterprise_ssid
+    [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa3_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -51,7 +51,7 @@ WLAN Guest 2.4g WPA3 enterprise: Set SSID
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_2_4g_wpa3_enterprise_ssid_hide
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_ssid_hide
     [Documentation]             Fire off the disable and check that wifi guest 2.4g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -69,7 +69,7 @@ WLAN Guest 2.4g WPA3 enterprise: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: SSID broadcast
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_2_4g_wpa3_enterprise_ssid_broadcast
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi guest 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -87,7 +87,7 @@ WLAN Guest 2.4g WPA3 enterprise: SSID broadcast
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: Server IP
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_2_4g_wpa3_enterprise_server
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_server
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -105,7 +105,7 @@ WLAN Guest 2.4g WPA3 enterprise: Server IP
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: Port forwarding
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_2_4g_wpa3_enterprise_port
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_port
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -123,7 +123,7 @@ WLAN Guest 2.4g WPA3 enterprise: Port forwarding
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: Connection secret
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_2_4g_wpa3_enterprise_secret
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -141,7 +141,7 @@ WLAN Guest 2.4g WPA3 enterprise: Connection secret
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: maxclient
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_2_4g_wpa3_enterprise_maxclient
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_maxclient
     [Documentation]             Fire off the maclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -159,7 +159,7 @@ WLAN Guest 2.4g WPA3 enterprise: maxclient
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_2_4g_wpa3_enterprise_rekey
+    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -193,7 +193,7 @@ WLAN Guest 2.4g WPA3 enterprise: Rekey key rotation interval
 
 #exit from WLAN wpa3_enterprise 2.4g
 Exit from WLAN 2.4g wpa3_enterprise
-    [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_2_4g_wpa3_enterprise_exit
+    [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa3_enterprise_exit
     [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global configuration level
     ${output}=                 write    top
     sleep                       1
