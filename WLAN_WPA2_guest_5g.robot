@@ -159,7 +159,7 @@ WLAN WPA2 guest 5g personal: Rekey key rotation interval
     ${exit}                     write  top
 
 #exit from WLAN wpa2 5g
-Exit from WLAN 5g wpa2 personal
+WLAN WPA2 guest 5g personal: Exit from WLAN 5g wpa2 personal
     [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa2_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
     ${output}=                 write    top
