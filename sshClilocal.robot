@@ -2066,7 +2066,7 @@ Exit from WLAN 2.4g
 WLAN 2.4g: WPA Enter WPA personal
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa
+    #configure -> interface wifi 2.4g -> security wpa
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
@@ -2204,7 +2204,7 @@ Exit from WLAN 2.4g WPA
 WLAN WPA2 2.4g: wpa2 personal
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa2
+    #configure -> interface wifi 2.4g -> security wpa2
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -2352,7 +2352,7 @@ Exit from WLAN 2.4g wpa2
 WLAN 2.4g WPA3: Enter wpa3 personal
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa3
+    #configure -> interface wifi 2.4g -> security wpa3
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2488,7 +2488,7 @@ Exit from WLAN 2.4g wpa3
 WLAN 2.4g: Enter wpa12_mix personal
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa12_mix
+    #configure -> interface wifi 2.4g -> security wpa12_mix
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2631,7 +2631,7 @@ Exit from WLAN 2.4g wpa12_mix personal
 WLAN 2.4g: Enter wpa23_mix personal
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa23_mix
+    #configure -> interface wifi 2.4g -> security wpa23_mix
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2768,7 +2768,7 @@ Exit from WLAN 2.4g wpa23_mix
 Enter wpa2_enterprise
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa2_enterprise
+    #configure -> interface wifi 2.4g -> security wpa2_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2965,7 +2965,7 @@ Exit from WLAN 2.4g wpa2_enterprise
 WLAN 2.4g: Enter wpa3_enterprise
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa3_enterprise
+    #configure -> interface wifi 2.4g -> security wpa3_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3153,7 +3153,7 @@ Exit from WLAN 2.4g wpa3_enterprise
 WLAN 2.4g: Enter wpa12_mix_enterprise
     [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa12_mix_enterprise
+    #configure -> interface wifi 2.4g -> security wpa12_mix_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
@@ -4147,7 +4147,7 @@ Exit from WLAN 5g Guest
 WLAN 5g WPA personal: Enter WPA personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa
+    #configure -> interface wifi 5g -> security wpa
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -4284,7 +4284,7 @@ Exit from WLAN 5g WPA personal
 WLAN WPA2 5g personal: wpa2 personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa2
+    #configure -> interface wifi 5g -> security wpa2
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -4439,7 +4439,7 @@ Exit from WLAN 5g wpa2 personal
 WLAN 5g WPA3 personal: Enter wpa3 personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa3
+    #configure -> interface wifi 5g -> security wpa3
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -4575,7 +4575,7 @@ Exit from WLAN 5g wpa3
 WLAN 5g WPA12 mix personal: Enter wpa12_mix personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa12_mix
+    #configure -> interface wifi 5g -> security wpa12_mix
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -4718,7 +4718,7 @@ Exit from WLAN 5g wpa12_mix personal
 WLAN 5g WPA23 mix personal: Enter wpa23_mix personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa23_mix_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa23_mix
+    #configure -> interface wifi 5g -> security wpa23_mix
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -4856,7 +4856,7 @@ Exit from WLAN 5g wpa23_mix
 WLAN 5g WPA2 Enterprise: Enter wpa2_enterprise
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enterprise_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa2_enterprise
+    #configure -> interface wifi 5g -> security wpa2_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -5053,7 +5053,7 @@ Exit from WLAN 5g wpa2_enterprise
 WLAN 5g: Enter wpa3_enterprise
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_enterprise_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa3_enterprise
+    #configure -> interface wifi 5g -> security wpa3_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -5241,7 +5241,7 @@ Exit from WLAN 5g wpa3_enterprise
 WLAN 5g: Enter wpa12_mix_enterprise
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa12_mix_enterprise
+    #configure -> interface wifi 5g -> security wpa12_mix_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
@@ -5372,7 +5372,7 @@ WLAN 5g WPA12 mix enterprise: Connection secret
 
 WLAN 5g WPA12 mix enterprise: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -5836,7 +5836,7 @@ Exit from WLAN 2.4g
 WLAN Guest 2.4g: WPA Enter WPA personal
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa
+    #configure -> interface wifi 2.4g -> security wpa
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration WLAN Guest 2.4g
@@ -5974,7 +5974,7 @@ Exit from WLAN Guest 2.4g WPA
 WLAN Guest 2.4g WPA3: Enter wpa3 personal
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa3
+    #configure -> interface wifi 2.4g -> security wpa3
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6110,7 +6110,7 @@ Exit from WLAN 2.4g wpa3
 WLAN Guest 2.4g: Enter wpa12_mix personal
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa12_mix
+    #configure -> interface wifi 2.4g -> security wpa12_mix
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6253,7 +6253,7 @@ Exit from WLAN 2.4g wpa12_mix personal
 WLAN Guest 2.4g WPA23 Mix: Enter wpa23_mix personal
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa23_mix_enter
     [Documentation]             Fire off the interface wifi guest 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi guest 2.4g -> seecurity wpa23_mix
+    #configure -> interface wifi guest 2.4g -> security wpa23_mix
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6390,7 +6390,7 @@ Exit from WLAN 2.4g wpa23_mix
 WLAN 2.4g WPA2 enterprise Guest: Enter wpa2_enterprise
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa2_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa2_enterprise
+    #configure -> interface wifi 2.4g -> security wpa2_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6587,7 +6587,7 @@ Exit from WLAN Guest 2.4g wpa2_enterprise
 WLAN Guest 2.4g WPA3 enterprise: Enter wpa3_enterprise
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_enter
     [Documentation]             Fire off the interface wifi guest 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi guest 2.4g -> seecurity wpa3_enterprise
+    #configure -> interface wifi guest 2.4g -> security wpa3_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6711,7 +6711,7 @@ WLAN Guest 2.4g WPA3 enterprise: Connection secret
 
 WLAN Guest 2.4g WPA3 enterprise: maxclient
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
@@ -6788,7 +6788,7 @@ WLAN Guest 2.4g WPA3 enterprise: Exit from WLAN 2.4g wpa3_enterprise
 WLAN Guest 2.4g WPA12 mix enterprise: Enter wpa12_mix_enterprise
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 2.4g -> seecurity wpa12_mix_enterprise
+    #configure -> interface wifi 2.4g -> security wpa12_mix_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
@@ -6996,7 +6996,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Exit from WLAN 2.4g wpa12_mix_enterprise
 WLAN Guest 5g: WPA Enter WPA personal
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa
+    #configure -> interface wifi 5g -> security wpa
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration WLAN Guest 5g
@@ -7134,7 +7134,7 @@ Exit from WLAN Guest 5g WPA
 WLAN WPA2 guest 5g personal: wpa2 personal
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa2
+    #configure -> interface wifi 5g -> security wpa2
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -7289,7 +7289,7 @@ WLAN WPA2 guest 5g personal: Exit from WLAN 5g wpa2 personal
 WLAN Guest 5g WPA3 personal: Enter wpa3 personal
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa3
+    #configure -> interface wifi 5g -> security wpa3
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -7425,7 +7425,7 @@ WLAN Guest 5g WPA3 personal: Exit from WLAN 5g wpa3
 WLAN Guest 5g WPA12 mix personal: Enter wpa12_mix personal
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa12_mix
+    #configure -> interface wifi 5g -> security wpa12_mix
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -7568,7 +7568,7 @@ WLAN Guest 5g WPA12 mix personal: Exit from WLAN 5g wpa12_mix personal
 WLAN Guest 5g WPA23 mix personal: Enter wpa23_mix personal
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa23_mix_enter
     [Documentation]             Fire off the interface wifi guest 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi guest 5g -> seecurity wpa23_mix
+    #configure -> interface wifi guest 5g -> security wpa23_mix
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -7706,7 +7706,7 @@ WLAN Guest 5g WPA23 mix personal: Exit from WLAN 5g wpa23_mix
 WLAN Guest 5g WPA12 mix enterprise: Enter wpa12_mix_enterprise
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_enter
     [Documentation]             Fire off the interface wifi guest 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> seecurity wpa12_mix_enterprise
+    #configure -> interface wifi 5g -> security wpa12_mix_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
@@ -7837,7 +7837,7 @@ WLAN Guest 5g WPA12 mix enterprise: Connection secret
 
 WLAN Guest 5g WPA12 mix enterprise: maxclient
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
