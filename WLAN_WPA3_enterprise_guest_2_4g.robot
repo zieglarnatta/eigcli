@@ -148,14 +148,27 @@ WLAN Guest 2.4g WPA3 enterprise: maxclient
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa3_enterprise
     sleep                       1
+    #upper boundary test >50
     ${output}=                  write  maxclient 118
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}       maxclient must between 1 - 50   Syntax error: Illegal parameter
+    sleep                       1
+    #lower boundary test <1
+    ${output}=                  write  maxclient 0
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}       maxclient must between 1 - 50   Syntax error: Illegal parameter
+    sleep                       1
+    #happy path between 1 - 50
+    ${output}=                  write  maxclient 21
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=118
+    should contain              ${output}  MAX_CLIENTS=21
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: Rekey key rotation interval

@@ -6687,20 +6687,33 @@ WLAN Guest 2.4g WPA3 enterprise: Connection secret
 
 WLAN Guest 2.4g WPA3 enterprise: maxclient
     [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa3_enterprise_maxclient
-    [Documentation]             Fire off the maxclient and check that max clients is updated
+    [Documentation]             Fire off the maclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa3_enterprise
     sleep                       1
+    #upper boundary test >50
     ${output}=                  write  maxclient 118
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}       maxclient must between 1 - 50   Syntax error: Illegal parameter
+    sleep                       1
+    #lower boundary test <1
+    ${output}=                  write  maxclient 0
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}       maxclient must between 1 - 50   Syntax error: Illegal parameter
+    sleep                       1
+    #happy path between 1 - 50
+    ${output}=                  write  maxclient 21
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=118
+    should contain              ${output}  MAX_CLIENTS=21
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3 enterprise: Rekey key rotation interval
@@ -6840,7 +6853,7 @@ WLAN Guest 5g: WPA Password
 
 WLAN Guest 5g: WPA maxclient
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration WLAN Guest 5g
@@ -6995,7 +7008,7 @@ WLAN WPA2 guest 5g personal: PMF protected Management Frames
 
 WLAN WPA2 guest 5g personal: maxclient
     [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -7268,7 +7281,7 @@ WLAN Guest 5g WPA12 mix personal: Password
 
 WLAN Guest 5g WPA12 mix personal: maxclient
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -7456,6 +7469,7 @@ WLAN Guest 5g WPA23 mix personal: Exit from WLAN 5g wpa23_mix
     #set client configuration  prompt=#
     ${output}=              read     #until prompt
     should contain              ${output}   (global)#
+
 
 
 #Execute template

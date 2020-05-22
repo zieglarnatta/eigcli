@@ -33,7 +33,7 @@ WLAN Guest 5g: Enter wpa3_enterprise
 
 
 WLAN 5g: Set SSID for wpa3_enterprise
-    [Tags]                      Config  interface_wifi_gust_5g     interface_wifi_guest_5g_wpa3_enterprise_ssid
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa3_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -51,7 +51,7 @@ WLAN 5g: Set SSID for wpa3_enterprise
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 enterprise: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_gust_5g  interface_wifi_guest_5g_wpa3_enterprise_ssid_hide
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enterprise_ssid_hide
     [Documentation]             Fire off the disable and check that wifi guest 5g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -69,7 +69,7 @@ WLAN Guest 5g WPA3 enterprise: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 enterprise: SSID broadcast
-    [Tags]                      Config  interface_wifi_gust_5g  interface_wifi_guest_5g_wpa3_enterprise_ssid_broadcast
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi guest 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -87,7 +87,7 @@ WLAN Guest 5g WPA3 enterprise: SSID broadcast
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 enterprise: Server IP
-    [Tags]                      Config  interface_wifi_gust_5g  interface_wifi_guest_5g_wpa3_enterprise_server
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enterprise_server
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -105,8 +105,8 @@ WLAN Guest 5g WPA3 enterprise: Server IP
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 enterprise: Port forwarding
-    [Tags]                      Config  interface_wifi_gust_5g  interface_wifi_guest_5g_wpa3_enterprise_port
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enterprise_port
+    [Documentation]             Fire off the port forwarding and check that port forwarding is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -123,7 +123,7 @@ WLAN Guest 5g WPA3 enterprise: Port forwarding
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 enterprise: Connection secret
-    [Tags]                      Config  interface_wifi_gust_5g  interface_wifi_guest_5g_wpa3_enterprise_secret
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -141,26 +141,39 @@ WLAN Guest 5g WPA3 enterprise: Connection secret
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 enterprise: maxclient
-    [Tags]                      Config  interface_wifi_gust_5g  interface_wifi_guest_5g_wpa3_enterprise_maxclient
-    [Documentation]             Fire off the maclient and check that max clients is updated
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enterprise_maxclient
+    [Documentation]             Fire off the maxlient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
     ${output}=                  write  security wpa3_enterprise
     sleep                       1
+    #upper boundary test >50
     ${output}=                  write  maxclient 118
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}       maxclient must between 1 - 50   Syntax error: Illegal parameter
+    sleep                       1
+    #lower boundary test <1
+    ${output}=                  write  maxclient 0
+    sleep                       1
+    ${output}=                  read
+    should contain              ${output}       maxclient must between 1 - 50   Syntax error: Illegal parameter
+    sleep                       1
+    #happy path between 1 - 50
+    ${output}=                  write  maxclient 21
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
-    should contain              ${output}  MAX_CLIENTS=118
+    should contain              ${output}  MAX_CLIENTS=21
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 enterprise: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_gust_5g  interface_wifi_guest_5g_wpa3_enterprise_rekey
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_enterprise_rekey
+    [Documentation]             Fire off the rekey and check that rekey is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -192,15 +205,16 @@ WLAN Guest 5g WPA3 enterprise: Rekey key rotation interval
     ${exit}=                  write   top
 
 #exit from WLAN wpa3_enterprise 5g
-Exit from WLAN 5g wpa3_enterprise
-    [Tags]                      Config  interface_wifi_gust_5g     interface_wifi_guest_5g_wpa3_enterprise_exit
+WLAN Guest 5g WPA3 enterprise: Exit from WLAN 5g wpa3_enterprise
+    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa3_enterprise_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global configuration level
     ${output}=                 write    top
     sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
+    #set client configuration  prompt=#
+    ${output}=         read     #until prompt
     should contain              ${output}   (global)#
+    ${exit}=                  write   top
 
 #Execute template
 #    [Tags]                      template
