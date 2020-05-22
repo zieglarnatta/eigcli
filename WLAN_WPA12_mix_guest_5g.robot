@@ -141,7 +141,7 @@ WLAN Guest 5g WPA12 mix personal: Rekey key rotation interval
     ${exit}=                    write    top
 
 #exit from WLAN wpa12_mix 5g
-Exit from WLAN 5g wpa12_mix personal
+WLAN Guest 5g WPA12 mix personal: Exit from WLAN 5g wpa12_mix personal
     [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa12_mix_exit
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
     ${output}=                  write   top
@@ -152,8 +152,8 @@ Exit from WLAN 5g wpa12_mix personal
     ${output}=                 write    top
     sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
+    #set client configuration  prompt=#
+    ${output}=              read    #until prompt
     should contain              ${output}   (global)#
     ${exit}=                    write    top
 
