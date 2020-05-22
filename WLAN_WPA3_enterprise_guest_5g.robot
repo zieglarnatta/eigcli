@@ -31,7 +31,6 @@ WLAN Guest 5g: Enter wpa3_enterprise
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
     ${exit}=                  write   top
 
-
 WLAN 5g: Set SSID for wpa3_enterprise
     [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa3_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected

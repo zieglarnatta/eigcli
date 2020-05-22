@@ -205,7 +205,7 @@ WLAN Guest 2.4g WPA3 enterprise: Rekey key rotation interval
     ${exit}=                  write   top
 
 #exit from WLAN wpa3_enterprise 2.4g
-Exit from WLAN 2.4g wpa3_enterprise
+WLAN Guest 2.4g WPA3 enterprise: Exit from WLAN 2.4g wpa3_enterprise
     [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa3_enterprise_exit
     [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global configuration level
     ${output}=                 write    top
