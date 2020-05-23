@@ -20,7 +20,7 @@ Execute Hello World Echo Command And Verify Output
     should be equal         ${output}          Hello SSHLibrary!
 
 #Global configuration level
-Execute Help
+Global: Execute Help
     [Tags]                      Global     help
     [Documentation]             Execute Help command and report all help topics
     ${execute}=                 write              help
@@ -30,7 +30,7 @@ Execute Help
     should not contain          ${output}           -ash: help: not found
     should contain              ${output}           (global)#
 
-Global History 10 And Verify Output
+Global: History 10 And Verify Output
     [Tags]                      Global   history     10
     [Documentation]             Execute history 10 CLI and return the last 10
     ...                         The keyword returns the standard output by default.
@@ -41,7 +41,7 @@ Global History 10 And Verify Output
     should not contain          ${output}       -ash: help: not found
 
 
-Global Ping on 8.8.8.8
+Global: Ping on 8.8.8.8
     [Tags]                  Global     ping        8.8.8.8
     [Documentation]         Execute ping on 8.8.8.8 CLI and return the ping hops
     ...                     The keyword returns the standard output by default.
@@ -57,8 +57,8 @@ Global Ping on 8.8.8.8
 #    [Documentation]             Start the http python on localhost on port 7272
 #    run process                 python  ${server}   timeout=3min	on_timeout=continue
 
-Global AR Ping
-    [Tags]                      Global     ar_ping     ar  ping
+Global: AR Ping
+    [Tags]                      Global     ar_ping
     [Documentation]             Execute Ap Ping and report ping stats
     #Start the http python on localhost on port 7272
     run process                 python  ${server}   timeout=3min	on_timeout=continue
@@ -70,7 +70,7 @@ Global AR Ping
     should not contain          ${output}   Syntax error: Illegal command line    -ash: help: not found
     should contain              ${output}   0% packet loss
 
-Global Traceroute
+Global: Traceroute
     [Tags]                      Global  traceroute
     [Documentation]             Execute Traceroute and report traceroute stats
     #Start the http python on localhost on port 7272
@@ -86,7 +86,7 @@ Global Traceroute
     should not contain          ${output}   traceroute: can't set multicast source interface    Illegal command line
     #should not Be Equal         ${output}    traceroute: can't set multicast source interface    #has issues
 
-Global ps Processes
+Global: ps Processes
     [Tags]                      Global   ps
     [Documentation]             Execute the ps & return all of the processes
     ${execute}=                 write   ps
@@ -97,7 +97,7 @@ Global ps Processes
     should not contain          ${output}   -ash: help: not found
     should not contain          ${output}   Syntax error: Illegal command line
 
-Global show interfaces
+Global: show interfaces
     [Tags]                      Global  show    interfaces
     [Documentation]             Execute the show interfaces & return all of the processes
     ${execute}=                 write   show interfaces
@@ -106,7 +106,7 @@ Global show interfaces
     should not be empty         ${output}
     should not contain          ${output}   -ash: help: not found
 
-Global show ip route
+Global: show ip route
     [Tags]                      Global  show    ip_route
     [Documentation]             Execute the show ip route & return all of the processes
     ${execute}=                 write   show ip route
@@ -116,7 +116,7 @@ Global show ip route
     should not contain          ${output}   -ash: help: not found
     should not contain          ${output}   Syntax error: Illegal command line
 
-Global show iptables
+Global: show iptables
     [Tags]                      Global  show    iptables    show_iptables
     [Documentation]             Execute the show iptables & return all of the processes
     ${execute}=                 write   show iptables
@@ -126,9 +126,9 @@ Global show iptables
     should not be empty         ${output}
     should not contain          ${output}   -ash: help: not found
 
-#configure
-Execute "configure" and then "exit", then back to "confgiure" and use "top" to go back to global configuration
-    [Tags]                      Global  System_Configuration   top     Global      configure_to_global
+#Global --> configure --> Global
+Global: Execute "configure" and then "exit", then back to "confgiure" and use "top" to go back to global configuration
+    [Tags]                      Global  Config      System_Configuration   top     Global      configure_to_global
     [Documentation]             Execute the configure and then retreat back to global via top and one exit statement
     ${execute}=                 write   configure
     set client configuration    prompt=#
@@ -152,8 +152,8 @@ Execute "configure" and then "exit", then back to "confgiure" and use "top" to g
     should contain              ${output}   (global)#
 
 #System config portion
-Global ntp server configuration and show it (has problem matching with double space, also ntp updated on server 6 rather than 1)
-    [Tags]                      System_Configuration    ntp     show_ntp
+Global: ntp server configuration and show it (has problem matching with double space, also ntp updated on server 6 rather than 1)
+    [Tags]                      Config      System_Configuration    ntp     show_ntp
     [Documentation]             Execute the ntp & confirm ntp servers are updated & shown
     ${execute}=                 write   top
     ${execute}=                 write   configure
@@ -175,8 +175,8 @@ Global ntp server configuration and show it (has problem matching with double sp
     should be equal             ${output} Stahp it NTP!
 
 #WAN0
-WAN Configuration Wan0 Mode and back out via exit & top
-    [Tags]                      WAN     wan0    wan_configuration
+WAN Configuration: Wan0 Mode and back out via exit & top
+    [Tags]                      Config      WAN     wan0    wan_configuration
     [Documentation]             Enters the WAN Configuration Mode and retrest to global with top and then repeat but with two exits
     ${execute}=                 write   top
     ${output}=                 write   configure
@@ -224,7 +224,7 @@ WAN Configuration Wan0 Mode and back out via exit & top
     should contain              ${exit}   (global)#
 
 #WAN0 DHCP
-Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out & back out via top and 3 exits
+WAN Configuration: Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out & back out via top and 3 exits
     [Tags]                      Config      WAN     wan0    dhcp    conn_dhcp
     [Documentation]             Enters the WAN DHCP Configuration Mode
     ${execute}=                 write   top
@@ -7718,7 +7718,7 @@ WLAN Guest 5g WPA23 mix personal: Exit from WLAN 5g wpa23_mix
 WLAN Guest 5g WPA12 mix enterprise: Enter wpa12_mix_enterprise
     [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_enter
     [Documentation]             Fire off the interface wifi guest 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi 5g -> security wpa12_mix_enterprise
+    #configure -> interface wifi guest 5g -> security wpa12_mix_enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
@@ -8330,6 +8330,7 @@ WLAN Guest 5g WPA3 enterprise: Exit from WLAN 5g wpa3_enterprise
     ${output}=         read     #until prompt
     should contain              ${output}   (global)#
     ${exit}=                  write   top
+
 
 
 #Execute template
