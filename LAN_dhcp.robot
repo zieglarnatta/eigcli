@@ -148,6 +148,70 @@ LAN0 Bridge DHCP: Set WINS server
     should contain              ${wins}   WINS_SERVER=10.0.0.1
     ${exit}                     write  top  #reset the command line to global
 
+#moved these tests higher up since the ip assign del is flakey
+LAN0 Bridge DHCP: ip range
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_range
+    [Documentation]             Execute the ip range to add a range of IPs & ensure that it gets reflected
+    ${execute}=                 write   top    #reset it to ensure we start form global level
+    sleep                       1
+    ${execute}=                 write   configure   #system config level
+    sleep                       1
+    ${execute}=                 write   interface bridge lan0   #bridge lan0 level
+    sleep                       1
+    ${execute}=                 write   dhcp   #dhcp level
+    sleep                       1
+    ${execute}=                 write   ip range 192.168.0.2 192.168.0.5     #fire off the ip range from 2 to 5
+    sleep                       1
+    ${dhcp}=                     write   show   #show the results
+    sleep                       1
+    #need to consider the "apply" command to make it permanent & how to reset it
+    ${ipassignadd}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
+    sleep                       1
+    should not be empty         ${ipassignadd}
+    should not contain          ${ipassignadd}   -ash: ntp: not found    -ash: show ntp: not found
+    should contain              ${ipassignadd}  IP_Range_Start=192.168.0.2  IP_Range_End=192.168.0.5
+    ${exit}                     write  top  #reset the command line to global
+
+LAN0 Bridge DHCP: lease
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_lease
+    [Documentation]             Execute the lease to change lease time in seconds (from 24h default) & ensure that it gets reflected
+    ${execute}=                 write   top    #reset it to ensure we start form global level
+    ${execute}=                 write   configure   #system config level
+    ${execute}=                 write   interface bridge lan0   #bridge lan0 level
+    ${execute}=                 write   dhcp   #dhcp level
+    sleep                       1
+    ${execute}=                 write   lease 80000     #fire off the lease to be 80,000 seconds
+    sleep                       1
+    ${dhcp}=                     write   show   #show the results
+    sleep                       1
+    #need to consider the "apply" command to make it permanent & how to reset it
+    ${lease}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
+    sleep                       1
+    should not be empty         ${lease}
+    should not contain          ${lease}   -ash: ntp: not found    -ash: show ntp: not found
+    should contain              ${lease}  LEASE_TIME=80000s
+    ${exit}                     write  top  #reset the command line to global
+
+LAN0 Bridge DHCP: gateway
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_gateway
+    [Documentation]             Execute the gateway to specify the ip gateway & ensure that it gets reflected
+    ${execute}=                 write   top    #reset it to ensure we start form global level
+    ${execute}=                 write   configure   #system config level
+    ${execute}=                 write   interface bridge lan0   #bridge lan0 level
+    ${execute}=                 write   dhcp   #dhcp level
+    sleep                       1
+    ${execute}=                 write   gateway 192.168.2.1     #fire off the gateway to be 192.168.2.1
+    sleep                       1
+    ${dhcp}=                     write   show   #show the results
+    sleep                       1
+    #need to consider the "apply" command to make it permanent & how to reset it
+    ${gateway}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
+    sleep                       1
+    should not be empty         ${gateway}
+    should not contain          ${gateway}   -ash: ntp: not found    -ash: show ntp: not found
+    should contain              ${gateway}  DEFAULT_GATEWAY=192.168.2.1
+    ${exit}                     write  top  #reset the command line to global
+
 LAN0 Bridge DHCP: ip Assign show
     [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_assign_show
     [Documentation]             Execute the ip assign show & ensure that it is blank since nothing has been assigned for now. One more will be done once we assign a mac address to the ip
@@ -241,28 +305,8 @@ LAN0 Bridge DHCP: ip Assign delete
     should contain              ${ipassignshow}  Device:E8:B3:1F:0C:6D:20 IP Address:192.168.0.201
     ${exit}                     write  show
     ${exit}                     write  read
+    sleep                       1
     ${exit}                     write  top  #reset the command line to global
-
-LAN0 Bridge DHCP: ip range
-    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_range
-    [Documentation]             Execute the ip range toa dd a range of IPs & ensure that it gets reflected
-    ${execute}=                 write   top    #reset it to ensure we start form global level
-    ${execute}=                 write   configure   #system config level
-    ${execute}=                 write   interface bridge lan0   #bridge lan0 level
-    ${execute}=                 write   dhcp   #dhcp level
-    sleep                       1
-    ${execute}=                 write   ip range 192.168.0.2 192.168.0.5     #fire off the ip range from 2 to 5
-    sleep                       1
-    ${dhcp}=                     write   show   #show the results
-    sleep                       1
-    #need to consider the "apply" command to make it permanent & how to reset it
-    ${ipassignadd}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
-    sleep                       1
-    should not be empty         ${ipassignadd}
-    should not contain          ${ipassignadd}   -ash: ntp: not found    -ash: show ntp: not found
-    should contain              ${ipassignadd}  IP_Range_Start=192.168.0.2  IP_Range_End=192.168.0.5
-    ${exit}                     write  top  #reset the command line to global
-
 
 *** Keywords ***
 Open Connection And Log In
