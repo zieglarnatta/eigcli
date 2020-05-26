@@ -98,7 +98,7 @@ Global: ps Processes
     should not contain          ${output}   Syntax error: Illegal command line
 
 Global: show interfaces
-    [Tags]                      Global  show    interfaces
+    [Tags]                      Global  show    interfaces  show_interfaes
     [Documentation]             Execute the show interfaces & return all of the processes
     ${execute}=                 write   show interfaces
     set client configuration    prompt=#
@@ -107,7 +107,7 @@ Global: show interfaces
     should not contain          ${output}   -ash: help: not found
 
 Global: show ip route
-    [Tags]                      Global  show    ip_route
+    [Tags]                      Global  show    ip_route    show_ip_route
     [Documentation]             Execute the show ip route & return all of the processes
     ${execute}=                 write   show ip route
     set client configuration    prompt=#
@@ -128,7 +128,7 @@ Global: show iptables
 
 #Global --> configure --> Global
 Global: Execute "configure" and then "exit", then back to "confgiure" and use "top" to go back to global configuration
-    [Tags]                      Global  Config      System_Configuration   top     Global      configure_to_global
+    [Tags]                      Global  Config      System_Configuration   top     Global      configure_in_out
     [Documentation]             Execute the configure and then retreat back to global via top and one exit statement
     ${execute}=                 write   configure
     set client configuration    prompt=#
@@ -175,8 +175,8 @@ Global: ntp server configuration and show it (has problem matching with double s
     should be equal             ${output} Stahp it NTP!
 
 #WAN0
-WAN Configuration: Wan0 Mode and back out via exit & top
-    [Tags]                      Config      WAN     wan0    wan_configuration
+WAN0 Configuration: Wan0 Mode and back out via exit & top
+    [Tags]                      Config      WAN     wan0    wan_configuration   wan0_in_out
     [Documentation]             Enters the WAN Configuration Mode and retrest to global with top and then repeat but with two exits
     ${execute}=                 write   top
     ${output}=                 write   configure
@@ -224,8 +224,8 @@ WAN Configuration: Wan0 Mode and back out via exit & top
     should contain              ${exit}   (global)#
 
 #WAN0 DHCP
-WAN Configuration: Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out & back out via top and 3 exits
-    [Tags]                      Config      WAN     wan0    dhcp    conn_dhcp
+WAN0 dhcp: Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out & back out via top and 3 exits
+    [Tags]                      Config      WAN     wan0    dhcp    conn_dhcp_in_out
     [Documentation]             Enters the WAN DHCP Configuration Mode
     ${execute}=                 write   top
     ${output}=                 write   configure
@@ -266,8 +266,8 @@ WAN Configuration: Execute conn dhcp to enter the WAN DHCP Configuration Mode, d
     should not contain          ${output}   -ash: show ntp: not found
     should contain              ${output}   (global)#
 
-Execute update DHCP mtu, apply and then show DHCP
-    [Tags]                      Config      WAN     wan0    dhcp   mtu_dhcp
+WAN0 dhcp: Execute update DHCP mtu, apply and then show DHCP
+    [Tags]                      Config      WAN     wan0    dhcp   dhcp_mtu
     [Documentation]             Update mtu, apply and then show DHCP
     ${execute}=                 write   top
     ${output}=                 write   configure
@@ -287,8 +287,8 @@ Execute update DHCP mtu, apply and then show DHCP
     should contain              ${exit}   (global)#
 
 
-Execute update DHCP DNS and then show the applied result
-    [Tags]                      Config      WAN     wan0    dhcp   dns_dhcp
+WAN0 dhcp: Execute update DHCP DNS and then show the applied result
+    [Tags]                      Config      WAN     wan0    dhcp   dhcp_dns
     [Documentation]             Update DNS, apply and then show new DNS
     ${execute}=                 write   top
     ${output}=                 write   configure
@@ -310,8 +310,8 @@ Execute update DHCP DNS and then show the applied result
     should contain              ${output}   (config-if-wan0-dhcp)#
 
 
-Execute update DHCP host name & then show the applied result
-    [Tags]                      Config      WAN     wan0    dhcp   host_DHCP
+WAN0 dhcp: Execute update DHCP host name & then show the applied result
+    [Tags]                      Config      WAN     wan0    dhcp   DHCP_host
     [Documentation]             update host name as yeehaw, apply & then show it
     ${execute}=                 write   top
     ${output}=                 write   configure
@@ -334,8 +334,8 @@ Execute update DHCP host name & then show the applied result
     ${exit}                     read
     should contain              ${exit}   (global)#
 
-Execute update DHCP querymode to normal (from aggresive default) & then show the applied result
-    [Tags]                      Config      WAN     wan0    dhcp   querymode_DHCP
+WAN0 dhcp: Execute update DHCP querymode to normal (from aggresive default) & then show the applied result
+    [Tags]                      Config      WAN     wan0    dhcp   dhcp_query_mode
     [Documentation]             update query mode from Aggresive to Normal
     ${execute}=                 write   top
     ${output}=                 write   configure
@@ -361,8 +361,8 @@ Execute update DHCP querymode to normal (from aggresive default) & then show the
 #WIP
 
 #WAN Static config
-Execute connect static Wan & then back out
-    [Tags]                     Config       WAN     wan0    conn static     conn_static_in_out
+WAN0 static: Execute connect static Wan & then back out
+    [Tags]                     Config       WAN     wan0  static:  conn static     static_in_out
     [Documentation]            Enters the WAN Static Configuration Mode, then use top & 3 exits to go back to Global Configuration
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -402,8 +402,8 @@ Execute connect static Wan & then back out
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
 
-Execute the mtu for WAN Static
-    [Tags]                     Config       WAN     wan0    conn_static     mtu_static
+WAN0 static: Execute the mtu for WAN Static
+    [Tags]                     Config       WAN     wan0  static  conn_static     static_mtu
     [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -423,8 +423,8 @@ Execute the mtu for WAN Static
     ${exit}                     read
     should contain              ${exit}   (global)#
 
-Execute the dns for WAN Static
-    [Tags]                     Config       WAN     wan0    conn_static     dns_static
+WAN0 static: Execute the dns for WAN Static
+    [Tags]                     Config       WAN     wan0  static  conn_static     static_dns
     [Documentation]            Enters the WAN Static Configuration Mode and to set dns as 8.8.8.8
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -444,8 +444,8 @@ Execute the dns for WAN Static
     ${exit}                     read
     should contain              ${exit}   (global)#
 
-Execute the ip for WAN Static
-    [Tags]                     Config       WAN     wan0    conn_static     ip_static
+WAN0 static: Execute the ip for WAN Static
+    [Tags]                     Config       WAN     wan0  static  conn_static     static_ip
     [Documentation]            Enters the WAN Static Configuration Mode and to set ip as 192.168.0.200
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -465,8 +465,8 @@ Execute the ip for WAN Static
     ${exit}                     read
     should contain              ${exit}   (global)#
 
-Execute the netmask for WAN Static
-    [Tags]                     Config       WAN     wan0    conn_static     netmask_static
+WAN0 static: Execute the netmask for WAN Static
+    [Tags]                     Config       WAN     wan0  static   conn_static     static_netmask
     [Documentation]            Enters the WAN Static Configuration Mode and to set netmask as 255.255.0.0
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -486,8 +486,8 @@ Execute the netmask for WAN Static
     ${exit}                     read
     should contain              ${exit}   (global)#
 
-Execute the gateway for WAN Static
-    [Tags]                     Config       WAN     wan0    conn_static     gateway_static
+WAN0 static: Execute the gateway for WAN Static
+    [Tags]                     Config       WAN     wan0  static  conn_static     static_gateway
     [Documentation]            Enters the WAN Static Configuration Mode and to set gateway as DEFAULT_GATEWAY=192.168.0.203
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -508,8 +508,8 @@ Execute the gateway for WAN Static
     should contain              ${exit}   (global)#
 
 #WAN PPPoE
-Execute connect PPPoE Wan & then back out
-    [Tags]                     Config       WAN     wan0    conn pppoe     conn_pppoe_in_out
+WAN0 PPPoE: Execute connect PPPoE Wan & then back out
+    [Tags]                     Config       WAN     wan0  PPPoE   conn pppoe     pppoe_in_out
     [Documentation]            Enters the WAN PPPoE Configuration Mode, then use top & 3 exits to go back to Global Configuration
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -549,31 +549,9 @@ Execute connect PPPoE Wan & then back out
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pppoe)#
 
-#connect again
-Execute conn PPPoE to enter Wan PPPoE
-    [Tags]                     Config       WAN     wan0    conn pppoe  conn_pppoe  enter_pppoe
-    [Documentation]            Enters the WAN PPPoE Configuration Mode and show default values
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pppoe
-    sleep                       1
-    ${output}=                 write   show
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    #${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wan0-pppoe)#
-    should contain              ${output}   PPPoE Configuration:    DNS_AUTO=Enable     USER_NAME=  PASSWORD=
-    should contain              ${output}   MTU=    SERVICE_NAME=   ACCESS_CONCENTRATOR_NAME=   ADDITIONAL_PPPD_OPTIONS=
-    ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
-
 #mtu
-Execute the mtu for WAN PPPoE
-    [Tags]                     Config       WAN     wan0    conn pppoe  conn_pppoe     mtu_pppoe
+WAN0 PPPoE: Execute the mtu for WAN PPPoE
+    [Tags]                     Config       WAN     wan0  PPPoE   conn pppoe  conn_pppoe     pppoe_mtu
     [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -594,8 +572,8 @@ Execute the mtu for WAN PPPoE
     should contain              ${exit}   (global)#
 
 #dns
-Execute the dns for WAN PPPoE
-    [Tags]                     Config       WAN     wan0    conn_pppoe     dns_pppoe
+WAN0 PPPoE: Execute the dns for WAN PPPoE
+    [Tags]                     Config       WAN     wan0   PPPoE  conn_pppoe     pppoe_dns
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set dns as 8.8.8.8
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -616,8 +594,8 @@ Execute the dns for WAN PPPoE
     should contain              ${exit}   (global)#
 
 #username
-Execute the username for WAN PPPoE
-    [Tags]                     Config       WAN     wan0    conn_pppoe     username_pppoe
+WAN0 PPPoE: Execute the username for WAN PPPoE
+    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_username
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set username as leroy_jenkins
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -638,8 +616,8 @@ Execute the username for WAN PPPoE
     should contain              ${exit}   (global)#
 
 #password
-Execute the password for WAN PPPoE
-    [Tags]                     Config       WAN     wan0    conn_pppoe     password_pppoe
+WAN0 PPPoE: Execute the password for WAN PPPoE
+    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_password
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set password as atLeastWeHaveChicken
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -660,8 +638,8 @@ Execute the password for WAN PPPoE
     should contain              ${exit}   (global)#
 
 #servicename
-Execute the servicename for WAN PPPoE
-    [Tags]                     Config       WAN     wan0    conn_pppoe     servicename_pppoe
+WAN0 PPPoE: Execute the servicename for WAN PPPoE
+    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_servicename
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -682,8 +660,8 @@ Execute the servicename for WAN PPPoE
     should contain              ${exit}   (global)#
 
 #acname
-Execute the acname for WAN PPPoE
-    [Tags]                     Config       WAN     wan0    conn_pppoe     acname_pppoe
+WAN0 PPPoE: Execute the acname for WAN PPPoE
+    [Tags]                     Config       WAN     wan0   PPPoE  conn_pppoe     pppoe_acname
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -704,8 +682,8 @@ Execute the acname for WAN PPPoE
     should contain              ${exit}   (global)#
 
 #options
-Execute the options for WAN PPPoE
-    [Tags]                     Config       WAN     wan0    conn_pppoe     options_pppoe
+WAN0 PPPoE: Execute the options for WAN PPPoE
+    [Tags]                     Config       WAN     wan0  PPPoE  conn_pppoe     pppoe_options
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -725,20 +703,9 @@ Execute the options for WAN PPPoE
     ${exit}                     read
     should contain              ${exit}   (global)#
 
-#exit from PPPoE
-Exit from PPPoE
-    [Tags]                     Config       WAN     wan0    conn_pppoe     exit_pppoe
-    [Documentation]            Exit the WAN PPPoE Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #PPTP
-Enter PPTP and then back out to Global
-    [Tags]                      Config       WAN     wan0    conn_pptp  conn_pptp_in_out    pptp
+WAN0 PPTP: Enter PPTP and then back out to Global
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  conn_pptp_in_out
     [Documentation]             Fire off the conn pptp and then back out via top and then back in and back out via 3 exits
     #configure -> interface ethernet wan0 -> conn pptp
     ${execute}=                 write   top
@@ -778,8 +745,8 @@ Enter PPTP and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
 
-Execute conn pptp to Enter PPTP
-    [Tags]                      Config       WAN     wan0    conn_pptp
+WAN0 PPTP: Execute conn pptp to Enter PPTP
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp
     [Documentation]             Fire off the conn pptp and then verify it's in PPTP
     #configure -> interface ethernet wan0 -> conn pptp
     ${execute}=                 write   top
@@ -793,8 +760,8 @@ Execute conn pptp to Enter PPTP
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter mtu 1433   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_mtu
+WAN0 PPTP: Enter mtu 1433   #has problems not showing
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_mtu
     [Documentation]             Fire off the conn pptp and then set the mtu
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -810,8 +777,8 @@ Enter mtu 1433   #has problems not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter DNS
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_dns
+WAN0 PPTP: Enter DNS
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_dns
     [Documentation]             Fire off the conn pptp and then set the dns
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -828,8 +795,8 @@ Enter DNS
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter PPTP IP
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_ip
+WAN0 PPTP: Enter PPTP IP
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_ip
     [Documentation]             Fire off the ip and then set the ip
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -846,8 +813,8 @@ Enter PPTP IP
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter netmask   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_netmask
+WAN0 PPTP: Enter netmask   #has issues, not working, not showing
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_netmask
     [Documentation]             Fire off the netmask and then set the netmask
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -864,8 +831,8 @@ Enter netmask   #has issues, not working, not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter gateway   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_gateway
+WAN0 PPTP: Enter gateway   #has issues, not working, not showing
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_gateway
     [Documentation]             Fire off the netmask and then set the gateway
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -882,8 +849,8 @@ Enter gateway   #has issues, not working, not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter username   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_username
+WAN0 PPTP: Enter username   #has problems not showing
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_username
     [Documentation]             Fire off the username and then set the username
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -900,8 +867,8 @@ Enter username   #has problems not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter password   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_password
+WAN0 PPTP: Enter password   #has problems not showing
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_password
     [Documentation]             Fire off the password and then set the password
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -918,8 +885,8 @@ Enter password   #has problems not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter vpn   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_vpn
+WAN0 PPTP: Enter vpn   #has problems not showing
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_vpn
     [Documentation]             Fire off the vpn and then set the vpn
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -936,8 +903,8 @@ Enter vpn   #has problems not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter hostname
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_hostname
+WAN0 PPTP: Enter hostname
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_hostname
     [Documentation]             Fire off the hostname and then set the hostname
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -954,8 +921,8 @@ Enter hostname
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter default route: enable  #has problems
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_defaultroute
+WAN0 PPTP: Enter default route: enable  #has problems
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_defaultroute
     [Documentation]             Fire off the default route and then set the default route
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -972,8 +939,8 @@ Enter default route: enable  #has problems
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter Encrypt mppe128  #has problems, nothing shown
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_encrypt
+WAN0 PPTP: Enter Encrypt mppe128  #has problems, nothing shown
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_encrypt
     [Documentation]             Fire off the encrypt and then set the encrytion to mppe128
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -990,8 +957,8 @@ Enter Encrypt mppe128  #has problems, nothing shown
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter options   #has issues
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_options
+WAN0 PPTP: Enter options   #has issues
+    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_options
     [Documentation]             Fire off the options and then set the options as ttyname
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1008,20 +975,9 @@ Enter options   #has issues
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-#exit from pptp
-Exit from PPPoE
-    [Tags]                     Config       WAN     wan0    conn_pptp     exit_pptp
-    [Documentation]            Exit the WAN L2TP Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write   top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #L2TP
-Enter L2TP and then back out to Global
-    [Tags]                      Config       WAN     wan0    conn_l2tp  conn_l2tp_in_out    l2tp
+WAN0 L2TP: Enter L2TP and then back out to Global
+    [Tags]                      Config       WAN     wan0    conn_l2tp  conn_l2tp_in_out    L2TP
     [Documentation]             Fire off the conn l2tp and then back out via top and then back in and back out via 3 exits
     #configure -> interface ethernet wan0 -> conn l2tp
     ${exit}                     write  top
@@ -1060,8 +1016,8 @@ Enter L2TP and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
 
-Execute conn l2tp to Enter l2tp
-    [Tags]                      Config       WAN     wan0    conn_l2tp
+WAN0 L2TP: Execute conn l2tp to Enter l2tp
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp
     [Documentation]             Fire off the conn l2tp and then verify it's in l2tp
     #configure -> interface ethernet wan0 -> conn l2tp
     ${exit}                     write  top
@@ -1076,8 +1032,8 @@ Execute conn l2tp to Enter l2tp
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter mtu 1432   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_mtu
+WAN0 L2TP: Enter mtu 1432   #has problems not showing
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_mtu
     [Documentation]             Fire off the conn l2tp and then set the mtu
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1094,8 +1050,8 @@ Enter mtu 1432   #has problems not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter DNS
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_dns
+WAN0 L2TP: Enter DNS
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_dns
     [Documentation]             Fire off the conn l2tp and then set the dns
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1112,8 +1068,8 @@ Enter DNS
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter l2tp IP
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_ip
+WAN0 L2TP: Enter l2tp IP
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_ip
     [Documentation]             Fire off the ip and then set the ip
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1130,8 +1086,8 @@ Enter l2tp IP
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter netmask   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_netmask
+WAN0 L2TP: Enter netmask   #has issues, not working, not showing
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_netmask
     [Documentation]             Fire off the netmask and then set the netmask
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1148,8 +1104,8 @@ Enter netmask   #has issues, not working, not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter gateway   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_gateway
+WAN0 L2TP: Enter gateway   #has issues, not working, not showing
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_gateway
     [Documentation]             Fire off the netmask and then set the gateway
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1167,8 +1123,8 @@ Enter gateway   #has issues, not working, not showing
     ${exit}                     write  top
     ${exit}                     write  top
 
-Enter username   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_username
+WAN0 L2TP: Enter username   #has problems not showing
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_username
     [Documentation]             Fire off the username and then set the username
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1185,8 +1141,8 @@ Enter username   #has problems not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter password   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_password
+WAN0 L2TP: Enter password   #has problems not showing
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_password
     [Documentation]             Fire off the password and then set the password
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1203,8 +1159,8 @@ Enter password   #has problems not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter vpn   #has problems not showing
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_vpn
+WAN0 L2TP: Enter vpn   #has problems not showing
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_vpn
     [Documentation]             Fire off the vpn and then set the vpn
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1221,8 +1177,8 @@ Enter vpn   #has problems not showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter hostname
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_hostname
+WAN0 L2TP: Enter hostname
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_hostname
     [Documentation]             Fire off the hostname and then set the hostname
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1239,8 +1195,8 @@ Enter hostname
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter default route: enable  #has problems not enabled
-    [Tags]                      Config       WAN     wan0    conn_l2tp  l2tp_defaultroute
+WAN0 L2TP: Enter default route: enable  #has problems not enabled
+    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_defaultroute
     [Documentation]             Fire off the default route and then set the default route
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1257,8 +1213,8 @@ Enter default route: enable  #has problems not enabled
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-Enter options   #has problems, snow showing
-    [Tags]                      Config       WAN     wan0    conn_pptp  pptp_options
+WAN0 L2TP: Enter options   #has problems, snow showing
+    [Tags]                      Config       WAN     wan0   L2TP    conn_pptp  pptp_options
     [Documentation]             Fire off the options and then set the options as ttyname
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1275,20 +1231,9 @@ Enter options   #has problems, snow showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
-#exit from L2TP
-Exit from L2TP
-    [Tags]                     Config       WAN     wan0    conn_L2TP     exit_L2TP
-    [Documentation]            Exit the WAN L2TP Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write   top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN 2.4g
-Enter Wifi 2.4g and then back out to Global
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_in_out
+WLAN 2.4g: Enter Wifi 2.4g and then back out to Global
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> conn
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1322,8 +1267,8 @@ Enter Wifi 2.4g and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config)#   (config-if-wlan-2.4g)#
 
-Enter disable
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_disable
+WLAN 2.4g: Enter disable
+    [Tags]                      Config  WLAN    WLAN2_4g  interface_wifi_2_4g  interface_wifi_2_4g_disable
     [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1339,8 +1284,8 @@ Enter disable
     #need to incorporate a UI robot to check on this in teh admin
     ${exit}                     write  top
 
-Enter enable
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_enable
+WLAN 2.4g: Enter enable
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_enable
     [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1358,8 +1303,8 @@ Enter enable
     ${exit}                     write  top
 
 #enter all the security wpa and then back out
-Enter security WPA and then back out
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa_in_out
+WLAN 2.4g WPA: Enter security WPA and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1382,9 +1327,9 @@ Enter security WPA and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
-    #sleep                       1
+    sleep                       1
     ${output}=                  write  security wpa
     sleep                       1
     ${output}=                  write   exit
@@ -1396,8 +1341,8 @@ Enter security WPA and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
 
-Enter security WPA2 and then back out
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa2_in_out
+WLAN 2.4g WPA2: Enter security WPA2 and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa2_in_out
     [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1420,9 +1365,9 @@ Enter security WPA2 and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
-    #sleep                       1
+    sleep                       1
     ${output}=                  write  security wpa2
     sleep                       1
     ${output}=                  write  exit
@@ -1434,8 +1379,8 @@ Enter security WPA2 and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
 
-Enter security WPA3 and then back out
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_in_out
+WLAN 2.4g WPA3: Enter security WPA3 and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_in_out
     [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1458,9 +1403,9 @@ Enter security WPA3 and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa3)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
-    #sleep                       1
+    sleep                       1
     ${output}=                  write  security wpa3
     sleep                       1
     ${output}=                  write  exit
@@ -1472,8 +1417,8 @@ Enter security WPA3 and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
 
-Enter security WPA12 Mix and then back out
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa12_mix_in_out
+WLAN 2.4g WPA12 mix: Enter security WPA12 Mix and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa12_mix_in_out
     [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1496,9 +1441,9 @@ Enter security WPA12 Mix and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
-    #sleep                       1
+    sleep                       1
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
@@ -1510,8 +1455,8 @@ Enter security WPA12 Mix and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#    (global)#
 
-Enter security WPA23 mix and then back out
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa23_mix_in_out
+WLAN 2.4g WPA23 mix: Enter security WPA23 mix and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1534,9 +1479,9 @@ Enter security WPA23 mix and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
-    #sleep                       1
+    sleep                       1
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
@@ -1548,8 +1493,8 @@ Enter security WPA23 mix and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#     (config)#    (global)#
 
-Enter security WPA2 enterprise and then back out
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa2_enterprise_in_out
+WLAN 2.4g WPA2 enterprise: Enter security WPA2 enterprise and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_security_wpa2_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1572,9 +1517,9 @@ Enter security WPA2 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
-    #sleep                       1
+    sleep                       1
     ${output}=                  write  security wpa2_enterprise
     sleep                       1
     ${output}=                  write  exit
@@ -1586,8 +1531,8 @@ Enter security WPA2 enterprise and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#    (global)#
 
-Enter security WPA3 enterprise and then back out
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_enterprise_in_out
+WLAN 2.4g WPA3 enterprise: Enter security WPA3 enterprise and then back out
+    [Tags]                      Config  WLAN    WLAN_2_$g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1610,9 +1555,9 @@ Enter security WPA3 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa3-ent)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
-    #sleep                       1
+    sleep                       1
     ${output}=                  write  security wpa3_enterprise
     sleep                       1
     ${output}=                  write  exit
@@ -1624,8 +1569,8 @@ Enter security WPA3 enterprise and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
 
-Enter security WPA12 mix enterprise and then back out
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa12_mix_enterprise_in_out
+WLAN 2.4g WPA12 mix enerprise: Enter security WPA12 mix enterprise and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_security_wpa12_mix_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1648,9 +1593,9 @@ Enter security WPA12 mix enterprise and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#   (config-if-wlan-2.4g)#
     #use one exit to go back to (config-if-wlan-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN 2.4g
-    #sleep                       1
+    sleep                       1
     ${output}=                  write  security wpa12_mix_enterprise
     sleep                       1
     ${output}=                  write  exit
@@ -1662,21 +1607,9 @@ Enter security WPA12 mix enterprise and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#    (global)#
 
-
-#exit from WLAN 2.4g
-Exit from WLAN 2.4g
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN Guest 2.4g
-Enter WLAN Guest 2.4g and then back out to Global
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_in_out
+WLAN Guest 2.4g: Enter WLAN Guest 2.4g and then back out to Global
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_in_out
     [Documentation]             Fire off the interface wifi guest 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi guest 2.4g -> conn
     ${exit}                     write  top
@@ -1710,8 +1643,8 @@ Enter WLAN Guest 2.4g and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
 
-Enter disable
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_disable
+WLAN 2.4g: Enter disable
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_disable
     [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1727,8 +1660,8 @@ Enter disable
     #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
-Enter enable
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_enable
+WLAN 2.4g: Enter enable
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_enable
     [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1736,8 +1669,7 @@ Enter enable
     sleep                       1
     ${output}=                  write  enable
     sleep                       10
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
+    ${output}=                  read
     sleep                       1
     #should be empty             ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
@@ -1747,7 +1679,7 @@ Enter enable
 
 #enter all the security wpa and then back out
 Enter security WPA and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1784,8 +1716,8 @@ Enter security WPA and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
 
-Enter security WPA2 and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_in_out
+WLAN 2.4g WPA2: Enter security WPA2 and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_in_out
     [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1822,8 +1754,8 @@ Enter security WPA2 and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
 
-Enter security WPA3 and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_in_out
+WLAN 2.4g WPA3: Enter security WPA3 and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_in_out
     [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1860,8 +1792,8 @@ Enter security WPA3 and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3)#    (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
 
-Enter security WPA12 Mix and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_in_out
+WLAN 2.4g WPA12 Mix: Enter security WPA12 Mix and then back out
+    [Tags]                      Config  WLAN    WLAN2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_in_out
     [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1884,9 +1816,7 @@ Enter security WPA12 Mix and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#   (config-if-wlan-guest-2.4g-wpa12-mix)#
     #use one exit to go back to (config-if-wlan-guest-2.4g)#
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
@@ -1898,8 +1828,8 @@ Enter security WPA12 Mix and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#    (config-if-wlan-2.4gx)#     (config)#    (global)#
 
-Enter security WPA23 mix and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa23_mix_in_out
+WLAN 2.4g WPA23 Mix: Enter security WPA23 mix and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1936,8 +1866,8 @@ Enter security WPA23 mix and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#    (config-if-wlan-guest-2.4g-wpa23-mix)#     (config)#    (global)#
 
-Enter security WPA2 enterprise and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_enterprise_in_out
+WLAN 2.4g WPA2 enterprise: Enter security WPA2 enterprise and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1974,8 +1904,8 @@ Enter security WPA2 enterprise and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config-if-wlan-guest-2.4g-wpa2-ent)#     (config)#    (global)#
 
-Enter security WPA3 enterprise and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_enterprise_in_out
+WLAN 2.4g WPA3 enterprise: Enter security WPA3 enterprise and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2012,8 +1942,8 @@ Enter security WPA3 enterprise and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3-ent)#     (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
 
-Enter security WPA12 mix enterprise and then back out
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_enterprise_in_out
+WLAN 2.4g WPA12 Mix enterprise: Enter security WPA12 mix enterprise and then back out
+    [Tags]                      Config  WLAN    WLAN_2_4g    interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2050,21 +1980,9 @@ Enter security WPA12 mix enterprise and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#    (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#    (global)#
 
-
-#exit from WLAN 2.4g
-Exit from WLAN 2.4g
-    [Tags]                      Config  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN 2.4g: WPA
-WLAN 2.4g: WPA Enter WPA personal
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_enter
+WLAN 2.4g WPA: Enter WPA personal
+    [Tags]                      Config  WLAN  WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa
     ${output}=                  write   top
@@ -2081,8 +1999,8 @@ WLAN 2.4g: WPA Enter WPA personal
     ${exit}=                  write   top
 
 
-WLAN 2.4g: WPA Set SSID for WPA Personal WLAN 2.4g
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa_ssid
+WLAN 2.4g WPA: Set SSID for WPA Personal WLAN 2.4g
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g     interface_wifi_2_4g_wpa_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2099,9 +2017,9 @@ WLAN 2.4g: WPA Set SSID for WPA Personal WLAN 2.4g
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}=                  write   top
 
-WLAN 2.4g: WPA SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+WLAN 2.4g WPA: SSID Hide enabled
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 2.4g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
@@ -2117,8 +2035,8 @@ WLAN 2.4g: WPA SSID Hide enabled
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}=                  write   top
 
-WLAN 2.4g: WPA SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_broadcast
+WLAN 2.4g WPA: SSID broadcast
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2135,8 +2053,8 @@ WLAN 2.4g: WPA SSID broadcast
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}=                  write   top
 
-WLAN 2.4g: WPA Password
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_password
+WLAN 2.4g WPA: Password
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2153,8 +2071,8 @@ WLAN 2.4g: WPA Password
     should contain              ${output}  PASSWORD=YoshiYoshi
     ${exit}=                  write   top
 
-WLAN 2.4g: WPA maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_maxclient
+WLAN 2.4g WPA: maxclient
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2171,9 +2089,9 @@ WLAN 2.4g: WPA maxclient
     should contain              ${output}  MAX_CLIENTS=120
     ${exit}=                  write   top
 
-WLAN 2.4g: WPA Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa_rekey
-    [Documentation]             Fire off the password and check that password is updated
+WLAN 2.4g WPA: Rekey key rotation interval
+    [Tags]                      Config    WLAN  WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa_rekey
+    [Documentation]             Fire off the rekey and check that it is updated in seconds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration WLAN 2.4g
@@ -2189,20 +2107,9 @@ WLAN 2.4g: WPA Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
     ${exit}=                  write   top
 
-#exit from WLAN WPA 2.4g
-Exit from WLAN 2.4g WPA
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN WPA2 2.4g
 WLAN WPA2 2.4g: wpa2 personal
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enter
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa2_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa2
     ${output}=                  write   top
@@ -2219,7 +2126,7 @@ WLAN WPA2 2.4g: wpa2 personal
 
 
 WLAN WPA2 2.4g: Set SSID for wpa2 Personal WLAN 2.4g
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_ssid
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g     interface_wifi_2_4g_wpa2_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2236,8 +2143,8 @@ WLAN WPA2 2.4g: Set SSID for wpa2 Personal WLAN 2.4g
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
 
 WLAN WPA2 2.4g: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 2.4g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -2253,7 +2160,7 @@ WLAN WPA2 2.4g: SSID Hide enabled
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
 
 WLAN WPA2 2.4g: SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_broadcast
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa2_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2270,7 +2177,7 @@ WLAN WPA2 2.4g: SSID broadcast
     should contain              ${output}  HIDE_SSID=Disable
 
 WLAN WPA2 2.4g: Password
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_password
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa2_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2287,8 +2194,8 @@ WLAN WPA2 2.4g: Password
     should contain              ${output}  PASSWORD=PrincessPeach
 
 WLAN WPA2 2.4g: PMF protected Management Frames
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_pmf
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa2_pmf
+    [Documentation]             Fire off the protected management frames and check that pmf is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -2304,7 +2211,7 @@ WLAN WPA2 2.4g: PMF protected Management Frames
     should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
 
 WLAN WPA2 2.4g: maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_maxclient
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa2_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2321,8 +2228,8 @@ WLAN WPA2 2.4g: maxclient
     should contain              ${output}  MAX_CLIENTS=120
 
 WLAN WPA2 2.4g: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_rekey
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa2_rekey
+    [Documentation]             Fire off the rekey and check that it is updated in seconds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -2337,20 +2244,9 @@ WLAN WPA2 2.4g: Rekey key rotation interval
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
 
-#exit from WLAN wpa2 2.4g
-Exit from WLAN 2.4g wpa2
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN 2.4g WPA3
 WLAN 2.4g WPA3: Enter wpa3 personal
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enter
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa3_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa3
     ${output}=                  write   top
@@ -2366,7 +2262,7 @@ WLAN 2.4g WPA3: Enter wpa3 personal
     ${exit}=                    write   top
 
 WLAN 2.4g WPA3: Set SSID for wpa3 Personal WLAN 2.4g
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa3_ssid
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g     interface_wifi_2_4g_wpa3_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${exit}=                    write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2384,8 +2280,8 @@ WLAN 2.4g WPA3: Set SSID for wpa3 Personal WLAN 2.4g
     ${exit}=                    write   top
 
 WLAN 2.4g WPA3: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa3_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 2.4g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2402,7 +2298,7 @@ WLAN 2.4g WPA3: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3: SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_ssid_broadcast
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa3_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2420,7 +2316,7 @@ WLAN 2.4g WPA3: SSID broadcast
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3: Password
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_password
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa3_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2438,7 +2334,7 @@ WLAN 2.4g WPA3: Password
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3: maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_maxclient
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2456,8 +2352,8 @@ WLAN 2.4g WPA3: maxclient
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_rekey
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_rekey
+    [Documentation]             Fire off the rekey and check that i is updated in seconds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2473,20 +2369,9 @@ WLAN 2.4g WPA3: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3597s
     ${exit}=                  write   top
 
-#exit from WLAN wpa3 2.4g
-Exit from WLAN 2.4g wpa3
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa3_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN WPA 12 mix personal 2.4g
-WLAN 2.4g: Enter wpa12_mix personal
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enter
+WLAN 2.4g WPA12 mix: Enter wpa12_mix personal
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa12_mix
     ${output}=                  write   top
@@ -2502,8 +2387,8 @@ WLAN 2.4g: Enter wpa12_mix personal
     ${exit}=                    write   top
 
 
-WLAN 2.4g: Set SSID for wpa12_mix Personal WLAN 2.4g
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_ssid
+WLAN 2.4g WPA12 mix: Set SSID for wpa12_mix Personal WLAN 2.4g
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2520,9 +2405,9 @@ WLAN 2.4g: Set SSID for wpa12_mix Personal WLAN 2.4g
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}=                    write   top
 
-WLAN 2.4g: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+WLAN 2.4g WPA12 mix: SSID Hide enabled
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_hide
+    [Documentation]             Fire off the ssid hdie and check that wifi 2.4g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2538,8 +2423,8 @@ WLAN 2.4g: SSID Hide enabled
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}=                    write   top
 
-WLAN 2.4g: SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_broadcast
+WLAN 2.4g WPA12 mix: SSID broadcast
+    [Tags]                      Config  WLAN    WALN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2556,8 +2441,8 @@ WLAN 2.4g: SSID broadcast
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}=                    write   top
 
-WLAN 2.4g: Password
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_password
+WLAN 2.4g WPA12 mix: Password
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2574,8 +2459,8 @@ WLAN 2.4g: Password
     should contain              ${output}  PASSWORD=IchooseYou
     ${exit}=                    write   top
 
-WLAN 2.4g: maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_maxclient
+WLAN 2.4g WPA12 mix: maxclient
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2592,9 +2477,9 @@ WLAN 2.4g: maxclient
     should contain              ${output}  MAX_CLIENTS=123
     ${exit}=                    write   top
 
-WLAN 2.4g: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_rekey
-    [Documentation]             Fire off the password and check that password is updated
+WLAN 2.4g WPA12 mix: Rekey key rotation interval
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_rekey
+    [Documentation]             Fire off the rekey and check that it is updated ins econds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2610,26 +2495,9 @@ WLAN 2.4g: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
     ${exit}=                    write   top
 
-#exit from WLAN wpa12_mix 2.4g
-Exit from WLAN 2.4g wpa12_mix personal
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                  write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
-    ${output}=                  write  security wpa12_mix
-    sleep                       1
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-    ${exit}=                    write   top
-
 #WLAN 2.4g WPA23 Mix personal
-WLAN 2.4g: Enter wpa23_mix personal
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_enter
+WLAN 2.4g WPA23 mix: Enter wpa23_mix personal
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa23_mix
     ${output}=                  write   top
@@ -2645,8 +2513,8 @@ WLAN 2.4g: Enter wpa23_mix personal
     ${exit}=                  write   top
 
 
-WLAN 2.4g: Set SSID for wpa23_mix Personal WLAN 2.4g
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa23_mix_ssid
+WLAN 2.4g WPA23 mix: Set SSID for wpa23_mix Personal WLAN 2.4g
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g     interface_wifi_2_4g_wpa23_mix_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2663,9 +2531,9 @@ WLAN 2.4g: Set SSID for wpa23_mix Personal WLAN 2.4g
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}=                  write   top
 
-WLAN 2.4g: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+WLAN 2.4g WPA23 mix: SSID Hide enabled
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 2.4g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2681,8 +2549,8 @@ WLAN 2.4g: SSID Hide enabled
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}=                  write   top
 
-WLAN 2.4g: SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_ssid_broadcast
+WLAN 2.4g WPA23 mix: SSID broadcast
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2699,8 +2567,8 @@ WLAN 2.4g: SSID broadcast
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}=                  write   top
 
-WLAN 2.4g: Password
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_password
+WLAN 2.4g WPA23 mix: Password
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2717,8 +2585,8 @@ WLAN 2.4g: Password
     should contain              ${output}  PASSWORD=GottaCatchThemAll
     ${exit}=                  write   top
 
-WLAN 2.4g: maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_maxclient
+WLAN 2.4g WPA23 mix: maxclient
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2735,9 +2603,9 @@ WLAN 2.4g: maxclient
     should contain              ${output}  MAX_CLIENTS=123
     ${exit}=                  write   top
 
-WLAN 2.4g: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_rekey
-    [Documentation]             Fire off the password and check that password is updated
+WLAN 2.4g WPA23 mix: Rekey key rotation interval
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa23_mix_rekey
+    [Documentation]             Fire off the rekey and check that rekey is updated in seconds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2753,20 +2621,9 @@ WLAN 2.4g: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
     ${exit}=                  write   top
 
-#exit from WLAN wpa23_mix 2.4g
-Exit from WLAN 2.4g wpa23_mix
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa23_mix_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global configuration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN 2.4g WPA2 enterprise
-Enter wpa2_enterprise
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_enter
+WLAN 2.4g WPA2 enterprise: Enter wpa2_enterprise
+    [Tags]                      Config  WLAN   WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa2_enterprise
     ${output}=                  write   top
@@ -2782,8 +2639,8 @@ Enter wpa2_enterprise
     ${exit}=                    write   top
 
 
-Set SSID for wpa2_enterprise WLAN 2.4g
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_enterprise_ssid
+WLAN 2.4g WPA2 enterprise: Set SSID for wpa2_enterprise WLAN 2.4g
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2799,9 +2656,9 @@ Set SSID for wpa2_enterprise WLAN 2.4g
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}=                  write   top
 
-SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+WLAN 2.4g WPA2 enterprise: SSID Hide enabled
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 2.4g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2816,8 +2673,8 @@ SSID Hide enabled
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-2.4g)#
     ${exit}=                  write   top
 
-SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_ssid_broadcast
+WLAN 2.4g WPA2 enterprise: SSID broadcast
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2833,9 +2690,9 @@ SSID broadcast
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}=                  write   top
 
-Server IP
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_server
-    [Documentation]             Fire off the password and check that password is updated
+WLAN 2.4g WPA2 enterprise: Server IP
+    [Tags]                      Config  WLAN    WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_server
+    [Documentation]             Fire off the server IP and check that it is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2850,9 +2707,9 @@ Server IP
     should contain              ${output}  SERVER_IP=192.168.0.253
     ${exit}=                  write   top
 
-Port forwarding
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_port
-    [Documentation]             Fire off the password and check that password is updated
+WLAN 2.4g WPA2 enterprise: Port forwarding
+    [Tags]                      Config     WLAN  WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_port
+    [Documentation]             Fire off the port forwarding and check that it is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2867,8 +2724,8 @@ Port forwarding
     should contain              ${output}  PORT_FORWARD=1811
     ${exit}=                  write   top
 
-Connection secret
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_secret
+WLAN 2.4g WPA2 enterprise: Connection secret
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2884,9 +2741,9 @@ Connection secret
     should contain              ${output}  CONNECTION_SECRET=PowerExtreme!
     ${exit}=                  write   top
 
-PMF protected Management Frames
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_pmf
-    [Documentation]             Fire off the password and check that password is updated
+WLAN 2.4g WPA2 enterprise: PMF protected Management Frames
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_pmf
+    [Documentation]             Fire off the protected management frames and check that pmf is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -2901,8 +2758,8 @@ PMF protected Management Frames
     should contain              ${output}  PROTECTED_MANAGEMENT_FRAMES=Required
     ${exit}=                  write   top
 
-maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_maxclient
+WLAN 2.4g WPA2 enterprise: maxclient
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2918,8 +2775,8 @@ maxclient
     should contain              ${output}  MAX_CLIENTS=123
     ${exit}=                  write   top
 
-Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_rekey
+WLAN 2.4g WPA2 enterperise: Rekey key rotation interval
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa2_enterprise_rekey
     [Documentation]             Fire off the key rotation and check that upper & lower limits tested & key rotataion is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2950,20 +2807,9 @@ Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
     ${exit}=                  write   top
 
-#exit from WLAN wpa2_enterprise 2.4g
-Exit from WLAN 2.4g wpa2_enterprise
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa2_enterprise_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global configuration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN 2.4g WPA3 enterprise
-WLAN 2.4g: Enter wpa3_enterprise
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_enter
+WLAN 2.4g WPA3 enterprise: Enter wpa3_enterprise
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa3_enterprise
     ${output}=                  write   top
@@ -2979,8 +2825,8 @@ WLAN 2.4g: Enter wpa3_enterprise
     ${exit}=                  write   top
 
 
-WLAN 2.4g: Set SSID for wpa3_enterprise
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa3_enterprise_ssid
+WLAN 2.4g WPA3 enterprise: Set SSID for wpa3_enterprise
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g     interface_wifi_2_4g_wpa3_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2998,8 +2844,8 @@ WLAN 2.4g: Set SSID for wpa3_enterprise
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3 enterprise: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 2.4g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3016,7 +2862,7 @@ WLAN 2.4g WPA3 enterprise: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3 enterprise: SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_ssid_broadcast
+    [Tags]                      Config    WLAN  WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3034,8 +2880,8 @@ WLAN 2.4g WPA3 enterprise: SSID broadcast
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3 enterprise: Server IP
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_server
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_server
+    [Documentation]             Fire off the server ip and check that server ip is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3052,8 +2898,8 @@ WLAN 2.4g WPA3 enterprise: Server IP
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3 enterprise: Port forwarding
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_port
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_port
+    [Documentation]             Fire off the port forwarding and check that it is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3070,7 +2916,7 @@ WLAN 2.4g WPA3 enterprise: Port forwarding
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3 enterprise: Connection secret
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_secret
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3088,7 +2934,7 @@ WLAN 2.4g WPA3 enterprise: Connection secret
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3 enterprise: maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_maxclient
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3106,8 +2952,8 @@ WLAN 2.4g WPA3 enterprise: maxclient
     ${exit}=                  write   top
 
 WLAN 2.4g WPA3 enterprise: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_rekey
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa3_enterprise_rekey
+    [Documentation]             Fire off the rekey and check that rekey is updated in seconds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3138,20 +2984,9 @@ WLAN 2.4g WPA3 enterprise: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3580s
     ${exit}=                  write   top
 
-#exit from WLAN wpa3_enterprise 2.4g
-Exit from WLAN 2.4g wpa3_enterprise
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa3_enterprise_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global configuration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN 2.4g WPA12 mix enterprise
 WLAN 2.4g: Enter wpa12_mix_enterprise
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_enter
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa12_mix_enterprise
     ${output}=                  write   top
@@ -3167,12 +3002,9 @@ WLAN 2.4g: Enter wpa12_mix_enterprise
     should contain              ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
-
 
 WLAN 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_ssid
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3188,12 +3020,10 @@ WLAN 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     should contain              ${output}   SSID=Snorks
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
 
 WLAN 2.4g WPA12 mix enterprise: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 2.4g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3207,11 +3037,9 @@ WLAN 2.4g WPA12 mix enterprise: SSID Hide enabled
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
 
 WLAN 2.4g WPA12 mix enterprise: SSID broadcast
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_broadcast
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3226,11 +3054,10 @@ WLAN 2.4g WPA12 mix enterprise: SSID broadcast
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 2.4g WPA12 mix enterprise: Server IP
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_server
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config    WLAN  WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_server
+    [Documentation]             Fire off the server IP and check that server ip is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3244,11 +3071,10 @@ WLAN 2.4g WPA12 mix enterprise: Server IP
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  SERVER_IP=192.168.0.252
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 2.4g WPA12 mix enterprise: Port forwarding
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_port
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config    WLAN  WLAN_2_4g    WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_port
+    [Documentation]             Fire off the port forwarding and check that it is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi 2.4g
@@ -3262,10 +3088,9 @@ WLAN 2.4g WPA12 mix enterprise: Port forwarding
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  PORT_FORWARD=1808
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 2.4g WPA12 mix enterprise: Connection secret
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_secret
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_secret
     [Documentation]             Fire off the secret and check that secret is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3280,10 +3105,9 @@ WLAN 2.4g WPA12 mix enterprise: Connection secret
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  CONNECTION_SECRET=BestUnderwaterLife
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 2.4g WPA12 mix enterprise: maxclient
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_maxclient
+    [Tags]                      Config    WLAN  WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3310,10 +3134,9 @@ WLAN 2.4g WPA12 mix enterprise: maxclient
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  MAX_CLIENTS=117
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 2.4g WPA12 mix enterprise: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_rekey
+    [Tags]                      Config   WLAN  WLAN_2_4g    interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_enterprise_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3343,22 +3166,10 @@ WLAN 2.4g WPA12 mix enterprise: Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
-
-#exit from WLAN wpa12_mix_enterprise 2.4g
-WLAN 2.4g WPA12 mix enterprise: Exit from WLAN 2.4g wpa12_mix_enterprise
-    [Tags]                      Config  interface_wifi_2_4g     interface_wifi_2_4g_wpa12_mix_enterprise_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global configuration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
 
 #WLAN 5g
 WLAN 5g: Enter Wifi 5g and then back out to Global
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_in_out
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_in_out
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> conn
     ${output}=                  write   top
@@ -3395,7 +3206,7 @@ WLAN 5g: Enter Wifi 5g and then back out to Global
     should not contain          ${output}   (config)#   (config-if-wlan-5g)#
 
 WLAN 5g: Enter disable
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_disable
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_disable
     [Documentation]             Fire off the disable and check that wifi 5g is disabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3412,7 +3223,7 @@ WLAN 5g: Enter disable
     ${exit}                     write  top
 
 WLAN 5g: Enter enable
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_enable
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_enable
     [Documentation]             Fire off the enable and check that wifi 5g is enabled
     ${exit}                     write  top
     ${output}=                  write   top
@@ -3432,7 +3243,7 @@ WLAN 5g: Enter enable
 
 #5g: Enter all the security wpa and then back out
 WLAN 5g: Enter security WPA and then back out
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa_in_out
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                  write   top
@@ -3472,7 +3283,7 @@ WLAN 5g: Enter security WPA and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA2 and then back out
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa2_in_out
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa2_in_out
     [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3511,7 +3322,7 @@ WLAN 5g: Enter security WPA2 and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA3 and then back out
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa3_in_out
+    [Tags]                      Config    WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_security_wpa3_in_out
     [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3550,7 +3361,7 @@ WLAN 5g: Enter security WPA3 and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa3)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA12 Mix and then back out
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa12_mix_in_out
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa12_mix_in_out
     [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3589,7 +3400,7 @@ WLAN 5g: Enter security WPA12 Mix and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA23 mix and then back out
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa23_mix_in_out
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3628,7 +3439,7 @@ WLAN 5g: Enter security WPA23 mix and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA2 enterprise and then back out
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa2_enterprise_in_out
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa2_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3667,7 +3478,7 @@ WLAN 5g: Enter security WPA2 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA3 enterprise and then back out
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa3_enterprise_in_out
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3706,7 +3517,7 @@ WLAN 5g: Enter security WPA3 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa3-ent)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA12 mix enterprise and then back out
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_security_wpa12_mix_enterprise_in_out
+    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa12_mix_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3744,21 +3555,9 @@ WLAN 5g: Enter security WPA12 mix enterprise and then back out
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa12-mix-ent)#     (config)#    (global)#
 
-
-#exit from WLAN 5g
-Exit from WLAN 5g
-    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_exit
-    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN Guest 5g
 WLAN 5g Guest: Enter WLAN Guest 5g and then back out to Global
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_in_out
     [Documentation]             Fire off the interface wifi guest 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi guest 5g -> conn
     ${exit}                     write  top
@@ -3793,7 +3592,7 @@ WLAN 5g Guest: Enter WLAN Guest 5g and then back out to Global
     should not contain          ${output}   (config)#   (config-if-wlan-guest-5g)#
 
 WLAN 5g Guest: Enter disable
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_disable
+    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_disable
     [Documentation]             Fire off the disable and check that wifi 5g is disabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3810,7 +3609,7 @@ WLAN 5g Guest: Enter disable
     ${exit}                     write  top
 
 WLAN 5g Guest: Enter enable
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_enable
+    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_enable
     [Documentation]             Fire off the enable and check that wifi 5g is enabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3829,7 +3628,7 @@ WLAN 5g Guest: Enter enable
 
 #WLAN 5g: Enter all the security wpa and then back out
 WLAN 5g Guest: Enter security WPA and then back out
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3867,7 +3666,7 @@ WLAN 5g Guest: Enter security WPA and then back out
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa)#  (config-if-wlan-5g-wpa)#     (config)#    (global)#
 
 WLAN 5g Guest: Enter security WPA2 and then back out
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa2_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa2_in_out
     [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3905,7 +3704,7 @@ WLAN 5g Guest: Enter security WPA2 and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#    (global)#
 
 WLAN 5g Guest: Enter security WPA3 and then back out
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa3_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa3_in_out
     [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3943,7 +3742,7 @@ WLAN 5g Guest: Enter security WPA3 and then back out
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa3)#    (config-if-wlan-5g-wpa3)#     (config)#    (global)#
 
 WLAN 5g Guest: Enter security WPA12 Mix and then back out
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa12_mix_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa12_mix_in_out
     [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3981,7 +3780,7 @@ WLAN 5g Guest: Enter security WPA12 Mix and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#    (config-if-wlan-5gx)#     (config)#    (global)#
 
 WLAN 5g Guest: Enter security WPA23 mix and then back out
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa23_mix_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4019,7 +3818,7 @@ WLAN 5g Guest: Enter security WPA23 mix and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#    (config-if-wlan-guest-5g-wpa23-mix)#     (config)#    (global)#
 
 WLAN 5g Guest: Enter security WPA2 enterprise and then back out
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa2_enterprise_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g     interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa2_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4057,7 +3856,7 @@ WLAN 5g Guest: Enter security WPA2 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config-if-wlan-guest-5g-wpa2-ent)#     (config)#    (global)#
 
 WLAN 5g Guest: Enter security WPA3 enterprise and then back out
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa3_enterprise_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4095,7 +3894,7 @@ WLAN 5g Guest: Enter security WPA3 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa3-ent)#     (config-if-wlan-5g-wpa3-ent)#     (config)#    (global)#
 
 WLAN 5g Guest: Enter security WPA12 mix enterprise and then back out
-    [Tags]                      Config  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa12_mix_enterprise_in_out
+    [Tags]                      Config    WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa12_mix_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode Enterprise
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4132,20 +3931,9 @@ WLAN 5g Guest: Enter security WPA12 mix enterprise and then back out
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa12-mix-ent)#    (config-if-wlan-5g-wpa12-mix-ent)#     (config)#    (global)#
 
-#exit from WLAN 5g Guest
-Exit from WLAN 5g Guest
-    [Tags]                      Config  interface_wifi_guest_5g     interface_wifi_guest_5g_exit
-    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN 5g WPA Personal
 WLAN 5g WPA personal: Enter WPA personal
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_enter
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> security wpa
     ${output}=                  write   top
@@ -4162,7 +3950,7 @@ WLAN 5g WPA personal: Enter WPA personal
 
 
 WLAN 5g WPA personal: Set SSID for WPA Personal WLAN 5g
-    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa_ssid
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g     interface_wifi_5g_wpa_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4180,8 +3968,8 @@ WLAN 5g WPA personal: Set SSID for WPA Personal WLAN 5g
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 5g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -4198,7 +3986,7 @@ WLAN 5g WPA personal: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: SSID broadcast
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_ssid_broadcast
+    [Tags]                      Config     WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4216,7 +4004,7 @@ WLAN 5g WPA personal: SSID broadcast
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: Password
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_password
+    [Tags]                      Config     WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4234,7 +4022,7 @@ WLAN 5g WPA personal: Password
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: maxclient
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_maxclient
+    [Tags]                      Config     WLAN  WLAN_5g     WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4252,8 +4040,8 @@ WLAN 5g WPA personal: maxclient
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa_rekey
-    [Documentation]             Fire off the password and check that password is updated
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa_rekey
+    [Documentation]             Fire off the rekey and check that rekey is updated ins econds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
@@ -4269,20 +4057,9 @@ WLAN 5g WPA personal: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
     ${exit}=                  write   top
 
-#exit from WLAN WPA 5g
-Exit from WLAN 5g WPA personal
-    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa_exit
-    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN WPA2 personal 5g
 WLAN WPA2 5g personal: wpa2 personal
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_enter
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa2_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> security wpa2
     ${output}=                  write   top
@@ -4299,7 +4076,7 @@ WLAN WPA2 5g personal: wpa2 personal
 
 
 WLAN WPA2 5g personal: Set SSID for wpa2 Personal WLAN 5g
-    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa2_ssid
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g     interface_wifi_5g_wpa2_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4317,7 +4094,7 @@ WLAN WPA2 5g personal: Set SSID for wpa2 Personal WLAN 5g
     ${exit}                     write  top
 
 WLAN WPA2 5g personal: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_ssid_hide
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa2_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4335,7 +4112,7 @@ WLAN WPA2 5g personal: SSID Hide enabled
     ${exit}                     write  top
 
 WLAN WPA2 5g personal: SSID broadcast
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_ssid_broadcast
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa2_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4353,7 +4130,7 @@ WLAN WPA2 5g personal: SSID broadcast
     ${exit}                     write  top
 
 WLAN WPA2 5g personal: Password
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_password
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa2_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4371,7 +4148,7 @@ WLAN WPA2 5g personal: Password
     ${exit}                     write  top
 
 WLAN WPA2 5g personal: PMF protected Management Frames
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_pmf
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa2_pmf
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4389,7 +4166,7 @@ WLAN WPA2 5g personal: PMF protected Management Frames
     ${exit}                     write  top
 
 WLAN WPA2 5g personal: maxclient
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_maxclient
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa2_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4407,7 +4184,7 @@ WLAN WPA2 5g personal: maxclient
     ${exit}                     write  top
 
 WLAN WPA2 5g personal: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa2_rekey
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa2_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4424,20 +4201,9 @@ WLAN WPA2 5g personal: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3599s
     ${exit}                     write  top
 
-#exit from WLAN wpa2 5g
-Exit from WLAN 5g wpa2 personal
-    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa2_exit
-    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN 5g WPA3 personal
 WLAN 5g WPA3 personal: Enter wpa3 personal
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_enter
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa3_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> security wpa3
     ${output}=                  write   top
@@ -4453,7 +4219,7 @@ WLAN 5g WPA3 personal: Enter wpa3 personal
     ${exit}=                    write   top
 
 WLAN 5g WPA3 personal: Set SSID for wpa3 Personal WLAN 5g
-    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa3_ssid
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g     interface_wifi_5g_wpa3_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${exit}=                    write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4471,8 +4237,8 @@ WLAN 5g WPA3 personal: Set SSID for wpa3 Personal WLAN 5g
     ${exit}=                    write   top
 
 WLAN 5g WPA3 personal: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa3_ssid_hide
+    [Documentation]             Fire off the ssaid hide and check that wifi 5g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -4489,7 +4255,7 @@ WLAN 5g WPA3 personal: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN 5g WPA3 personal: SSID broadcast
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_ssid_broadcast
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa3_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4507,7 +4273,7 @@ WLAN 5g WPA3 personal: SSID broadcast
     ${exit}=                  write   top
 
 WLAN 5g WPA3 personal: Password
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_password
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa3_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4525,7 +4291,7 @@ WLAN 5g WPA3 personal: Password
     ${exit}=                  write   top
 
 WLAN 5g WPA3 personal: maxclient
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_maxclient
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa3_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4543,7 +4309,7 @@ WLAN 5g WPA3 personal: maxclient
     ${exit}=                  write   top
 
 WLAN 5g WPA3 personal: Rekey key rotation interval
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa3_rekey
+    [Tags]                      Config     WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa3_rekey
     [Documentation]             Fire off the rekey and check that rekey is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4560,20 +4326,9 @@ WLAN 5g WPA3 personal: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3597s
     ${exit}=                  write   top
 
-#exit from WLAN wpa3 5g
-Exit from WLAN 5g wpa3
-    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa3_exit
-    [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-
 #WLAN WPA 12 mix personal 5g
 WLAN 5g WPA12 mix personal: Enter wpa12_mix personal
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_enter
+    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa12_mix_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> security wpa12_mix
     ${output}=                  write   top
@@ -4590,7 +4345,7 @@ WLAN 5g WPA12 mix personal: Enter wpa12_mix personal
 
 
 WLAN 5g WPA12 mix personal: Set SSID for wpa12_mix Personal WLAN 5g
-    [Tags]                      Config  interface_wifi_5g     interface_wifi_5g_wpa12_mix_ssid
+    [Tags]                      Config    WLAN  WLAN_5g   interface_wifi_5g     interface_wifi_5g_wpa12_mix_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4608,8 +4363,8 @@ WLAN 5g WPA12 mix personal: Set SSID for wpa12_mix Personal WLAN 5g
     ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: SSID Hide enabled
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_ssid_hide
-    [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
+    [Tags]                      Config    WLAN  WLAN_5g  interface_wifi_5g  interface_wifi_5g_wpa12_mix_ssid_hide
+    [Documentation]             Fire off the ssid hide and check that wifi 5g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi 5g     #to get into Global Connfiguration -> System configuration -> Wifi 5g
@@ -4626,7 +4381,7 @@ WLAN 5g WPA12 mix personal: SSID Hide enabled
     ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: SSID broadcast
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_ssid_broadcast
+    [Tags]                      Config    WLAN  WLAN_5g  interface_wifi_5g  interface_wifi_5g_wpa12_mix_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4644,7 +4399,7 @@ WLAN 5g WPA12 mix personal: SSID broadcast
     ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: Password
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_password
+    [Tags]                      Config   WLAN  WLAN_5g  interface_wifi_5g  interface_wifi_5g_wpa12_mix_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4662,7 +4417,7 @@ WLAN 5g WPA12 mix personal: Password
     ${exit}=                    write   top
 
 WLAN 5g WPA12 mix personal: maxclient
-    [Tags]                      Config  interface_wifi_5g  interface_wifi_5g_wpa12_mix_maxclient
+    [Tags]                      Config     WLAN  WLAN_5g  interface_wifi_5g  interface_wifi_5g_wpa12_mix_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
