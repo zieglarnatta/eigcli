@@ -168,7 +168,7 @@ LAN0 Bridge DHCP: ip Assign show
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: ip Assign add
-    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_assign_add
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_assign_add DHCP_ip_assign_combo
     [Documentation]             Execute the ip assign add & ensure that it is not blank
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -195,29 +195,72 @@ LAN0 Bridge DHCP: ip Assign delete
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
-    ${execute}=                 write   ip assign add E8:B3:1F:0C:6D:19 192.168.0.4
-    sleep                       1
-    ${execute}=                 write   ip assign add E8:B3:1F:0C:6D:20 192.168.0.5     #fire off the ip assign add to set 1st one up
-    sleep                       1
-    ${execute}=                 write   ip assign add E8:B3:1A:0C:6D:21 192.168.0.6     #fire off the ip assign add to set 2nd one up
+    ${execute}=                 write   ip assign add E8:B3:1F:0C:6D:19 192.168.0.200
+    sleep                       3
+    ${execute}=                 write   show
     sleep                       2
-    ${execute}=                 write   ip assign del 192.168.0.4     #fire off the ip assign del via ip assignment
+    ${execute}=                 read
+    should contain              ${execute}  E8:B3:1F:0C:6D:19 192.168.0.200
+    sleep                       1
+    ${execute}=                 write   ip assign add E8:B3:1F:0C:6D:20 192.168.0.201     #fire off the ip assign add to set 1st one up
+    sleep                       3
+    ${execute}=                 write   show
     sleep                       2
+    ${execute}=                 read
+    should contain              ${execute}  E8:B3:1F:0C:6D:20 192.168.0.201
+    ${execute}=                 write   ip assign add E8:B3:1A:0C:6D:21 192.168.0.202     #fire off the ip assign add to set 2nd one up
+    sleep                       3
+    ${execute}=                 write   show
+    sleep                       2
+    ${execute}=                 read
+    should contain              ${execute}  E8:B3:1A:0C:6D:21 192.168.0.202
+    sleep                       1
+    ${execute}=                 write   ip assign del 192.168.0.200     #fire off the ip assign del via ip assignment
+    sleep                       3
+    ${execute}=                 write   show
+    sleep                       2
+    ${execute}=                 read
+    should not contain              ${execute}  E8:B3:1F:0C:6D:19 192.168.0.200
+    sleep                       1
     ${execute}=                 write   ip assign del E8:B3:1A:0C:6D:21     #fire off the ip assign del via mac assignment
+    sleep                       3
+    ${execute}=                 write   show
     sleep                       2
-    ${dhcp}=                     write   ip assign show   #show the dns and other results
-    sleep                       2
-    #need to consider the "apply" command to make it permanent & how to reset it
-    set client configuration  prompt=#
-    ${ipassignadd}=         read until prompt      #read the result, should not be empty since there is one last device
-    #${ipassignadd}=                 read
+    ${execute}=                 read
+    should not contain              ${execute}  E8:B3:1A:0C:6D:21 192.168.0.202
     sleep                       1
-    should not be empty         ${ipassignadd}
-    should not contain          ${ipassignadd}   E8:B3:1F:0C:6D:19   192.168.0.4    -ash: ntp: not found    -ash: show ntp: not found
-    should not contain          ${dhcp}   E8:B3:1A:0C:6D:21   192.168.0.6    MAC   IP Address
-    should contain              ${ipassignadd}  E8:B3:1F:0C:6D:20   192.168.0.5
+    ${execute}=                 read
+    sleep                       1
+    ${ipassignshow}=            write   ip assign show   #show the dns and other results
+    sleep                       3
+    #need to consider the "apply" command to make it permanent & how to reset it
+    ${ipassignshow}=                 read
+    should not be empty         ${ipassignshow}
+    should not contain          ${ipassignshow}   E8:B3:1F:0C:6D:19   192.168.0.200    -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${ipassignshow}   E8:B3:1A:0C:6D:21   192.168.0.202    MAC   IP Address
+    should contain              ${ipassignshow}  Device:E8:B3:1F:0C:6D:20 IP Address:192.168.0.201
     ${exit}                     write  show
     ${exit}                     write  read
+    ${exit}                     write  top  #reset the command line to global
+
+LAN0 Bridge DHCP: ip range
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_range
+    [Documentation]             Execute the ip range toa dd a range of IPs & ensure that it gets reflected
+    ${execute}=                 write   top    #reset it to ensure we start form global level
+    ${execute}=                 write   configure   #system config level
+    ${execute}=                 write   interface bridge lan0   #bridge lan0 level
+    ${execute}=                 write   dhcp   #dhcp level
+    sleep                       1
+    ${execute}=                 write   ip range 192.168.0.2 192.168.0.5     #fire off the ip range from 2 to 5
+    sleep                       1
+    ${dhcp}=                     write   show   #show the results
+    sleep                       1
+    #need to consider the "apply" command to make it permanent & how to reset it
+    ${ipassignadd}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
+    sleep                       1
+    should not be empty         ${ipassignadd}
+    should not contain          ${ipassignadd}   -ash: ntp: not found    -ash: show ntp: not found
+    should contain              ${ipassignadd}  IP_Range_Start=192.168.0.2  IP_Range_End=192.168.0.5
     ${exit}                     write  top  #reset the command line to global
 
 
