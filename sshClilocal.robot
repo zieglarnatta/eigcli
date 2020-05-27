@@ -354,8 +354,6 @@ WAN0 dhcp: Execute update DHCP querymode to normal (from aggresive default) & th
     should not contain          ${output}   QUERY_MODE=Agressive
     should contain              ${output}   (config-if-wan0-dhcp)#
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #next to reset and clean it up
 #WIP
@@ -420,8 +418,6 @@ WAN0 static: Execute the mtu for WAN Static
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 WAN0 static: Execute the dns for WAN Static
     [Tags]                     Config       WAN     wan0  static  conn_static     static_dns
@@ -439,10 +435,8 @@ WAN0 static: Execute the dns for WAN Static
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   DNS_SERVER1=8.8.8.8
     should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    DNS_SERVER=
+    should not contain          ${output}   DNS_SERVER=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 WAN0 static: Execute the ip for WAN Static
     [Tags]                     Config       WAN     wan0  static  conn_static     static_ip
@@ -460,10 +454,8 @@ WAN0 static: Execute the ip for WAN Static
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   IP_ADDR=192.168.0.200
     should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    DNS_SERVER=     IP_ADDR=
+    should not contain          ${output}   DNS_SERVER=     IP_ADDR=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 WAN0 static: Execute the netmask for WAN Static
     [Tags]                     Config       WAN     wan0  static   conn_static     static_netmask
@@ -481,10 +473,8 @@ WAN0 static: Execute the netmask for WAN Static
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   NETMASK=255.255.0.0
     should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    DNS_SERVER=     IP_ADDR=    NETMASK=
+    should not contain          ${output}   DNS_SERVER=     IP_ADDR=    NETMASK=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 WAN0 static: Execute the gateway for WAN Static
     [Tags]                     Config       WAN     wan0  static  conn_static     static_gateway
@@ -504,8 +494,6 @@ WAN0 static: Execute the gateway for WAN Static
     should not be empty         ${output}
     should not contain          ${output}   DNS_SERVER=     IP_ADDR=    NETMASK=    DEFAULT_GATEWAY=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #WAN PPPoE
 WAN0 PPPoE: Execute connect PPPoE Wan & then back out
@@ -568,8 +556,6 @@ WAN0 PPPoE: Execute the mtu for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #dns
 WAN0 PPPoE: Execute the dns for WAN PPPoE
@@ -590,8 +576,6 @@ WAN0 PPPoE: Execute the dns for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    DNS_SERVER=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #username
 WAN0 PPPoE: Execute the username for WAN PPPoE
@@ -612,8 +596,6 @@ WAN0 PPPoE: Execute the username for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    USER_NAME=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #password
 WAN0 PPPoE: Execute the password for WAN PPPoE
@@ -634,8 +616,6 @@ WAN0 PPPoE: Execute the password for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    PASSWORD=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #servicename
 WAN0 PPPoE: Execute the servicename for WAN PPPoE
@@ -656,8 +636,6 @@ WAN0 PPPoE: Execute the servicename for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    PASSWORD=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #acname
 WAN0 PPPoE: Execute the acname for WAN PPPoE
@@ -678,8 +656,6 @@ WAN0 PPPoE: Execute the acname for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    ACCESS_CONCENTRATOR_NAME=
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #options
 WAN0 PPPoE: Execute the options for WAN PPPoE
@@ -700,8 +676,6 @@ WAN0 PPPoE: Execute the options for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    ADDITIONAL_PPPD_OPTIONS
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #PPTP
 WAN0 PPTP: Enter PPTP and then back out to Global
@@ -762,7 +736,7 @@ WAN0 PPTP: Execute conn pptp to Enter PPTP
 
 WAN0 PPTP: Enter mtu 1433   #has problems not showing
     [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_mtu
-    [Documentation]             Fire off the conn pptp and then set the mtu
+    [Documentation]             Fire off the conn pptp and then set the mtu, HAS ISSUE NEED OT FILE BUG MTU NOT STICKING
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -780,7 +754,7 @@ WAN0 PPTP: Enter mtu 1433   #has problems not showing
 WAN0 PPTP: Enter DNS
     [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_dns
     [Documentation]             Fire off the conn pptp and then set the dns
-    ${exit}                     write  top
+    ${reset}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pptp
@@ -816,7 +790,7 @@ WAN0 PPTP: Enter PPTP IP
 WAN0 PPTP: Enter netmask   #has issues, not working, not showing
     [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_netmask
     [Documentation]             Fire off the netmask and then set the netmask
-    ${exit}                     write  top
+    ${reset}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pptp
@@ -833,7 +807,7 @@ WAN0 PPTP: Enter netmask   #has issues, not working, not showing
 
 WAN0 PPTP: Enter gateway   #has issues, not working, not showing
     [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_gateway
-    [Documentation]             Fire off the netmask and then set the gateway
+    [Documentation]             Fire off the netmask and then set the gateway #known error, open defect on this
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -974,6 +948,7 @@ WAN0 PPTP: Enter options   #has issues
     should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
+    sleep                       2
 
 #L2TP
 WAN0 L2TP: Enter L2TP and then back out to Global
@@ -1120,7 +1095,6 @@ WAN0 L2TP: Enter gateway   #has issues, not working, not showing
     ${output}=                  read    #until prompt
     should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-l2tp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
     ${exit}                     write  top
 
 WAN0 L2TP: Enter username   #has problems not showing
@@ -1455,7 +1429,7 @@ WLAN 2.4g WPA12 mix: Enter security WPA12 Mix and then back out
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#    (global)#
 
-WLAN 2.4g WPA23 mix: Enter security WPA23 mix and then back out
+WLAN 2.4g WPA23 Mix: Enter security WPA23 mix and then back out
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
@@ -1643,7 +1617,7 @@ WLAN Guest 2.4g: Enter WLAN Guest 2.4g and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
 
-WLAN 2.4g: Enter disable
+WLAN Guest 2.4g: Enter disable
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_disable
     [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
     ${exit}                     write  top
@@ -1660,7 +1634,7 @@ WLAN 2.4g: Enter disable
     #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
-WLAN 2.4g: Enter enable
+WLAN Guest 2.4g: Enter enable
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_enable
     [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
     ${exit}                     write  top
@@ -1716,7 +1690,7 @@ Enter security WPA and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
 
-WLAN 2.4g WPA2: Enter security WPA2 and then back out
+WLAN Guest 2.4g WPA2: Enter security WPA2 and then back out
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_in_out
     [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
     ${exit}                     write  top
@@ -1754,7 +1728,7 @@ WLAN 2.4g WPA2: Enter security WPA2 and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
 
-WLAN 2.4g WPA3: Enter security WPA3 and then back out
+WLAN Guest 2.4g WPA3: Enter security WPA3 and then back out
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_in_out
     [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
     ${exit}                     write  top
@@ -1792,7 +1766,7 @@ WLAN 2.4g WPA3: Enter security WPA3 and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3)#    (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
 
-WLAN 2.4g WPA12 Mix: Enter security WPA12 Mix and then back out
+WLAN Guest 2.4g WPA12 Mix: Enter security WPA12 Mix and then back out
     [Tags]                      Config  WLAN    WLAN2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_in_out
     [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
     ${exit}                     write  top
@@ -1828,7 +1802,7 @@ WLAN 2.4g WPA12 Mix: Enter security WPA12 Mix and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#    (config-if-wlan-2.4gx)#     (config)#    (global)#
 
-WLAN 2.4g WPA23 Mix: Enter security WPA23 mix and then back out
+WLAN Guest 2.4g WPA23 Mix: Enter security WPA23 mix and then back out
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa23_mix_in_out
     [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
     ${exit}                     write  top
@@ -1866,7 +1840,7 @@ WLAN 2.4g WPA23 Mix: Enter security WPA23 mix and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#    (config-if-wlan-guest-2.4g-wpa23-mix)#     (config)#    (global)#
 
-WLAN 2.4g WPA2 enterprise: Enter security WPA2 enterprise and then back out
+WLAN Guest 2.4g WPA2 enterprise: Enter security WPA2 enterprise and then back out
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 Enterprise and then back out
     ${exit}                     write  top
@@ -1904,7 +1878,7 @@ WLAN 2.4g WPA2 enterprise: Enter security WPA2 enterprise and then back out
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config-if-wlan-guest-2.4g-wpa2-ent)#     (config)#    (global)#
 
-WLAN 2.4g WPA3 enterprise: Enter security WPA3 enterprise and then back out
+WLAN Guest 2.4g WPA3 enterprise: Enter security WPA3 enterprise and then back out
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
     ${exit}                     write  top
@@ -4959,8 +4933,6 @@ WLAN 5g: Enter wpa12_mix_enterprise
     should contain              ${output}   (config-if-wlan-5g-wpa12-mix-ent)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
 
 
 WLAN 5g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
@@ -4980,8 +4952,6 @@ WLAN 5g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     should contain              ${output}   SSID=Snorks
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
 
 WLAN 5g WPA12 mix enterprise: SSID Hide enabled
     [Tags]                      Config    WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_ssid_hide
@@ -4999,8 +4969,6 @@ WLAN 5g WPA12 mix enterprise: SSID Hide enabled
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-5g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
 
 WLAN 5g WPA12 mix enterprise: SSID broadcast
     [Tags]                      Config    WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_ssid_broadcast
@@ -5018,7 +4986,6 @@ WLAN 5g WPA12 mix enterprise: SSID broadcast
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 5g WPA12 mix enterprise: Server IP
     [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_server
@@ -5036,7 +5003,6 @@ WLAN 5g WPA12 mix enterprise: Server IP
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  SERVER_IP=192.168.0.252
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 5g WPA12 mix enterprise: Port forwarding
     [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_port
@@ -5054,7 +5020,6 @@ WLAN 5g WPA12 mix enterprise: Port forwarding
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  PORT_FORWARD=1808
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 5g WPA12 mix enterprise: Connection secret
     [Tags]                      Config    WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_secret
@@ -5072,7 +5037,6 @@ WLAN 5g WPA12 mix enterprise: Connection secret
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  CONNECTION_SECRET=BestUnderwaterLife
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
 
 WLAN 5g WPA12 mix enterprise: maxclient
     [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_maxclient
@@ -5102,7 +5066,7 @@ WLAN 5g WPA12 mix enterprise: maxclient
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  MAX_CLIENTS=117
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN 5g WPA12 mix enterprise: Rekey key rotation interval
     [Tags]                      Config   WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_rekey
@@ -5135,20 +5099,20 @@ WLAN 5g WPA12 mix enterprise: Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
-#WLAN Guest 2.4g
-WLAN Guest 2.4g: Enter WLAN Guest 2.4g and then back out to Global
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_in_out
+#WLAN Guest 5g
+WLAN Guest 5g: Enter WLAN Guest 5g and then back out to Global
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_in_out
     [Documentation]             Fire off the interface wifi guest 2.4g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi guest 2.4g -> conn
+    #configure -> interface wifi guest 5g -> conn
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     #sleep                       1
     set client configuration  prompt=#
     ${output}=         read until prompt
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config)#   (global)#
     #use top to go all the way back into Global Config
     ${output}=                  write   top
@@ -5157,11 +5121,11 @@ WLAN Guest 2.4g: Enter WLAN Guest 2.4g and then back out to Global
     ${output}=         read until prompt
     should contain              ${output}   (global)#
     should not be empty         ${output}
-    should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
+    should not contain          ${output}   (config)#   (config-if-wlan-guest-5g)#
     #use 3 exits to get back to global
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
     sleep                       1
     ${output}=                 write   exit
     sleep                       1
@@ -5173,29 +5137,29 @@ WLAN Guest 2.4g: Enter WLAN Guest 2.4g and then back out to Global
     should not be empty         ${output}
     should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
 
-WLAN Guest 2.4g: Enter disable
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_disable
+WLAN Guest 5g: Enter disable
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_disable
     [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     sleep                       1
     ${output}=                  write  disable
     sleep                       10
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
     #sleep                       1
-    should contain              ${output}  (config-if-wlan-guest-2.4g)#
+    should contain              ${output}  (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config)#   (global)#
     #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
-WLAN Guest 2.4g: Enter enable
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_enable
-    [Documentation]             Fire off the enable and check that wifi 2.4g is enabled
+WLAN Guest 5g: Enter enable
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_enable
+    [Documentation]             Fire off the enable and check that wifi 5g is enabled
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     sleep                       1
     ${output}=                  write  enable
     sleep                       10
@@ -5203,14 +5167,14 @@ WLAN Guest 2.4g: Enter enable
     ${output}=                  read    #until prompt
     sleep                       1
     #should be empty             ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
+    should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config)#   (global)#
     #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
-#WLAN Guest 2.4g: Enter  all the security wpa and then back out
-WLAN Guest 2.4g: Enter security WPA and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
+#WLAN Guest 5g: Enter  all the security wpa and then back out
+WLAN Guest 5g: Enter security WPA and then back out
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6451,10 +6415,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Enter wpa12_mix_enterprise
     should contain              ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
-
-
+    
 WLAN Guest 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa12_mix_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
@@ -6472,8 +6433,6 @@ WLAN Guest 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     should contain              ${output}   SSID=Snorks
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
 
 WLAN Guest 2.4g WPA12 mix enterprise: SSID Hide enabled
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_ssid_hide
@@ -6491,9 +6450,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: SSID Hide enabled
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
-
+    
 WLAN Guest 2.4g WPA12 mix enterprise: SSID broadcast
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
@@ -6510,7 +6467,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: SSID broadcast
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 2.4g WPA12 mix enterprise: Server IP
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_server
@@ -6528,7 +6485,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Server IP
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  SERVER_IP=192.168.0.252
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 2.4g WPA12 mix enterprise: Port forwarding
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_port
@@ -6546,7 +6503,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Port forwarding
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  PORT_FORWARD=1808
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 2.4g WPA12 mix enterprise: Connection secret
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_secret
@@ -6564,7 +6521,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Connection secret
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  CONNECTION_SECRET=BestUnderwaterLife
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 2.4g WPA12 mix enterprise: maxclient
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_maxclient
@@ -6594,7 +6551,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: maxclient
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  MAX_CLIENTS=23
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 2.4g WPA12 mix enterprise: Rekey key rotation interval
     [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_rekey
@@ -6627,7 +6584,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 #WLAN Guest 5g: WPA
 WLAN Guest 5g: WPA Enter WPA personal
@@ -6769,7 +6726,7 @@ WLAN WPA2 guest 5g personal: wpa2 personal
     set client configuration    prompt=#
     ${output}=                  read until prompt
     should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-5g-wpa2)#
+    should contain              ${output}   (config-if-wlan-guest-5g-wpa2)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
     ${exit}                     write  top
 
@@ -6866,7 +6823,7 @@ WLAN WPA2 guest 5g personal: PMF protected Management Frames
 
 WLAN WPA2 guest 5g personal: maxclient
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_wpa2_maxclient
-    [Documentation]             Fire off the maxclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated #has issue file bug
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -6991,7 +6948,7 @@ WLAN Guest 5g WPA3 personal: Password
 
 WLAN Guest 5g WPA3 personal: maxclient
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa3_maxclient
-    [Documentation]             Fire off the maxclient and check that max clients is updated
+    [Documentation]             Fire off the maxclient and check that max clients is updated #has issue file a bug
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
@@ -7123,14 +7080,36 @@ WLAN Guest 5g WPA12 mix personal: maxclient
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
     ${output}=                  write  security wpa12_mix
     sleep                       1
-    ${output}=                  write  maxclient 123
+    #test lower limit <1
+    #${lowerlimit}=               write  maxclient 0
+    #sleep                       2
+    #${lowerlimit}=               write   show
+    #sleep                       1
+    #${lowerlimit}=               read
+    #sleep                       1
+    #should contain              ${lowerlimit}    maxclient must between 1 - 50
+    #test upper limit > 50
+    #${upperlimit}=              write  maxclient 101
+    #sleep                       2
+    #${upperlimit}=              write   show
+    #sleep                       1
+    #${upperlimit}=              read
+    #sleep                       1
+    #should contain              ${upperlimit}    maxclient must between 1 - 50
+    #test happy path
+    ${happypath}=                  write  maxclient 30
+    sleep                       2
+    #${output}=                  write  apply
+    #sleep                       1
+    ${happypath}=                  write   show
     sleep                       1
-    ${output}=                  write   show
+    ${happypath}=                  read
     sleep                       1
-    ${output}=                  read
-    should not be empty         ${output}
-    should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
-    should contain              ${output}  MAX_CLIENTS=123
+    should contain              ${happypath}  MAX_CLIENTS=30
+    should not be empty         ${happypath}
+    should not contain          ${happypath}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
+    should not contain          ${happypath}   maxclient must between 1 - 50
+    should contain              ${happypath}  MAX_CLIENTS=30
     ${exit}=                    write    top
 
 WLAN Guest 5g WPA12 mix personal: Rekey key rotation interval
@@ -7266,14 +7245,14 @@ WLAN Guest 5g WPA23 mix personal: maxclient
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
     ${output}=                  write  security wpa23_mix
     sleep                       1
-    ${output}=                  write  maxclient 123
+    ${output}=                  write  maxclient 32
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
-    should contain              ${output}  MAX_CLIENTS=123
+    should contain              ${output}  MAX_CLIENTS=32
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA23 mix personal: Rekey key rotation interval
@@ -7324,9 +7303,6 @@ WLAN Guest 5g WPA12 mix enterprise: Enter wpa12_mix_enterprise
     should contain              ${output}   (config-if-wlan-guest-5g-wpa12-mix-ent)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-5g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
-
 
 WLAN Guest 5g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g     interface_wifi_guest_5g_wpa12_mix_enterprise_ssid
@@ -7345,8 +7321,8 @@ WLAN Guest 5g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     should contain              ${output}   SSID=Snorks
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
+    
+    
 
 WLAN Guest 5g WPA12 mix enterprise: SSID Hide enabled
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_ssid_hide
@@ -7364,8 +7340,8 @@ WLAN Guest 5g WPA12 mix enterprise: SSID Hide enabled
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-5g)#
     ${exit}                     write  top
-    #${exit}                     read
-    #should contain              ${exit}   (global)#
+    
+    
 
 WLAN Guest 5g WPA12 mix enterprise: SSID broadcast
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_ssid_broadcast
@@ -7383,7 +7359,7 @@ WLAN Guest 5g WPA12 mix enterprise: SSID broadcast
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 5g WPA12 mix enterprise: Server IP
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_server
@@ -7401,7 +7377,7 @@ WLAN Guest 5g WPA12 mix enterprise: Server IP
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  SERVER_IP=192.168.0.252
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 5g WPA12 mix enterprise: Port forwarding
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_port
@@ -7419,7 +7395,7 @@ WLAN Guest 5g WPA12 mix enterprise: Port forwarding
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  PORT_FORWARD=1808
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 5g WPA12 mix enterprise: Connection secret
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_secret
@@ -7437,7 +7413,7 @@ WLAN Guest 5g WPA12 mix enterprise: Connection secret
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  CONNECTION_SECRET=BestUnderwaterLife
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 5g WPA12 mix enterprise: maxclient
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_maxclient
@@ -7467,7 +7443,7 @@ WLAN Guest 5g WPA12 mix enterprise: maxclient
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  MAX_CLIENTS=21
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 WLAN Guest 5g WPA12 mix enterprise: Rekey key rotation interval
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_rekey
@@ -7500,7 +7476,7 @@ WLAN Guest 5g WPA12 mix enterprise: Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
-    #should contain              ${exit}   (global)#
+    
 
 #exit from WLAN wpa12_mix_enterprise 5g
 WLAN Guest 5g WPA12 mix enterprise: Exit from WLAN 5g wpa12_mix_enterprise
