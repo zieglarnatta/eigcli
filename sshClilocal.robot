@@ -157,7 +157,7 @@ Global: ntp server configuration and show it (has problem matching with double s
     [Documentation]             Execute the ntp & confirm ntp servers are updated & shown
     ${execute}=                 write   top
     ${execute}=                 write   configure
-    ${execute}=                 write   ntp server1 www.yahoo.com server2 www.google.com        loglevel=DEBUG
+    ${execute}=                 write   ntp server1 www.yahoo.com server2 www.google.com server3 www.msn.com server4 server5        loglevel=DEBUG
     sleep                       1
     ${ntp}=                  write   show ntp       loglevel=DEBUG
     sleep                       2
@@ -220,8 +220,6 @@ WAN0 Configuration: Wan0 Mode and back out via exit & top
     should not contain          ${output}   (config-if-wan0)#
     should contain              ${output}   (global)#
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 #WAN0 DHCP
 WAN0 dhcp: Execute conn dhcp to enter the WAN DHCP Configuration Mode, do initial read out & back out via top and 3 exits
@@ -1017,12 +1015,14 @@ WAN0 L2TP: Enter mtu 1432   #has problems not showing
     sleep                       1
     ${output}=                  write  mtu 1432
     sleep                       1
+    ${output}=                  write  apply
+    sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
     should contain              ${output}   MTU=1432    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
+    should not contain          ${output}   ERROR: MTU need set, errno: [-1]    (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
 WAN0 L2TP: Enter DNS
@@ -1179,12 +1179,14 @@ WAN0 L2TP: Enter default route: enable  #has problems not enabled
     sleep                       1
     ${output}=                  write  defaultroute enable
     sleep                       1
+    ${output}=                  write  apply
+    sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
     should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
+    should not contain          ${output}   ERROR: MTU need set, errno: [-1]    (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
 WAN0 L2TP: Enter options   #has problems, snow showing
@@ -1205,13 +1207,19 @@ WAN0 L2TP: Enter options   #has problems, snow showing
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
+Suite Teardown         Close All Connections
+
+Suite Setup            Open Connection And Log In
+
 #WLAN 2.4g
 WLAN 2.4g: Enter Wifi 2.4g and then back out to Global
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> conn
+    ${start}                     write  top
+    sleep                       1
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     sleep                       1
     set client configuration  prompt=#
@@ -1255,7 +1263,7 @@ WLAN 2.4g: Enter disable
     #sleep                       1
     should contain              ${output}  (config-if-wlan-2.4g)#
     should not contain          ${output}   (config)#   (global)#
-    #need to incorporate a UI robot to check on this in teh admin
+    #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
 WLAN 2.4g: Enter enable
@@ -1652,7 +1660,7 @@ WLAN Guest 2.4g: Enter enable
     ${exit}                     write  top
 
 #enter all the security wpa and then back out
-Enter security WPA and then back out
+WLAN Guest 2.4g WPA: Enter security WPA and then back out
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
@@ -3193,7 +3201,7 @@ WLAN 5g: Enter disable
     #sleep                       1
     should contain              ${output}  (config-if-wlan-5g)#
     should not contain          ${output}   (config)#   (global)#
-    #need to incorporate a UI robot to check on this in teh admin
+    #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
 WLAN 5g: Enter enable
@@ -5479,10 +5487,10 @@ WLAN Guest 2.4g: Enter security WPA12 mix WLAN Guest 2.4g: Enterprise and then b
 
 #WLAN Guest 2.4g: WPA
 WLAN Guest 2.4g: WPA Enter WPA personal
-    [Tags]                      Config  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_enter
+    [Tags]                      Config    WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa
-    ${output}=                  write   WLAN  WLAN_guest_2_4g    top
+    ${output}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration WLAN Guest 2.4g
     sleep                       1
@@ -5576,14 +5584,14 @@ WLAN Guest 2.4g: WPA maxclient
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration WLAN Guest 2.4g
     ${output}=                  write  security wpa
     sleep                       1
-    ${output}=                  write  maxclient 120
+    ${output}=                  write  maxclient 33
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=120
+    should contain              ${output}  MAX_CLIENTS=33
     ${exit}=                  write   top
 
 WLAN Guest 2.4g: WPA Rekey key rotation interval
@@ -5712,14 +5720,14 @@ WLAN Guest 2.4g WPA3: maxclient
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa3
     sleep                       1
-    ${output}=                  write  maxclient 122
+    ${output}=                  write  maxclient 34
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=122
+    should contain              ${output}  MAX_CLIENTS=34
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA3: Rekey key rotation interval
@@ -5838,14 +5846,14 @@ WLAN Guest 2.4g: maxclient
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa12_mix
     sleep                       1
-    ${output}=                  write  maxclient 123
+    ${output}=                  write  maxclient 35
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=123
+    should contain              ${output}  MAX_CLIENTS=35
     ${exit}=                    write   top
 
 WLAN Guest 2.4g: Rekey key rotation interval
@@ -5866,23 +5874,6 @@ WLAN Guest 2.4g: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3596s
     ${exit}=                    write   top
 
-#exit from WLAN wpa12_mix 2.4g
-Exit from WLAN 2.4g wpa12_mix personal
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa12_mix_exit
-    [Documentation]            Exit the WLAN 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
-    ${output}=                  write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
-    ${output}=                  write  security wpa12_mix
-    sleep                       1
-    ${output}=                 write    top
-    sleep                       1
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-    ${exit}=                    write   top
-
 #WLAN Guest 2.4g WPA23 Mix personal
 WLAN Guest 2.4g WPA23 Mix: Enter wpa23_mix personal
     [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa23_mix_enter
@@ -5891,6 +5882,7 @@ WLAN Guest 2.4g WPA23 Mix: Enter wpa23_mix personal
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
+    sleep                       1
     ${output}=                  write  security wpa23_mix
     sleep                       1
     set client configuration    prompt=#
@@ -5906,7 +5898,9 @@ WLAN Guest 2.4g WPA23 Mix: Set SSID for wpa23_mix Personal WLAN 2.4g
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
+    sleep                       1
     ${output}=                  write  security wpa23_mix
     sleep                       1
     ${output}=                 write   ssid Pokemon
@@ -5981,14 +5975,14 @@ WLAN Guest 2.4g WPA23 Mix: maxclient
     ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 2.4g
     ${output}=                  write  security wpa23_mix
     sleep                       1
-    ${output}=                  write  maxclient 123
+    ${output}=                  write  maxclient 36
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-2.4g)#
-    should contain              ${output}  MAX_CLIENTS=123
+    should contain              ${output}  MAX_CLIENTS=36
     ${exit}=                  write   top
 
 WLAN Guest 2.4g WPA23 Mix: Rekey key rotation interval
@@ -6685,14 +6679,14 @@ WLAN Guest 5g: WPA maxclient
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration WLAN Guest 5g
     ${output}=                  write  security wpa
     sleep                       1
-    ${output}=                  write  maxclient 120
+    ${output}=                  write  maxclient 37
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
-    should contain              ${output}  MAX_CLIENTS=120
+    should contain              ${output}  MAX_CLIENTS=37
     ${exit}=                  write   top
 
 WLAN Guest 5g: WPA Rekey key rotation interval
@@ -6822,21 +6816,21 @@ WLAN WPA2 guest 5g personal: PMF protected Management Frames
     ${exit}                     write  top
 
 WLAN WPA2 guest 5g personal: maxclient
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_wpa2_maxclient
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_guest_5g_wpa2_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated #has issue file bug
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
     ${output}=                  write  security wpa2
     sleep                       1
-    ${output}=                  write  maxclient 120
+    ${output}=                  write  maxclient 38
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
-    should contain              ${output}  MAX_CLIENTS=120
+    should contain              ${output}  MAX_CLIENTS=38
     ${exit}                     write  top
 
 WLAN WPA2 guest 5g personal: Rekey key rotation interval
@@ -6954,14 +6948,14 @@ WLAN Guest 5g WPA3 personal: maxclient
     ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
     ${output}=                  write  security wpa3
     sleep                       1
-    ${output}=                  write  maxclient 122
+    ${output}=                  write  maxclient 39
     sleep                       1
     ${output}=                  write   show
     sleep                       1
     ${output}=                  read
     should not be empty         ${output}
     should not contain          ${output}  Syntax error: Illegal parameter  (config)#   (global)#   (config-if-wlan-5g)#
-    should contain              ${output}  MAX_CLIENTS=122
+    should contain              ${output}  MAX_CLIENTS=39
     ${exit}=                  write   top
 
 WLAN Guest 5g WPA3 personal: Rekey key rotation interval
@@ -8377,6 +8371,15 @@ LAN0 Bridge DHCP: ip Assign delete
 #   logout from global configuration CLI by sending "logout"
 
 *** Keywords ***
+
+Suite Setup
+    Open Connection And Log In
+Suite Teardown
+    Close All Connections
+
 Open Connection And Log In
    Open Connection     ${HOST}
    Login               ${USERNAME}        ${PASSWORD}
+
+Close All Connections
+    Write               logout
