@@ -271,6 +271,14 @@ WAN0 dhcp: Execute update DHCP mtu, apply and then show DHCP
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write   conn dhcp
+    sleep                       1
+    ${mtuauto}=                 write   mtu auto
+    sleep                       1
+    ${mtuauto}=                 write   show
+    sleep                       1
+    ${mtuauto}=                  read
+    should contain              ${mtuauto}   MTU_AUTO=Enable
+    sleep                       1
     ${output}=                 write   mtu 1234
     sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -281,9 +289,6 @@ WAN0 dhcp: Execute update DHCP mtu, apply and then show DHCP
     ${output}=                  read
     should contain              ${output}   MTU=1234
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
-
 
 WAN0 dhcp: Execute update DHCP DNS and then show the applied result
     [Tags]                      Config      WAN     wan0    dhcp   dhcp_dns
@@ -2406,7 +2411,7 @@ WLAN 2.4g WPA12 mix: SSID Hide enabled
     ${exit}=                    write   top
 
 WLAN 2.4g WPA12 mix: SSID broadcast
-    [Tags]                      Config  WLAN    WALN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_broadcast
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa12_mix_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3148,6 +3153,10 @@ WLAN 2.4g WPA12 mix enterprise: Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
+
+Suite Teardown         Close All Connections
+
+Suite Setup            Open Connection And Log In
 
 #WLAN 5g
 WLAN 5g: Enter Wifi 5g and then back out to Global
