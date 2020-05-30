@@ -297,6 +297,15 @@ WAN0 dhcp: Execute update DHCP DNS and then show the applied result
     ${output}=                 write   configure
     ${output}=                 write   interface ethernet wan0
     ${output}=                 write    conn dhcp
+    sleep                       1
+    ${dnsauto}=                 write   dns auto
+    sleep                       1
+    ${dnsauto}=                 write   show
+    sleep                       1
+    ${dnsauto}=                 read
+    sleep                       1
+    should contain              ${dnsauto}     DNS_AUTO=Enable
+    sleep                       1
     ${output}=                 write   dns 8.8.4.4 8.8.8.8
     sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -334,8 +343,6 @@ WAN0 dhcp: Execute update DHCP host name & then show the applied result
     #should not contain          ${output}
     should contain              ${output}   (config-if-wan0-dhcp)#
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
 
 WAN0 dhcp: Execute update DHCP querymode to normal (from aggresive default) & then show the applied result
     [Tags]                      Config      WAN     wan0    dhcp   dhcp_query_mode
@@ -540,26 +547,6 @@ WAN0 PPPoE: Execute connect PPPoE Wan & then back out
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pppoe)#
 
-#mtu
-WAN0 PPPoE: Execute the mtu for WAN PPPoE
-    [Tags]                     Config       WAN     wan0  PPPoE   conn pppoe  conn_pppoe     pppoe_mtu
-    [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pppoe
-    ${output}=                 write   mtu 1324     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
-    sleep                       1
-    ${output}=                 write   show
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   MTU=1324
-    should not be empty         ${output}
-    should not contain          ${output}   MTU=1500
-    ${exit}                     write  top
-
 #dns
 WAN0 PPPoE: Execute the dns for WAN PPPoE
     [Tags]                     Config       WAN     wan0   PPPoE  conn_pppoe     pppoe_dns
@@ -570,6 +557,8 @@ WAN0 PPPoE: Execute the dns for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   dns 8.8.8.8     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
+    ${output}=                 write   apply
+    sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     ${read}=                  read
@@ -577,18 +566,22 @@ WAN0 PPPoE: Execute the dns for WAN PPPoE
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   DNS_SERVER1=8.8.8.8
     should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    DNS_SERVER=
+    should not contain          ${output}   MTU=1500    DNS_SERVER=     ERROR:
     ${exit}                     write  top
 
-#username
-WAN0 PPPoE: Execute the username for WAN PPPoE
-    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_username
+#username & password
+WAN0 PPPoE: Execute the username & password for WAN PPPoE
+    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_username_password
     [Documentation]            Enters the WAN PPPoE Configuration Mode and to set username as leroy_jenkins
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
     ${output}=                 write   username leroy_jenkins
+    sleep                       1
+    ${output}=                 write   password atLeastWeHaveChicken
+    sleep                       1
+    ${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -597,28 +590,54 @@ WAN0 PPPoE: Execute the username for WAN PPPoE
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   USER_NAME=leroy_jenkins
     should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    USER_NAME=
+    should not contain          ${output}   MTU=1500    USER_NAME=      PASSWORD=      ERROR:
     ${exit}                     write  top
 
 #password
-WAN0 PPPoE: Execute the password for WAN PPPoE
-    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_password
-    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set password as atLeastWeHaveChicken
+#WAN0 PPPoE: Execute the password for WAN PPPoE
+#    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_password
+#    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set password as atLeastWeHaveChicken
+#    ${execute}=                 write   top
+#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+#   ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+#    ${output}=                 write   conn pppoe
+#    ${output}=                 write   password atLeastWeHaveChicken
+#    sleep                       1
+#    ${output}=                 write   apply
+#    sleep                       1
+#    ${output}=                 write   show
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+#    ${read}=                  read
+#    set client configuration  prompt=#
+#    ${output}=         read until prompt
+#    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   PASSWORD=leroy_jenkins
+#    should not be empty         ${output}
+#    should not contain          ${output}   MTU=1500    PASSWORD=   ERROR:
+#    ${exit}                     write  top
+
+#mtu
+WAN0 PPPoE: Execute the mtu for WAN PPPoE
+    [Tags]                     Config       WAN     wan0  PPPoE   conn pppoe  conn_pppoe     pppoe_mtu
+    [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
-    ${output}=                 write   password atLeastWeHaveChicken
+    ${output}=                 write   mtu 1324     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    sleep                       1
+    ${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
+    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   PASSWORD=leroy_jenkins
-    should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    PASSWORD=
+    #set client configuration  prompt=#
+    #${output}=         read until prompt
+    should contain              ${read}   (config-if-wan0-pppoe)#    PPPoE Configuration:   MTU=1324
+    should not be empty         ${read}
+    should not contain          ${read}   MTU=1500    ERROR:
     ${exit}                     write  top
+
 
 #servicename
 WAN0 PPPoE: Execute the servicename for WAN PPPoE
@@ -679,6 +698,8 @@ WAN0 PPPoE: Execute the options for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    ADDITIONAL_PPPD_OPTIONS
     ${exit}                     write  top
+
+#need to reset EIG after the PPPoE is done, which takes time. SOlution: write a test module to reset and then wait else write the GUI ROBOT to go into admin to reset it back to DHCP
 
 #PPTP
 WAN0 PPTP: Enter PPTP and then back out to Global
@@ -1166,6 +1187,8 @@ WAN0 L2TP: Enter hostname
     sleep                       1
     ${output}=                  write  host yeehaw3
     sleep                       1
+    ${output}=                  write  apply
+    sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
@@ -1195,7 +1218,7 @@ WAN0 L2TP: Enter default route: enable  #has problems not enabled
     ${exit}                     write  top
 
 WAN0 L2TP: Enter options   #has problems, snow showing
-    [Tags]                      Config       WAN     wan0   L2TP    conn_pptp  pptp_options
+    [Tags]                      Config       WAN     wan0   L2TP    conn_l2tp  l2tp_options
     [Documentation]             Fire off the options and then set the options as ttyname
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1204,12 +1227,14 @@ WAN0 L2TP: Enter options   #has problems, snow showing
     sleep                       1
     ${output}=                  write  options ttyname
     sleep                       1
+    ${output}=                  write  apply
+    sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
     should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
+    should not contain          ${output}   (config-if-wan0)#   (config)#   ERROR:
     ${exit}                     write  top
 
 Suite Teardown         Close All Connections
