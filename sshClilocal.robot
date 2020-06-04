@@ -8,13 +8,13 @@ Documentation          This example demonstrates executing a command on a remote
 Library                Process
 Library                SSHLibrary
 Suite Setup            Open Connection And Log In
-Suite Teardown         Close All Connections
+#Suite Teardown         Close All Connections
 Resource            resourceLocal.robot
 
 *** Test Cases ***
 Execute Hello World Echo Command And Verify Output
     [Tags]                  Hello_World
-    [Documentation]         Execute Command can be used to run commands on the remote machine.
+    [Documentation]         Execute Command can be usWLANed to run commands on the remote machine.
     ...                     The keyword returns the standard output by default.
     ${output}=              Execute Command    echo Hello SSHLibrary!
     should be equal         ${output}          Hello SSHLibrary!
@@ -167,12 +167,12 @@ Global: ntp server configuration and show it (has problem matching with double s
     should not be empty         ${ntp}
     should not contain          ${ntp}   -ash: ntp: not found    -ash: show ntp: not found
     should contain              ${ntp}   (config)#     www.yahoo.com
-    should contain             ${ntp}   NTP Server1 www.yahoo.com    loglevel=WARN
+    should contain             ${ntp}   NTP Server1  www.yahoo.com    loglevel=WARN
     ${exit}                     write  top
-    ${exit}                     read
-    should contain              ${exit}   (global)#
-    ${output}=                 write   echo Stahp it NTP!
-    should be equal             ${output} Stahp it NTP!
+    #${exit}                     read
+    #should contain              ${exit}   (global)#
+    #${output}=                 write   echo Stahp it NTP!
+    #should be equal             ${output} Stahp it NTP!
 
 #WAN0
 WAN0 Configuration: Wan0 Mode and back out via exit & top
@@ -374,18 +374,18 @@ WAN0 static: Execute connect static Wan & then back out
     [Documentation]            Enters the WAN Static Configuration Mode, then use top & 3 exits to go back to Global Configuration
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   conn static     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
-    #sleep                       1
+    sleep                       1
     set client configuration  prompt=#
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-static)#
     should not be empty         ${output}
     #use top to go all the way back into Global Config
     ${output}=                  write   top
-    #sleep                       1
+    sleep                       1
     set client configuration  prompt=#
     ${output}=         read until prompt
     should contain              ${output}   (global)#
@@ -398,17 +398,20 @@ WAN0 static: Execute connect static Wan & then back out
     sleep                       1
     ${output}=                 write   conn static     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
-    ${output}=                 write   exit
+    ${exit}=                 write   exit
     sleep                       1
-    ${output}=                 write   exit
+    ${exit}=                 write   exit
     sleep                       1
-    ${output}=                 write   exit
+    ${exit}=                 write   exit
+    sleep                       1
+    ${exit}=                 write   exit
     sleep                       1
     set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-    should not be empty         ${output}
-    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
+    ${exit}=         read until prompt
+    sleep                       1
+    should contain              ${exit}   (global)#
+    should not be empty         ${exit}
+    should not contain          ${exit}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
 
 WAN0 static: Execute the mtu for WAN Static
     [Tags]                     Config       WAN     wan0  static  conn_static     static_mtu
@@ -557,8 +560,8 @@ WAN0 PPPoE: Execute the dns for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   dns 8.8.8.8     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
-    ${output}=                 write   apply
-    sleep                       1
+    #${output}=                 write   apply
+    #sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     ${read}=                  read
@@ -581,8 +584,8 @@ WAN0 PPPoE: Execute the username & password for WAN PPPoE
     sleep                       1
     ${output}=                 write   password atLeastWeHaveChicken
     sleep                       1
-    ${output}=                 write   apply
-    sleep                       1
+    #${output}=                 write   apply
+    #sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     ${read}=                  read
@@ -625,8 +628,8 @@ WAN0 PPPoE: Execute the mtu for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   mtu 1324     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
-    ${output}=                 write   apply
-    sleep                       1
+    #${output}=                 write   apply
+    #sleep                       1
     ${output}=                 write   show
     sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -897,7 +900,7 @@ WAN0 PPTP: Enter vpn   #has problems not showing
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   VPN_SERVER=symantec.com    (config-if-wan0-pptp)#
+    should contain              ${output}   VPN_Server=symantec.com    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
@@ -933,7 +936,7 @@ WAN0 PPTP: Enter default route: enable  #has problems
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-pptp)#
+    should contain              ${output}   DEFAULT_ROUTE=Enable    (config-if-wan0-pptp)#
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
 
@@ -982,6 +985,7 @@ WAN0 L2TP: Enter L2TP and then back out to Global
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    sleep                       1
     ${output}=                 write   conn l2tp
     sleep                       1
     set client configuration  prompt=#
@@ -1021,10 +1025,11 @@ WAN0 L2TP: Execute conn l2tp to Enter l2tp
     #configure -> interface ethernet wan0 -> conn l2tp
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    #sleep                       1
+    sleep                       1
     ${output}=                 write   conn l2tp
+    sleep                       1
     set client configuration  prompt=#
     ${output}=         read until prompt
     should contain              ${output}   (config-if-wan0-l2tp)#
@@ -1187,8 +1192,8 @@ WAN0 L2TP: Enter hostname
     sleep                       1
     ${output}=                  write  host yeehaw3
     sleep                       1
-    ${output}=                  write  apply
-    sleep                       1
+    #${output}=                  write  apply
+    #sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
@@ -1207,8 +1212,8 @@ WAN0 L2TP: Enter default route: enable  #has problems not enabled
     sleep                       1
     ${output}=                  write  defaultroute enable
     sleep                       1
-    ${output}=                  write  apply
-    sleep                       1
+    #${output}=                  write  apply
+    #sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
@@ -1227,8 +1232,8 @@ WAN0 L2TP: Enter options   #has problems, snow showing
     sleep                       1
     ${output}=                  write  options ttyname
     sleep                       1
-    ${output}=                  write  apply
-    sleep                       1
+    #${output}=                  write  apply
+    #sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
@@ -1238,8 +1243,10 @@ WAN0 L2TP: Enter options   #has problems, snow showing
     ${exit}                     write  top
 
 Suite Teardown         Close All Connections
+    sleep                       3
 
 Suite Setup            Open Connection And Log In
+    sleep                       3
 
 #WLAN 2.4g
 WLAN 2.4g: Enter Wifi 2.4g and then back out to Global
@@ -8038,7 +8045,7 @@ LAN0 Bridge: Config LAN IP address
     ${execute}=                 write   configure   #system config level
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     sleep                       1   #give the system 1 second to rest, seems to help decrease it from tripping on itself
-    ${ipaddress}=               write  ip 192.168.1.1
+    ${ipaddress}=               write  ip 192.168.1.1   #this may cause issue
     sleep                       1
     ${ipaddress}=               write  show
     sleep                       1
@@ -8069,7 +8076,7 @@ LAN0 Bridge: Config LAN Net Mask
 
 #LAN0 Bridge DHCP
 LAN0 Bridge DHCP: Get into LAN DHCP & then back out to Global
-    [Tags]                      Config  bridge  LAN  DHCP_in_out
+    [Tags]                      Config  bridge  LAN  DHCP   DHCP_in_out
     [Documentation]             Execute the LAN DHCP & then back out to test exit and top commands
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -8408,8 +8415,7 @@ LAN0 Bridge DHCP: ip Assign delete
 
 Suite Setup
     Open Connection And Log In
-Suite Teardown
-    Close All Connections
+
 
 Open Connection And Log In
    Open Connection     ${HOST}
@@ -8417,3 +8423,6 @@ Open Connection And Log In
 
 Close All Connections
     Write               logout
+
+#Suite Teardown
+#    Close All Connections
