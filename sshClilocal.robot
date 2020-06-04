@@ -1013,234 +1013,94 @@ WAN0 L2TP: Enter L2TP and then back out to Global
     sleep                       1
     ${output}=                 write   exit
     sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-    should not be empty         ${output}
-    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
+    #${output}=                 read
+    #${output}=                 write   exit
+    #sleep                       1
+    #set client configuration  prompt=#
+    ${global}=                  read    #until prompt
+    should contain              ${global}   (global)#
+    should not be empty         ${global}
+    should not contain          ${global}   (config-if-wan0)#   (config)#   (config-if-wan0-l2tp)#
 
-WAN0 L2TP: Execute conn l2tp to Enter l2tp
+#NOTE: After this L2TP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
+WAN0 L2TP: Start configuring all one shot & apply   #has problems not showing
     [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp
-    [Documentation]             Fire off the conn l2tp and then verify it's in l2tp
-    #configure -> interface ethernet wan0 -> conn l2tp
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    sleep                       1
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    sleep                       1
-    ${output}=                 write   conn l2tp
-    sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter mtu 1432   #has problems not showing
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_mtu
-    [Documentation]             Fire off the conn l2tp and then set the mtu
+    [Documentation]             Fire off all commands and then only show and then only apply adn show again. NOTE: Will need to reset via gui or RESTORE back to DHCP else risk losing Connection
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn l2tp
     sleep                       1
-    ${output}=                  write  mtu 1432
-    sleep                       1
-    ${output}=                  write  apply
-    sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   MTU=1432    (config-if-wan0-l2tp)#
-    should not contain          ${output}   ERROR: MTU need set, errno: [-1]    (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter DNS
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_dns
-    [Documentation]             Fire off the conn l2tp and then set the dns
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
-    ${output}=                  write  dns 192.168.0.205
-    sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   DNS_SERVER1=192.168.0.205    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter l2tp IP
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_ip
-    [Documentation]             Fire off the ip and then set the ip
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
-    ${output}=                  write  ip 192.168.0.206
-    sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   IP_ADDR=192.168.0.206    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter netmask   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_netmask
-    [Documentation]             Fire off the netmask and then set the netmask
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
-    ${output}=                  write  netmask 255.255.0.0
-    sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   NETMASK=255.255.0.0    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter gateway   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_gateway
-    [Documentation]             Fire off the netmask and then set the gateway
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
-    ${output}=                  write  gateway 255.255.0.0
-    sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter username   #has problems not showing
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_username
-    [Documentation]             Fire off the username and then set the username
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
+    #username
     ${output}=                  write  username ziegler_natta
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   USER_NAME=ziegler_natta    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter password   #has problems not showing
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_password
-    [Documentation]             Fire off the password and then set the password
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
+    #password
     ${output}=                  write  password reduxProcessChemistry
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
     sleep                       1
-    ${output}=                  write  show
+    #mtu
+    ${output}=                  write  mtu 1432
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
     sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   PASSWORD=reduxProcessChemistry    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter vpn   #has problems not showing
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_vpn
-    [Documentation]             Fire off the vpn and then set the vpn
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
+    #dns
+    ${output}=                  write  dns 192.168.0.205
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
     sleep                       1
+    #ip
+    ${output}=                  write  ip 192.168.0.206
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    sleep                       1
+    #netmask
+    ${output}=                  write  netmask 255.255.0.0
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    sleep                       1
+    #gateway
+    ${output}=                  write  gateway 255.255.0.0
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    sleep                       1
+    #vpn
     ${output}=                  write  vpn macaffee.com
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   VPN_SERVER=macaffee.com    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter hostname
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_hostname
-    [Documentation]             Fire off the hostname and then set the hostname
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
+    #hostname
     ${output}=                  write  host yeehaw3
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
     sleep                       1
-    #${output}=                  write  apply
-    #sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   Hostname=yeehaw3    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter default route: enable  #has problems not enabled
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp  l2tp_defaultroute
-    [Documentation]             Fire off the default route and then set the default route
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
+    #defaultroute
     ${output}=                  write  defaultroute enable
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
     sleep                       1
-    #${output}=                  write  apply
-    #sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   DEFAULT_ROUTE=enable    (config-if-wan0-l2tp)#
-    should not contain          ${output}   ERROR: MTU need set, errno: [-1]    (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 L2TP: Enter options   #has problems, snow showing
-    [Tags]                      Config       WAN     wan0   L2TP    conn_l2tp  l2tp_options
-    [Documentation]             Fire off the options and then set the options as ttyname
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn l2tp
-    sleep                       1
+    #options
     ${output}=                  write  options ttyname
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    sleep                       3
+    #show
+    ${output}=                  write  show
     sleep                       1
-    #${output}=                  write  apply
-    #sleep                       1
+    ${read}=                    read
+    sleep                       1
+    should contain              ${read}   MTU=1432    DNS_SERVER1=192.168.0.205    IP_ADDR=192.168.0.206   (config-if-wan0-l2tp)#
+    should contain              ${read}   USER_NAME=ziegler_natta    PASSWORD=reduxProcessChemistry  VPN_Server=macaffee.com    Hostname=yeehaw3
+    should contain              ${read}   DEFAULT_ROUTE=Enable    ADDITIONAL_PPPD_OPTIONS=ttyname
+    should not contain          ${read}   (config-if-wan0)#   (config)#    ERROR:    error
+    sleep                       1
+    #apply
+    ${apply}=                  write  apply
+    sleep                       1
+    ${apply}=                    read
+    should not contain          ${apply}   ERROR:   ERROR: MTU need set, errno: [-1]
+    sleep                       1
     ${output}=                  write  show
     sleep                       1
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-l2tp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#   ERROR:
+    should contain              ${output}   MTU=1432    DNS_SERVER1=192.168.0.205    IP_ADDR=192.168.0.206   (config-if-wan0-l2tp)#
+    should contain              ${output}   USER_NAME=ziegler_natta    PASSWORD=reduxProcessChemistry  VPN_Server=macaffee.com    Hostname=yeehaw3
+    should contain              ${output}   DEFAULT_ROUTE=Enable    ADDITIONAL_PPPD_OPTIONS=ttyname
+    should not contain          ${output}   (config-if-wan0)#   (config)#    ERROR:    error
     ${exit}                     write  top
+#NOTE: After this L2TP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 Suite Teardown         Close All Connections
     sleep                       3
