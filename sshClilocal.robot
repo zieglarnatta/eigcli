@@ -370,7 +370,7 @@ WAN0 dhcp: Execute update DHCP querymode to normal (from aggresive default) & th
 
 #WAN Static config
 WAN0 static: Execute connect static Wan & then back out
-    [Tags]                     Config       WAN     wan0  static:  conn static     static_in_out
+    [Tags]                     Config       WAN     wan0  static:  conn_static_in_out
     [Documentation]            Enters the WAN Static Configuration Mode, then use top & 3 exits to go back to Global Configuration
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -406,111 +406,64 @@ WAN0 static: Execute connect static Wan & then back out
     sleep                       1
     ${exit}=                 write   exit
     sleep                       1
-    set client configuration  prompt=#
-    ${exit}=         read until prompt
+    #set client configuration  prompt=#
+    ${exit}=                    read    #until prompt
     sleep                       1
     should contain              ${exit}   (global)#
     should not be empty         ${exit}
     should not contain          ${exit}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
 
-WAN0 static: Execute the mtu for WAN Static
-    [Tags]                     Config       WAN     wan0  static  conn_static     static_mtu
-    [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
+#NOTE: After this WAN0 Static below is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
+WAN0 static: Execute all commands for WAN Static
+    [Tags]                     Config       WAN     wan0  static  conn_static
+    [Documentation]            then show and then apply and then show again
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn static
+    sleep                       1
     ${output}=                 write   mtu 1325     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    should not contain          ${output}   ERROR
     sleep                       1
-    ${output}=                 write   show
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   MTU=1325
-    should not be empty         ${output}
-    should not contain          ${output}   MTU=1500
-    ${exit}                     write  top
-
-WAN0 static: Execute the dns for WAN Static
-    [Tags]                     Config       WAN     wan0  static  conn_static     static_dns
-    [Documentation]            Enters the WAN Static Configuration Mode and to set dns as 8.8.8.8
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn static
     ${output}=                 write   dns 8.8.8.8     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    should not contain          ${output}   ERROR
     sleep                       1
-    ${output}=                 write   show
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   DNS_SERVER1=8.8.8.8
-    should not be empty         ${output}
-    should not contain          ${output}   DNS_SERVER=
-    ${exit}                     write  top
-
-WAN0 static: Execute the ip for WAN Static
-    [Tags]                     Config       WAN     wan0  static  conn_static     static_ip
-    [Documentation]            Enters the WAN Static Configuration Mode and to set ip as 192.168.0.200
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn static
     ${output}=                 write   ip 192.168.0.200     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    should not contain          ${output}   ERROR
     sleep                       1
-    ${output}=                 write   show
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   IP_ADDR=192.168.0.200
-    should not be empty         ${output}
-    should not contain          ${output}   DNS_SERVER=     IP_ADDR=
-    ${exit}                     write  top
-
-WAN0 static: Execute the netmask for WAN Static
-    [Tags]                     Config       WAN     wan0  static   conn_static     static_netmask
-    [Documentation]            Enters the WAN Static Configuration Mode and to set netmask as 255.255.0.0
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn static
     ${output}=                 write   netmask 255.255.0.0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    should not contain          ${output}   ERROR
     sleep                       1
-    ${output}=                 write   show
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   NETMASK=255.255.0.0
-    should not be empty         ${output}
-    should not contain          ${output}   DNS_SERVER=     IP_ADDR=    NETMASK=
-    ${exit}                     write  top
-
-WAN0 static: Execute the gateway for WAN Static
-    [Tags]                     Config       WAN     wan0  static  conn_static     static_gateway
-    [Documentation]            Enters the WAN Static Configuration Mode and to set gateway as DEFAULT_GATEWAY=192.168.0.203
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn static
     ${output}=                 write   gateway 192.168.0.203     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    should not contain          ${output}   ERROR
     sleep                       1
     ${output}=                 write   show
+    should not contain          ${output}   ERROR
+    sleep                       1
+    ${output}=                 read
+    sleep                       1
+    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   DEFAULT_GATEWAY=192.168.0.203    NETMASK=255.255.0.0
+    should contain              ${output}   DNS_SERVER1=8.8.8.8    IP_ADDR=192.168.0.200   MTU=1325
+    sleep                       2
+    ${output}=                 write    apply
+    sleep                       1
+    ${read}=                    read
+    should not contain          ${read}   ERROR    OSError: Socket is closed    OSError:
+    sleep                       1
+    ${output}=                 write   show
+    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   DEFAULT_GATEWAY=192.168.0.203
+    #set client configuration  prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   DEFAULT_GATEWAY=192.168.0.203    NETMASK=255.255.0.0
+    should contain              ${output}   DNS_SERVER1=8.8.8.8    IP_ADDR=192.168.0.200   MTU=1325
     should not be empty         ${output}
-    should not contain          ${output}   DNS_SERVER=     IP_ADDR=    NETMASK=    DEFAULT_GATEWAY=
+    should not contain          ${output}   ERROR
     ${exit}                     write  top
 
 #WAN PPPoE
 WAN0 PPPoE: Execute connect PPPoE Wan & then back out
-    [Tags]                     Config       WAN     wan0  PPPoE   conn pppoe     pppoe_in_out
+    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_in_out
     [Documentation]            Enters the WAN PPPoE Configuration Mode, then use top & 3 exits to go back to Global Configuration
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -550,6 +503,7 @@ WAN0 PPPoE: Execute connect PPPoE Wan & then back out
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pppoe)#
 
+#NOTE: After this PPPoE below is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 #dns
 WAN0 PPPoE: Execute the dns for WAN PPPoE
     [Tags]                     Config       WAN     wan0   PPPoE  conn_pppoe     pppoe_dns
