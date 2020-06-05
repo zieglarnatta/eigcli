@@ -701,8 +701,7 @@ WAN0 PPPoE: Execute the options for WAN PPPoE
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    ADDITIONAL_PPPD_OPTIONS
     ${exit}                     write  top
-
-#need to reset EIG after the PPPoE is done, which takes time. SOlution: write a test module to reset and then wait else write the GUI ROBOT to go into admin to reset it back to DHCP
+#NOTE: After this PPPoE is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 #PPTP
 WAN0 PPTP: Enter PPTP and then back out to Global
@@ -740,242 +739,92 @@ WAN0 PPTP: Enter PPTP and then back out to Global
     sleep                       1
     ${output}=                 write   exit
     sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
+    #set client configuration  prompt=#
+    ${output}=                  read    #until prompt
     should contain              ${output}   (global)#
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
 
-WAN0 PPTP: Execute conn pptp to Enter PPTP
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp
-    [Documentation]             Fire off the conn pptp and then verify it's in PPTP
-    #configure -> interface ethernet wan0 -> conn pptp
+#NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
+#PPTP
+WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
+   [Tags]                      Config       WAN     wan0  PPTP  conn_pptp
+    [Documentation]             Fire off all PPTP, show, apply and then show again
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pptp
     sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter mtu 1433   #has problems not showing
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_mtu
-    [Documentation]             Fire off the conn pptp and then set the mtu, HAS ISSUE NEED OT FILE BUG MTU NOT STICKING
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
+    #mtu
     ${output}=                  write  mtu 1433
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   MTU=1433    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter DNS
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_dns
-    [Documentation]             Fire off the conn pptp and then set the dns
-    ${reset}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #dns
     ${output}=                  write  dns 8.8.8.8
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   DNS_SERVER1=8.8.8.8    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter PPTP IP
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_ip
-    [Documentation]             Fire off the ip and then set the ip
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #ip
     ${output}=                  write  ip 192.168.0.204
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   IP_ADDR=192.168.0.204    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter netmask   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_netmask
-    [Documentation]             Fire off the netmask and then set the netmask
-    ${reset}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #netmask
     ${output}=                  write  netmask 255.255.0.0
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   NETMASK=255.255.0.0    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter gateway   #has issues, not working, not showing
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_gateway
-    [Documentation]             Fire off the netmask and then set the gateway #known error, open defect on this
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #gateway
     ${output}=                  write  gateway 255.255.0.0
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   GATEWAY=255.255.0.0    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter username   #has problems not showing
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_username
-    [Documentation]             Fire off the username and then set the username
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #username
     ${output}=                  write  username paul_dirac
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   USER_NAME=paul_dirac    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter password   #has problems not showing
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_password
-    [Documentation]             Fire off the password and then set the password
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #password
     ${output}=                  write  password futurePurplePeopleEater
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   PASSWORD=futurePurplePeopleEater    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter vpn   #has problems not showing
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_vpn
-    [Documentation]             Fire off the vpn and then set the vpn
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #vpn
     ${output}=                  write  vpn symantec.com
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   VPN_Server=symantec.com    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter hostname
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_hostname
-    [Documentation]             Fire off the hostname and then set the hostname
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #hostname
     ${output}=                  write  host yeehaw2
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   Hostname=yeehaw2    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter default route: enable  #has problems
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_defaultroute
-    [Documentation]             Fire off the default route and then set the default route
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #defaultroute
     ${output}=                  write  defaultroute enable
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   DEFAULT_ROUTE=Enable    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter Encrypt mppe128  #has problems, nothing shown
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_encrypt
-    [Documentation]             Fire off the encrypt and then set the encrytion to mppe128
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #encrypt mppe
     ${output}=                  write  encrypt mppe128
     sleep                       1
-    ${output}=                  write  show
-    sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   encrypt    (config-if-wan0-pptp)#
-    should not contain          ${output}   (config-if-wan0)#   (config)#
-    ${exit}                     write  top
-
-WAN0 PPTP: Enter options   #has issues
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  pptp_options
-    [Documentation]             Fire off the options and then set the options as ttyname
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pptp
-    sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #options
     ${output}=                  write  options ttyname
     sleep                       1
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    #show it
     ${output}=                  write  show
     sleep                       1
+    ${output}=                  read
+    should contain              ${output}   MTU=1433  DNS_SERVER1=8.8.8.8  IP_ADDR=192.168.0.204  (config-if-wan0-pptp)#
+    should contain              ${output}   NETMASK=255.255.0.0    USER_NAME=paul_dirac    PASSWORD=futurePurplePeopleEater    VPN_Server=symantec.com
+    should contain              ${output}   Hostname=yeehaw2    DEFAULT_ROUTE=Enable    encrypt    ADDITIONAL_PPPD_OPTIONS=ttyname
+    #apply it
+    ${output}=                  write  apply
+    sleep                       2
     #set client configuration    prompt=#
     ${output}=                  read    #until prompt
-    should contain              ${output}   ADDITIONAL_PPPD_OPTIONS=ttyname    (config-if-wan0-pptp)#
+    ${output}=                  write  show
+    sleep                       2
+    ${output}=                  read    #until prompt
+    should contain              ${output}   MTU=1433  DNS_SERVER1=8.8.8.8  IP_ADDR=192.168.0.204  (config-if-wan0-pptp)#
+    should contain              ${output}   NETMASK=255.255.0.0    USER_NAME=paul_dirac    PASSWORD=futurePurplePeopleEater    VPN_Server=symantec.com
+    should contain              ${output}   Hostname=yeehaw2    DEFAULT_ROUTE=Enable    encrypt    ADDITIONAL_PPPD_OPTIONS=ttyname
+
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
-    sleep                       2
+#NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 #L2TP
 WAN0 L2TP: Enter L2TP and then back out to Global
@@ -1053,11 +902,11 @@ WAN0 L2TP: Start configuring all one shot & apply   #has problems not showing
     sleep                       1
     #netmask
     ${output}=                  write  netmask 255.255.0.0
-    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]   loglevel=warn
     sleep                       1
     #gateway
     ${output}=                  write  gateway 255.255.0.0
-    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]
+    should not contain          ${output}   error   ERROR:   ERROR: MTU need set, errno: [-1]   loglevel=warn
     sleep                       1
     #vpn
     ${output}=                  write  vpn macaffee.com
