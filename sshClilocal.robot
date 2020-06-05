@@ -544,8 +544,8 @@ WAN0 PPPoE: Execute connect PPPoE Wan & then back out
     sleep                       1
     ${output}=                 write   exit
     sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
+    #set client configuration  prompt=#
+    ${output}=                  read    #until prompt
     should contain              ${output}   (global)#
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pppoe)#
@@ -560,13 +560,13 @@ WAN0 PPPoE: Execute the dns for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   dns 8.8.8.8     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
-    #${output}=                 write   apply
-    #sleep                       1
+    ${output}=                 write   apply
+    sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
+    #${read}=                  read
+    #set client configuration  prompt=#
+    ${output}=                  read    #until prompt
     should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   DNS_SERVER1=8.8.8.8
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    DNS_SERVER=     ERROR:
@@ -584,39 +584,17 @@ WAN0 PPPoE: Execute the username & password for WAN PPPoE
     sleep                       1
     ${output}=                 write   password atLeastWeHaveChicken
     sleep                       1
-    #${output}=                 write   apply
-    #sleep                       1
+    ${output}=                 write   apply
+    sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     ${read}=                  read
     set client configuration  prompt=#
     ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   USER_NAME=leroy_jenkins
+    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   USER_NAME=leroy_jenkins    PASSWORD=atLeastWeHaveChicken
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    USER_NAME=      PASSWORD=      ERROR:
     ${exit}                     write  top
-
-#password
-#WAN0 PPPoE: Execute the password for WAN PPPoE
-#    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_password
-#    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set password as atLeastWeHaveChicken
-#    ${execute}=                 write   top
-#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-#   ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-#    ${output}=                 write   conn pppoe
-#    ${output}=                 write   password atLeastWeHaveChicken
-#    sleep                       1
-#    ${output}=                 write   apply
-#    sleep                       1
-#    ${output}=                 write   show
-    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-#    ${read}=                  read
-#    set client configuration  prompt=#
-#    ${output}=         read until prompt
-#    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   PASSWORD=leroy_jenkins
-#    should not be empty         ${output}
-#    should not contain          ${output}   MTU=1500    PASSWORD=   ERROR:
-#    ${exit}                     write  top
 
 #mtu
 WAN0 PPPoE: Execute the mtu for WAN PPPoE
@@ -628,8 +606,8 @@ WAN0 PPPoE: Execute the mtu for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   mtu 1324     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
-    #${output}=                 write   apply
-    #sleep                       1
+    ${output}=                 write   apply
+    sleep                       1
     ${output}=                 write   show
     sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -652,11 +630,14 @@ WAN0 PPPoE: Execute the servicename for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   servicename user1-service
     sleep                       1
+    ${output}=                 write   apply
+    sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
+    sleep                       1
+    #${read}=                  read
+    #set client configuration  prompt=#
+    ${output}=                  read    #until prompt
     should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   SERVICE_NAME=user1-service
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    PASSWORD=
@@ -672,11 +653,14 @@ WAN0 PPPoE: Execute the acname for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   acname ispl.com
     sleep                       1
+    ${output}=                 write   apply
+    sleep                       1
     ${output}=                 write   show
+    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
+    #${read}=                  read
+    #set client configuration  prompt=#
+    ${output}=                  read    #until prompt
     should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   ACCESS_CONCENTRATOR_NAME=ispl.com
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    ACCESS_CONCENTRATOR_NAME=
@@ -692,14 +676,18 @@ WAN0 PPPoE: Execute the options for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   options ignore-eol-tag
     sleep                       1
+    ${output}=                 write   apply
+    sleep                       1
     ${output}=                 write   show
+    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   ADDITIONAL_PPPD_OPTIONS=ignore-eol-tag
+    #${read}=                  read
+    #set client configuration  prompt=#
+    ${output}=                  read    #until prompt
+    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   ADDITIONAL_PPPD_OPTIONS=ignore-eol-tag    SERVICE_NAME=user1-service
+    should contain              ${output}   MTU=1324   USER_NAME=leroy_jenkins    PASSWORD=atLeastWeHaveChicken    DNS_SERVER1=8.8.8.8
     should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    ADDITIONAL_PPPD_OPTIONS
+    should not contain          ${output}   Usage: uci [<options>] <command> [<arguments>]    MTU=1500    ADDITIONAL_PPPD_OPTIONS
     ${exit}                     write  top
 #NOTE: After this PPPoE is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
