@@ -157,9 +157,13 @@ Global: ntp server configuration and show it (has problem matching with double s
     [Documentation]             Execute the ntp & confirm ntp servers are updated & shown
     ${execute}=                 write   top
     ${execute}=                 write   configure
-    ${execute}=                 write   ntp server1 www.yahoo.com server2 www.google.com server3 www.msn.com server4 server5        loglevel=DEBUG
     sleep                       1
+    ${execute}=                 write   ntp server1 www.yahoo.com server2 www.google.com server3 www.msn.com server4 server5        loglevel=DEBUG
+    sleep                       2
+    #${execute}=                 write    apply
+    #sleep                       2
     ${ntp}=                  write   show ntp       loglevel=DEBUG
+    should not contain          ${ntp}  ERROR   error
     sleep                       2
     #set client configuration   prompt=(config)#
     ${ntp}=                 read     #until prompt        loglevel=WARN
