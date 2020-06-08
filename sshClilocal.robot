@@ -152,7 +152,7 @@ Global: Execute "configure" and then "exit", then back to "confgiure" and use "t
     should contain              ${output}   (global)#
 
 #System config portion
-Global: ntp server configuration and show it (has problem matching with double space, also ntp updated on server 6 rather than 1)
+Global: ntp server configuration and show it
     [Tags]                      Config      System_Configuration    ntp     show_ntp
     [Documentation]             Execute the ntp & confirm ntp servers are updated & shown
     ${execute}=                 write   top
@@ -162,7 +162,7 @@ Global: ntp server configuration and show it (has problem matching with double s
     sleep                       2
     #${execute}=                 write    apply
     #sleep                       2
-    ${ntp}=                  write   show ntp       loglevel=DEBUG
+    ${ntp}=                  write   show ntp       #loglevel=DEBUG
     should not contain          ${ntp}  ERROR   error
     sleep                       2
     #set client configuration   prompt=(config)#
