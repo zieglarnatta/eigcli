@@ -14,7 +14,7 @@ Resource            resourceLocal.robot
 *** Test Cases ***
 Execute Hello World Echo Command And Verify Output
     [Tags]                  Hello_World
-    [Documentation]         Execute Command can be usWLANed to run commands on the remote machine.
+    [Documentation]         Execute Command can be used to run commands on the remote machine.
     ...                     The keyword returns the standard output by default.
     ${output}=              Execute Command    echo Hello SSHLibrary!
     should be equal         ${output}          Hello SSHLibrary!
@@ -74,16 +74,16 @@ Global: Traceroute
     [Tags]                      Global  traceroute
     [Documentation]             Execute Traceroute and report traceroute stats
     #Start the http python on localhost on port 7272
-    #run process                 python  ${server}   timeout=3min	on_timeout=continue
+    run process                 python  ${server}   timeout=3min	on_timeout=continue
     #start traceroute
     #${execute}=                 write       traceroute 8.8.8.8 resolve source localhost:7272 interface eth0
-    #${execute}=                 write       traceroute localhost:7272
-    ${execute}=                 write       traceroute 192.168.1.250
+    ${execute}=                 write       traceroute localhost:7272
+    #${execute}=                 write       traceroute 192.168.1.255
     Sleep                       12
     set client configuration    prompt=(global)#
-    ${output}=                  read until prompt   #traceroute: can't set multicast source interface
-    should not contain          ${output}    Usage: ping [OPTIONS] HOST     Syntax error: Illegal parameter
-    should not contain          ${output}   traceroute: can't set multicast source interface    Illegal command line
+    ${execute}=                  read    #until prompt   #traceroute: can't set multicast source interface
+    should not contain          ${execute}    Usage: ping [OPTIONS] HOST     Syntax error: Illegal parameter
+    should not contain          ${execute}   traceroute: can't set multicast source interface    Illegal command line
     #should not Be Equal         ${output}    traceroute: can't set multicast source interface    #has issues
 
 Global: ps Processes
@@ -518,7 +518,7 @@ WAN0 PPPoE: Execute the dns for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   dns 8.8.8.8     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
-    ${output}=                 write   apply
+    #${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -542,7 +542,7 @@ WAN0 PPPoE: Execute the username & password for WAN PPPoE
     sleep                       1
     ${output}=                 write   password atLeastWeHaveChicken
     sleep                       1
-    ${output}=                 write   apply
+    #${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -564,7 +564,7 @@ WAN0 PPPoE: Execute the mtu for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   mtu 1324     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
-    ${output}=                 write   apply
+    #${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
     sleep                       1
@@ -588,7 +588,7 @@ WAN0 PPPoE: Execute the servicename for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   servicename user1-service
     sleep                       1
-    ${output}=                 write   apply
+    #${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
@@ -611,7 +611,7 @@ WAN0 PPPoE: Execute the acname for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   acname ispl.com
     sleep                       1
-    ${output}=                 write   apply
+    #${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
     sleep                       1
@@ -634,7 +634,7 @@ WAN0 PPPoE: Execute the options for WAN PPPoE
     ${output}=                 write   conn pppoe
     ${output}=                 write   options ignore-eol-tag
     sleep                       1
-    ${output}=                 write   apply
+    #${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
     sleep                       1
@@ -6405,7 +6405,7 @@ WLAN Guest 5g: WPA Rekey key rotation interval
 
 #WLAN WPA2 personal guest 5g
 WLAN WPA2 guest 5g personal: wpa2 personal
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_wpa2_enter
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_guest_wpa2_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> security wpa2
     ${output}=                  write   top
@@ -6422,7 +6422,7 @@ WLAN WPA2 guest 5g personal: wpa2 personal
 
 
 WLAN WPA2 guest 5g personal: Set SSID for wpa2 Personal WLAN 5g
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g     interface_wifi_5g_wpa2_ssid
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g     interface_wifi_5g_guest_wpa2_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6440,7 +6440,7 @@ WLAN WPA2 guest 5g personal: Set SSID for wpa2 Personal WLAN 5g
     ${exit}                     write  top
 
 WLAN WPA2 guest 5g personal: SSID Hide enabled
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_wpa2_ssid_hide
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_guest_wpa2_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 5g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6458,7 +6458,7 @@ WLAN WPA2 guest 5g personal: SSID Hide enabled
     ${exit}                     write  top
 
 WLAN WPA2 guest 5g personal: SSID broadcast
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_wpa2_ssid_broadcast
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_guest_wpa2_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6476,7 +6476,7 @@ WLAN WPA2 guest 5g personal: SSID broadcast
     ${exit}                     write  top
 
 WLAN WPA2 guest 5g personal: Password
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_wpa2_password
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_guest_wpa2_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6494,7 +6494,7 @@ WLAN WPA2 guest 5g personal: Password
     ${exit}                     write  top
 
 WLAN WPA2 guest 5g personal: PMF protected Management Frames
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_wpa2_pmf
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_guest_wpa2_pmf
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6530,7 +6530,7 @@ WLAN WPA2 guest 5g personal: maxclient
     ${exit}                     write  top
 
 WLAN WPA2 guest 5g personal: Rekey key rotation interval
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_wpa2_rekey
+    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_5g  interface_wifi_5g_guest_wpa2_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
