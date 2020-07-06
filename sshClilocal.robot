@@ -374,53 +374,9 @@ WAN0 dhcp: Execute update DHCP querymode to normal (from aggresive default) & th
 
 #WAN Static config
 WAN0 static: Execute connect static Wan & then back out
-    [Tags]                     Config       WAN     wan0  static:  conn_static_in_out
+    [Tags]                     Config       WAN     wan0  wan_static  conn_static_in_out
     [Documentation]            Enters the WAN Static Configuration Mode, then use top & 3 exits to go back to Global Configuration
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    sleep                       1
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    sleep                       1
-    ${output}=                 write   conn static     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
-    sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-static)#
-    should not be empty         ${output}
-    #use top to go all the way back into Global Config
-    ${output}=                  write   top
-    sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-    should not be empty         ${output}
-    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
-    #use 3 exits to get back to global
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    sleep                       1
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    sleep                       1
-    ${output}=                 write   conn static     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
-    sleep                       1
-    ${exit}=                 write   exit
-    sleep                       1
-    ${exit}=                 write   exit
-    sleep                       1
-    ${exit}=                 write   exit
-    sleep                       1
-    ${exit}=                 write   exit
-    sleep                       1
-    #set client configuration  prompt=#
-    ${exit}=                    read    #until prompt
-    sleep                       1
-    should contain              ${exit}   (global)#
-    should not be empty         ${exit}
-    should not contain          ${exit}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
-
-#NOTE: After this WAN0 Static below is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
-WAN0 static: Execute all commands for WAN Static
-    [Tags]                     Config       WAN     wan0  static  conn_static
-    [Documentation]            then show and then apply and then show again
+    #Make sure WAN is plugged in to a source before you start this test
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
@@ -464,10 +420,102 @@ WAN0 static: Execute all commands for WAN Static
     should not be empty         ${output}
     should not contain          ${output}   ERROR
     ${exit}                     write  top
+    sleep                       1
+    ${execute}=                 write   top
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    sleep                       1
+    ${output}=                 write   conn static     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (config-if-wan0-static)#
+    should not be empty         ${output}
+    #use top to go all the way back into Global Config
+    ${output}=                  write   top
+    sleep                       1
+    set client configuration  prompt=#
+    ${output}=         read until prompt
+    should contain              ${output}   (global)#
+    should not be empty         ${output}
+    should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
+    #use 3 exits to get back to global
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    sleep                       1
+    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+    sleep                       1
+    ${output}=                 write   conn static     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    sleep                       1
+    ${exit}=                 write   exit
+    sleep                       1
+    ${exit}=                 write   exit
+    sleep                       1
+    ${exit}=                 write   exit
+    sleep                       1
+    ${exit}=                 write   exit
+    sleep                       1
+    #set client configuration  prompt=#
+    ${exit}=                    read    #until prompt
+    sleep                       1
+    should contain              ${exit}   (global)#
+    should not be empty         ${exit}
+    should not contain          ${exit}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
+
+
+#NOTE: After this WAN0 Static below is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
+#WAN0 static: Execute all commands for WAN Static
+#    [Tags]                     Config       WAN     wan0  wan_static  conn_static
+#    [Documentation]            then show and then apply and then show again
+#    #not sure why connection closes after the above initial in & out so forcing this to open again
+#    sleep                       3
+#    Open Connection And Log In
+#    ${execute}=                 write   top
+#    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+#    ${output}=                 write   conn static
+#    sleep                       1
+#    ${output}=                 write   mtu 1325     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+#    should not contain          ${output}   ERROR
+#    sleep                       1
+#    ${output}=                 write   dns 8.8.8.8     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+#    should not contain          ${output}   ERROR
+#    sleep                       1
+#    ${output}=                 write   ip 192.168.0.200     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+#    should not contain          ${output}   ERROR
+#    sleep                       1
+#    ${output}=                 write   netmask 255.255.0.0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+#    should not contain          ${output}   ERROR
+#    sleep                       1
+#    ${output}=                 write   gateway 192.168.0.203     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+#    should not contain          ${output}   ERROR
+#    sleep                       1
+#    ${output}=                 write   show
+#    should not contain          ${output}   ERROR
+#    sleep                       1
+#    ${output}=                 read
+#    sleep                       1
+#    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   DEFAULT_GATEWAY=192.168.0.203    NETMASK=255.255.0.0
+#    should contain              ${output}   DNS_SERVER1=8.8.8.8    IP_ADDR=192.168.0.200   MTU=1325
+#    sleep                       2
+#    ${output}=                 write    apply
+#    sleep                       1
+#    ${read}=                    read
+#    should not contain          ${read}   ERROR    OSError: Socket is closed    OSError:
+#    sleep                       1
+#    ${output}=                 write   show
+#    sleep                       1
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    #set client configuration  prompt=#
+#    ${output}=                  read    #until prompt
+#    should contain              ${output}   (config-if-wan0-static)#    WAN Static Configuration:   DEFAULT_GATEWAY=192.168.0.203    NETMASK=255.255.0.0
+#    should contain              ${output}   DNS_SERVER1=8.8.8.8    IP_ADDR=192.168.0.200   MTU=1325
+#    should not be empty         ${output}
+#    should not contain          ${output}   ERROR
+#    ${exit}                     write  top
 
 #WAN PPPoE
 WAN0 PPPoE: Execute connect PPPoE Wan & then back out
-    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_in_out
+    [Tags]                     Config       wan0  PPPoE   conn_pppoe     pppoe_in_out   pppoe_all
     [Documentation]            Enters the WAN PPPoE Configuration Mode, then use top & 3 exits to go back to Global Configuration
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -506,152 +554,205 @@ WAN0 PPPoE: Execute connect PPPoE Wan & then back out
     should contain              ${output}   (global)#
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pppoe)#
-
-#NOTE: After this PPPoE below is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
-#dns
-WAN0 PPPoE: Execute the dns for WAN PPPoE
-    [Tags]                     Config       WAN     wan0   PPPoE  conn_pppoe     pppoe_dns
-    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set dns as 8.8.8.8
-    ${execute}=                 write   top
+    #stuffing all the PPPoE Commands one shot here
+    #dns
+    ${execute}=                write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
     ${output}=                 write   conn pppoe
+    sleep                       1
+    #dns
     ${output}=                 write   dns 8.8.8.8     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
     sleep                       1
-    #${output}=                 write   apply
+    #username & input password
+    ${output}=                 write   username leroy_jenkins
+    sleep                       1
+    ${output}=                 write   password atLeastWeHaveChicken
+    sleep                       1
+    #mtu
+    ${output}=                 write   mtu 1324     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+    sleep                       1
+    #service name
+    ${output}=                 write   servicename user1-service
+    sleep                       1
+    #acname
+    ${output}=                 write   acname ispl.com
+    sleep                       1
+    #options
+    ${output}=                 write   options ignore-eol-tag
+    sleep                       1
+    ${output}=                 write   apply
     sleep                       1
     ${output}=                 write   show
+    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     #${read}=                  read
     #set client configuration  prompt=#
     ${output}=                  read    #until prompt
     should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   DNS_SERVER1=8.8.8.8
+    should contain              ${output}   USER_NAME=leroy_jenkins    PASSWORD=atLeastWeHaveChicken    MTU=1324
+    should contain              ${output}   SERVICE_NAME=user1-service  ACCESS_CONCENTRATOR_NAME=ispl.com   ADDITIONAL_PPPD_OPTIONS=ignore-eol-tag
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    DNS_SERVER=     ERROR:
-    ${exit}                     write  top
+
+#NOTE: After this PPPoE below is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
+#dns
+#WAN0 PPPoE: Execute the dns for WAN PPPoE
+#    [Tags]                     Config        wan0   PPPoE  conn_pppoe     pppoe_dns
+#    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set dns as 8.8.8.8
+#    ${execute}=                 write   top
+#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+#    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+#    ${output}=                 write   conn pppoe
+#    ${output}=                 write   dns 8.8.8.8     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+#    sleep                       1
+    #${output}=                 write   apply
+#    sleep                       1
+#    ${output}=                 write   show
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+    #${read}=                  read
+    #set client configuration  prompt=#
+#    ${output}=                  read    #until prompt
+#    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   DNS_SERVER1=8.8.8.8
+#    should not be empty         ${output}
+#    should not contain          ${output}   MTU=1500    DNS_SERVER=     ERROR:
+#    ${exit}                     write  top
+
+    #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
+#    ${read}=                  read
+#    set client configuration  prompt=#
+#    ${output}=         read until prompt
+#    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   USER_NAME=leroy_jenkins    PASSWORD=atLeastWeHaveChicken
+#    should not be empty         ${output}
+#    should not contain          ${output}   MTU=1500    USER_NAME=      PASSWORD=      ERROR:
+
+    #${output}=                 write   apply
+#    sleep                       1
+#    ${output}=                 write   show
+#    sleep                       1
 
 #username & password
-WAN0 PPPoE: Execute the username & password for WAN PPPoE
-    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_username_password
-    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set username as leroy_jenkins
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pppoe
-    ${output}=                 write   username leroy_jenkins
-    sleep                       1
-    ${output}=                 write   password atLeastWeHaveChicken
-    sleep                       1
+#WAN0 PPPoE: Execute the username & password for WAN PPPoE
+#    [Tags]                     Config       wan0  PPPoE   conn_pppoe     pppoe_username_password
+#    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set username as leroy_jenkins
+#    ${execute}=                 write   top
+#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+#    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+#    ${output}=                 write   conn pppoe
+#    ${output}=                 write   username leroy_jenkins
+#    sleep                       1
+#    ${output}=                 write   password atLeastWeHaveChicken
+#    sleep                       1
     #${output}=                 write   apply
-    sleep                       1
-    ${output}=                 write   show
+#    sleep                       1
+#    ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   USER_NAME=leroy_jenkins    PASSWORD=atLeastWeHaveChicken
-    should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    USER_NAME=      PASSWORD=      ERROR:
-    ${exit}                     write  top
+#    ${read}=                  read
+#    set client configuration  prompt=#
+#    ${output}=         read until prompt
+#    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   USER_NAME=leroy_jenkins    PASSWORD=atLeastWeHaveChicken
+#    should not be empty         ${output}
+#    should not contain          ${output}   MTU=1500    USER_NAME=      PASSWORD=      ERROR:
+#    ${exit}                     write  top
 
 #mtu
-WAN0 PPPoE: Execute the mtu for WAN PPPoE
-    [Tags]                     Config       WAN     wan0  PPPoE   conn pppoe  conn_pppoe     pppoe_mtu
-    [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pppoe
-    ${output}=                 write   mtu 1324     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
-    sleep                       1
+#WAN0 PPPoE: Execute the mtu for WAN PPPoE
+#    [Tags]                     Config       wan0  PPPoE   conn pppoe  conn_pppoe     pppoe_mtu
+#    [Documentation]            Enters the WAN Static Configuration Mode and set mtu as 1325
+#    ${execute}=                 write   top
+#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+#    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+#    ${output}=                 write   conn pppoe
+#    ${output}=                 write   mtu 1324     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0 -> Static
+#    sleep                       1
     #${output}=                 write   apply
-    sleep                       1
-    ${output}=                 write   show
-    sleep                       1
+#    sleep                       1
+#    ${output}=                 write   show
+#    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    ${read}=                  read
+#    ${read}=                  read
     #set client configuration  prompt=#
     #${output}=         read until prompt
-    should contain              ${read}   (config-if-wan0-pppoe)#    PPPoE Configuration:   MTU=1324
-    should not be empty         ${read}
-    should not contain          ${read}   MTU=1500    ERROR:
-    ${exit}                     write  top
+#    should contain              ${read}   (config-if-wan0-pppoe)#    PPPoE Configuration:   MTU=1324
+#    should not be empty         ${read}
+#    should not contain          ${read}   MTU=1500    ERROR:
+#    ${exit}                     write  top
 
 
 #servicename
-WAN0 PPPoE: Execute the servicename for WAN PPPoE
-    [Tags]                     Config       WAN     wan0  PPPoE   conn_pppoe     pppoe_servicename
-    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pppoe
-    ${output}=                 write   servicename user1-service
-    sleep                       1
+#WAN0 PPPoE: Execute the servicename for WAN PPPoE
+#    [Tags]                     Config       wan0  PPPoE   conn_pppoe     pppoe_servicename
+#    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+#    ${execute}=                 write   top
+#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+#    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+#    ${output}=                 write   conn pppoe
+#    ${output}=                 write   servicename user1-service
+#    sleep                       1
     #${output}=                 write   apply
-    sleep                       1
-    ${output}=                 write   show
+#    sleep                       1
+#    ${output}=                 write   show
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
-    sleep                       1
+#    sleep                       1
     #${read}=                  read
     #set client configuration  prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   SERVICE_NAME=user1-service
-    should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    PASSWORD=
-    ${exit}                     write  top
+#    ${output}=                  read    #until prompt
+#    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   SERVICE_NAME=user1-service
+#    should not be empty         ${output}
+#    should not contain          ${output}   MTU=1500    PASSWORD=
+#    ${exit}                     write  top
 
 #acname
-WAN0 PPPoE: Execute the acname for WAN PPPoE
-    [Tags]                     Config       WAN     wan0   PPPoE  conn_pppoe     pppoe_acname
-    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pppoe
-    ${output}=                 write   acname ispl.com
-    sleep                       1
+#WAN0 PPPoE: Execute the acname for WAN PPPoE
+#    [Tags]                     Config       wan0   PPPoE  conn_pppoe     pppoe_acname
+#    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+#    ${execute}=                 write   top
+#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+#    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+#    ${output}=                 write   conn pppoe
+#    ${output}=                 write   acname ispl.com
+#    sleep                       1
     #${output}=                 write   apply
-    sleep                       1
-    ${output}=                 write   show
-    sleep                       1
+#    sleep                       1
+#    ${output}=                 write   show
+#    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     #${read}=                  read
     #set client configuration  prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   ACCESS_CONCENTRATOR_NAME=ispl.com
-    should not be empty         ${output}
-    should not contain          ${output}   MTU=1500    ACCESS_CONCENTRATOR_NAME=
-    ${exit}                     write  top
+#    ${output}=                  read    #until prompt
+#    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   ACCESS_CONCENTRATOR_NAME=ispl.com
+#    should not be empty         ${output}
+#    should not contain          ${output}   MTU=1500    ACCESS_CONCENTRATOR_NAME=
+#    ${exit}                     write  top
 
 #options
-WAN0 PPPoE: Execute the options for WAN PPPoE
-    [Tags]                     Config       WAN     wan0  PPPoE  conn_pppoe     pppoe_options
-    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
-    ${execute}=                 write   top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
-    ${output}=                 write   conn pppoe
-    ${output}=                 write   options ignore-eol-tag
-    sleep                       1
-    #${output}=                 write   apply
-    sleep                       1
-    ${output}=                 write   show
-    sleep                       1
+#WAN0 PPPoE: Execute the options for WAN PPPoE
+#    [Tags]                     Config       wan0  PPPoE  conn_pppoe     pppoe_options
+#    [Documentation]            Enters the WAN PPPoE Configuration Mode and to set servicename as user1-service
+#    ${execute}=                 write   top
+#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+#    ${output}=                 write   interface ethernet wan0     #to get into Global Connfiguration -> System configuration -> Ethernet Wan0
+#    ${output}=                 write   conn pppoe
+#    ${output}=                 write   options ignore-eol-tag
+#    sleep                       1
+#    ${output}=                 write   apply
+#    sleep                       1
+#    ${output}=                 write   show
+#    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     #${read}=                  read
     #set client configuration  prompt=#
-    ${output}=                  read    #until prompt
-    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   ADDITIONAL_PPPD_OPTIONS=ignore-eol-tag    SERVICE_NAME=user1-service
-    should contain              ${output}   MTU=1324   USER_NAME=leroy_jenkins    PASSWORD=atLeastWeHaveChicken    DNS_SERVER1=8.8.8.8
-    should not be empty         ${output}
-    should not contain          ${output}   Usage: uci [<options>] <command> [<arguments>]    MTU=1500    ADDITIONAL_PPPD_OPTIONS
-    ${exit}                     write  top
+#    ${output}=                  read    #until prompt
+#    should contain              ${output}   (config-if-wan0-pppoe)#    PPPoE Configuration:   ADDITIONAL_PPPD_OPTIONS=ignore-eol-tag    SERVICE_NAME=user1-service
+#    should contain              ${output}   MTU=1324   USER_NAME=leroy_jenkins    PASSWORD=atLeastWeHaveChicken    DNS_SERVER1=8.8.8.8
+#    should not be empty         ${output}
+#    should not contain          ${output}   Usage: uci [<options>] <command> [<arguments>]    MTU=1500    ADDITIONAL_PPPD_OPTIONS
+#    ${exit}                     write  top
 #NOTE: After this PPPoE is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 #PPTP
 WAN0 PPTP: Enter PPTP and then back out to Global
-    [Tags]                      Config       WAN     wan0  PPTP  conn_pptp  conn_pptp_in_out
+    [Tags]                      Config       wan0  PPTP  conn_pptp  conn_pptp_in_out
     [Documentation]             Fire off the conn pptp and then back out via top and then back in and back out via 3 exits
     #configure -> interface ethernet wan0 -> conn pptp
     ${execute}=                 write   top
@@ -694,7 +795,7 @@ WAN0 PPTP: Enter PPTP and then back out to Global
 #NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 #PPTP
 WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
-   [Tags]                      Config       WAN     wan0  PPTP  conn_pptp
+   [Tags]                      Config       wan0  PPTP  conn_pptp
     [Documentation]             Fire off all PPTP, show, apply and then show again
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -774,7 +875,7 @@ WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
 
 #L2TP
 WAN0 L2TP: Enter L2TP and then back out to Global
-    [Tags]                      Config       WAN     wan0    conn_l2tp  conn_l2tp_in_out    L2TP
+    [Tags]                      Config       wan0    conn_l2tp  conn_l2tp_in_out    L2TP
     [Documentation]             Fire off the conn l2tp and then back out via top and then back in and back out via 3 exits
     #configure -> interface ethernet wan0 -> conn l2tp
     ${exit}                     write  top
@@ -819,7 +920,7 @@ WAN0 L2TP: Enter L2TP and then back out to Global
 
 #NOTE: After this L2TP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 WAN0 L2TP: Start configuring all one shot & apply   #has problems not showing
-    [Tags]                      Config       WAN     wan0  L2TP  conn_l2tp
+    [Tags]                      Config       wan0  L2TP  conn_l2tp
     [Documentation]             Fire off all commands and then only show and then only apply adn show again. NOTE: Will need to reset via gui or RESTORE back to DHCP else risk losing Connection
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -7781,7 +7882,7 @@ LAN0 Bridge DHCP: Disable DHCP
     ${disable}=                 read    #read the result, should be DHCP should be disabled
     sleep                       1
     should not be empty         ${disable}
-    should not contain          ${disable}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${disable}   -ash: ntp: not found    -ash: show ntp: not found  BUILTIN.FATAL ERROR    error
     should contain              ${disable}   DHCP_Service=Disable
     ${exit}                     write  top  #reset the command line to global
 
@@ -7795,13 +7896,16 @@ LAN0 Bridge DHCP: Enable DHCP
     sleep                       1
     ${execute}=                 write   enable     #fire off the enable message
     sleep                       1
-    ${dhcp}=                     write   show   #show the enable
+    ${dhcp}=                     write   apply   #show the enable
+    sleep                       1
+    ${dhcp}=                     write   show   #apply it
     sleep                       1
     #need to consider the "apply" command to make it permanent & how to reset it
     ${enable}=                 read    #read the result, should be DHCP should be enabled
     sleep                       1
     should not be empty         ${enable}
-    should not contain          ${enable}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${enable}   -ash: ntp: not found    -ash: show ntp: not found   DHCP_Service=Disable
+    should not contain          ${enable}   ERROR    error
     should contain              ${enable}   DHCP_Service=Enable
     ${exit}                     write  top  #reset the command line to global
 
@@ -7813,15 +7917,19 @@ LAN0 Bridge DHCP: Set DHCP domain name
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
+    ${execute}=                 write   enable
+    sleep                       1
     ${execute}=                 write   domain superfly.com     #fire off the domain message to set dhcp domain URL
     sleep                       1
     ${dhcp}=                     write   show   #show the domain and other results
     sleep                       1
+    ${dhcp}=                     write   apply   #apply it
     #need to consider the "apply" command to make it permanent & how to reset it
     ${domain}=                 read    #read the result, should be superfly.com as domain
     sleep                       1
     should not be empty         ${domain}
-    should not contain          ${domain}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${domain}   -ash: ntp: not found    -ash: show ntp: not found   DHCP_Service=Disable
+    should not contain          ${domain}   ERROR   error
     should contain              ${domain}   Domain=superfly.com
     ${exit}                     write  top  #reset the command line to global
 
@@ -7833,15 +7941,19 @@ LAN0 Bridge DHCP: Set DNS
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
+    ${execute}=                 write   enable
+    sleep                       1
     ${execute}=                 write   dns 8.8.4.4     #fire off the dns command
     sleep                       1
     ${dhcp}=                     write   show   #show the dns and other results
     sleep                       1
+    ${dhcp}=                     write   apply   #apply it
     #need to consider the "apply" command to make it permanent & how to reset it
     ${dns}=                 read    #read the result, should be 8.8.4.4 as the dns ip address
     sleep                       1
     should not be empty         ${dns}
-    should not contain          ${dns}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${dns}   -ash: ntp: not found    -ash: show ntp: not found  DHCP_Service=Disable
+    should not contain          ${dns}   ERROR  error
     should contain              ${dns}   DNS_SERVER=8.8.4.4
     ${exit}                     write  top  #reset the command line to global
 
@@ -7853,6 +7965,8 @@ LAN0 Bridge DHCP: Set WINS server
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
+    ${execute}=                 write   enable
+    sleep                       1
     ${execute}=                 write   wins 10.0.0.1     #fire off the wins to set dhcp wins ip address
     sleep                       1
     ${dhcp}=                     write   show   #show the wins and other results
@@ -7861,7 +7975,8 @@ LAN0 Bridge DHCP: Set WINS server
     ${wins}=                 read    #read the result, should be 10.0.0.1 as the dhcp wins server
     sleep                       1
     should not be empty         ${wins}
-    should not contain          ${wins}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${wins}   -ash: ntp: not found    -ash: show ntp: not found     DHCP_Service=Disable
+    should not contain          ${wins}   ERROR error
     should contain              ${wins}   WINS_SERVER=10.0.0.1
     ${exit}                     write  top  #reset the command line to global
 
@@ -7877,6 +7992,8 @@ LAN0 Bridge DHCP: ip range
     sleep                       1
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
+    ${execute}=                 write   enable
+    sleep                       1
     ${execute}=                 write   ip range 192.168.0.2 192.168.0.5     #fire off the ip range from 2 to 5
     sleep                       1
     ${dhcp}=                     write   show   #show the results
@@ -7885,7 +8002,8 @@ LAN0 Bridge DHCP: ip range
     ${ipassignadd}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
     sleep                       1
     should not be empty         ${ipassignadd}
-    should not contain          ${ipassignadd}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${ipassignadd}   -ash: ntp: not found    -ash: show ntp: not found  DHCP_Service=Disable
+    should not contain          ${ipassignadd}   ERROR  error
     should contain              ${ipassignadd}  IP_Range_Start=192.168.0.2  IP_Range_End=192.168.0.5
     ${exit}                     write  top  #reset the command line to global
 
@@ -7897,6 +8015,8 @@ LAN0 Bridge DHCP: lease
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
+    ${execute}=                 write   enable
+    sleep                       1
     ${execute}=                 write   lease 80000     #fire off the lease to be 80,000 seconds
     sleep                       1
     ${dhcp}=                     write   show   #show the results
@@ -7905,7 +8025,8 @@ LAN0 Bridge DHCP: lease
     ${lease}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
     sleep                       1
     should not be empty         ${lease}
-    should not contain          ${lease}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${lease}   -ash: ntp: not found    -ash: show ntp: not found    DHCP_Service=Disable
+    should not contain          ${lease}   ERROR    error
     should contain              ${lease}  LEASE_TIME=80000s
     ${exit}                     write  top  #reset the command line to global
 
@@ -7917,6 +8038,8 @@ LAN0 Bridge DHCP: gateway
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
+    ${execute}=                 write   enable
+    sleep                       1
     ${execute}=                 write   gateway 192.168.2.1     #fire off the gateway to be 192.168.2.1
     sleep                       1
     ${dhcp}=                     write   show   #show the results
@@ -7925,7 +8048,8 @@ LAN0 Bridge DHCP: gateway
     ${gateway}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
     sleep                       1
     should not be empty         ${gateway}
-    should not contain          ${gateway}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${gateway}   -ash: ntp: not found    -ash: show ntp: not found  DHCP_Service=Disable
+    should not contain          ${gateway}   ERROR  error
     should contain              ${gateway}  DEFAULT_GATEWAY=192.168.2.1
     ${exit}                     write  top  #reset the command line to global
 
@@ -7937,6 +8061,8 @@ LAN0 Bridge DHCP: ip Assign show
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
+    ${execute}=                 write   enable
+    sleep                       1
     ${execute}=                 write   ip assign show     #fire off the ip assign show command
     sleep                       1
     ${dhcp}=                     write   show   #show the dns and other results
@@ -7946,6 +8072,7 @@ LAN0 Bridge DHCP: ip Assign show
     sleep                       1
     should not be empty             ${ipassignshow}
     should not contain          ${ipassignshow}   MAC   IP Address     -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${ipassignshow}   ERROR error
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: ip Assign add
@@ -7956,6 +8083,8 @@ LAN0 Bridge DHCP: ip Assign add
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
+    ${execute}=                 write   enable
+    sleep                       1
     ${execute}=                 write   ip assign add E8:B3:1F:0C:6D:19 192.168.0.4     #fire off the ip assign add to set one up
     sleep                       1
     ${dhcp}=                     write   show   #show the dns and other results
@@ -7964,7 +8093,7 @@ LAN0 Bridge DHCP: ip Assign add
     ${ipassignadd}=                 read    #read the result, should be empty since there is no assigned mac + ip for now
     sleep                       1
     should not be empty         ${ipassignadd}
-    should not contain          ${ipassignadd}   -ash: ntp: not found    -ash: show ntp: not found
+    should not contain          ${ipassignadd}   -ash: ntp: not found    -ash: show ntp: not found  error ERROR
     should contain              ${ipassignadd}  MAC   IP Address    E8:B3:1F:0C:6D:19   192.168.0.4
     ${exit}                     write  top  #reset the command line to global
 
@@ -7975,6 +8104,8 @@ LAN0 Bridge DHCP: ip Assign delete
     ${execute}=                 write   configure   #system config level
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
     ${execute}=                 write   dhcp   #dhcp level
+    sleep                       1
+    ${execute}=                 write   enable
     sleep                       1
     ${execute}=                 write   ip assign add E8:B3:1F:0C:6D:19 192.168.0.200
     sleep                       3
@@ -8019,6 +8150,7 @@ LAN0 Bridge DHCP: ip Assign delete
     should not be empty         ${ipassignshow}
     should not contain          ${ipassignshow}   E8:B3:1F:0C:6D:19   192.168.0.200    -ash: ntp: not found    -ash: show ntp: not found
     should not contain          ${ipassignshow}   E8:B3:1A:0C:6D:21   192.168.0.202    MAC   IP Address
+    should not contain          ${ipassignshow}   ERROR error
     should contain              ${ipassignshow}  Device:E8:B3:1F:0C:6D:20 IP Address:192.168.0.201
     ${exit}                     write  show
     ${exit}                     write  read
