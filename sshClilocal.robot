@@ -793,6 +793,7 @@ WAN0 PPTP: Enter PPTP and then back out to Global
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
 
 #NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
+#also plug in an external internet source to the WAN since this moves it to the PPTP
 #PPTP
 WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
    [Tags]                      Config       wan0  PPTP  conn_pptp
