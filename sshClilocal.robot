@@ -8082,6 +8082,7 @@ LAN0 Bridge DHCP: ip Assign add
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
+    sleep                       1
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
     ${execute}=                 write   enable
@@ -8104,6 +8105,7 @@ LAN0 Bridge DHCP: ip Assign delete
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
+    sleep                       1
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
     ${execute}=                 write   enable
