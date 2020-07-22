@@ -197,7 +197,7 @@ WAN0 Configuration: Wan0 Mode and back out via exit & top
     should not contain          ${output}   (config)#
     should contain              ${output}   (config-if-wan0)#
     should contain              ${output}   DHCP Configuration:
-    should contain              ${output}   DNS_AUTO=Enable
+    should contain              ${output}   DNS_AUTO=Disable
     should contain              ${output}   HOST_NAME=
     should contain              ${output}   QUERY_MODE=Agressive
     should contain              ${output}   MTU_AUTO=Enable
