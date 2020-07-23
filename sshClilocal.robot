@@ -45,7 +45,7 @@ Global: Ping on 8.8.8.8
     [Tags]                  Global     ping        8.8.8.8
     [Documentation]         Execute ping on 8.8.8.8 CLI and return the ping hops
     ...                     The keyword returns the standard output by default.
-    write                   ping 8.8.8.8
+    write                   ping 10.0.0.10    #ping 8.8.8.8
     Sleep                   6
     ${output}=              read until      0% packet loss
     should not be empty     ${output}
