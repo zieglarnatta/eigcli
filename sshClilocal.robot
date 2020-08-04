@@ -179,6 +179,7 @@ Global: ntp server configuration and show it
     #should be equal             ${output} Stahp it NTP!
 
 #WAN0
+#make sure to physically plug in an internet connection to the blue WAN port
 WAN0 Configuration: Wan0 Mode and back out via exit & top
     [Tags]                      Config      WAN     wan0    wan_configuration   wan0_in_out
     [Documentation]             Enters the WAN Configuration Mode and retrest to global with top and then repeat but with two exits
@@ -875,6 +876,7 @@ WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
 #NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 #L2TP
+#ensure that internet is physically plugged into the blue WAN port before startng this test
 WAN0 L2TP: Enter L2TP and then back out to Global
     [Tags]                      Config       wan0    conn_l2tp  conn_l2tp_in_out    L2TP
     [Documentation]             Fire off the conn l2tp and then back out via top and then back in and back out via 3 exits
@@ -7764,6 +7766,7 @@ LTE Configuration: Set the ip type
     ${exit}=                    write   top    #reset it to ensure we start from global level
 
 #LAN0 Bridge
+#make sure to physically plug in the internet cable into LAN3 portbefore starting
 LAN0 Bridge: Get into LAN bridge & then back out to Global
     [Tags]                      Config  bridge  LAN  lan_bridge_in_out
     [Documentation]             Execute the LANfrom & then back out to test exit and top commands
