@@ -7676,6 +7676,12 @@ WLAN Guest 5g WPA3 enterprise: Exit from WLAN 5g wpa3_enterprise
     [Documentation]            Exit the WLAN 5g Configuration Mode via "top" command and land at Global configuration level
     ${output}=                 write    top
     sleep                       1
+    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
+    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Wifi Guest 5g
+    ${output}=                  write  security wpa3_enterprise
+    sleep                       1
+    ${output}=                 write    top
+    sleep                       1
     #will address the "apply" command separately because once it is applied then we have to do a factory "reset" to get rid of it
     #set client configuration  prompt=#
     ${output}=         read     #until prompt
