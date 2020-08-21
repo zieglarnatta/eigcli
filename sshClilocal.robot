@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation          This example demonstrates executing a command on a remote machine
+Documentation          This executes the Robot SSH CLI command for various configuration in the admin profile on a remote machine (the EIG)
 ...                    and getting its output.
 ...
 ...                    Notice how connections are handled as part of the suite setup and
@@ -595,6 +595,7 @@ WAN0 PPPoE: Execute connect PPPoE Wan & then back out
     should contain              ${output}   SERVICE_NAME=user1-service  ACCESS_CONCENTRATOR_NAME=ispl.com   ADDITIONAL_PPPD_OPTIONS=ignore-eol-tag
     should not be empty         ${output}
     should not contain          ${output}   MTU=1500    DNS_SERVER=     ERROR:
+    ${restore}=                  write       restore
 
 #NOTE: After this PPPoE below is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 #dns
@@ -752,6 +753,8 @@ WAN0 PPPoE: Execute connect PPPoE Wan & then back out
 #NOTE: After this PPPoE is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 #PPTP
+#NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
+#also plug in an external internet source to the WAN since this moves it to the PPTP
 WAN0 PPTP: Enter PPTP and then back out to Global
     [Tags]                      Config       wan0  PPTP  conn_pptp  conn_pptp_in_out
     [Documentation]             Fire off the conn pptp and then back out via top and then back in and back out via 3 exits
@@ -792,6 +795,7 @@ WAN0 PPTP: Enter PPTP and then back out to Global
     should contain              ${output}   (global)#
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
+    #${restore}=                  write       restore
 
 #NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 #also plug in an external internet source to the WAN since this moves it to the PPTP
@@ -873,10 +877,12 @@ WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
 
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
+    #${restore}=                 write       restore
 #NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 #L2TP
 #ensure that internet is physically plugged into the blue WAN port before startng this test
+#do a system restore after L2TP is done
 WAN0 L2TP: Enter L2TP and then back out to Global
     [Tags]                      Config       wan0    conn_l2tp  conn_l2tp_in_out    L2TP
     [Documentation]             Fire off the conn l2tp and then back out via top and then back in and back out via 3 exits
@@ -999,6 +1005,7 @@ WAN0 L2TP: Start configuring all one shot & apply   #has problems not showing
     should contain              ${output}   DEFAULT_ROUTE=Enable    ADDITIONAL_PPPD_OPTIONS=ttyname
     should not contain          ${output}   (config-if-wan0)#   (config)#    ERROR:    error
     ${exit}                     write  top
+    #${restore}=                  write       restore
 #NOTE: After this L2TP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 Suite Teardown         Close All Connections
@@ -7775,7 +7782,7 @@ LTE Configuration: Set the ip type
 #make sure to physically plug in the internet cable into LAN3 portbefore starting
 LAN0 Bridge: Get into LAN bridge & then back out to Global
     [Tags]                      Config  bridge  LAN  lan_bridge_in_out
-    [Documentation]             Execute the LANfrom & then back out to test exit and top commands
+    [Documentation]             Execute the LANfrom & then back out to test exit and top comm   ands
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
@@ -8168,6 +8175,7 @@ LAN0 Bridge DHCP: ip Assign delete
     ${exit}                     write  read
     sleep                       1
     ${exit}                     write  top  #reset the command line to global
+    ${restore}                  write  restore
 
 
 #Execute template
