@@ -153,7 +153,7 @@ Global: Execute "configure" and then "exit", then back to "confgiure" and use "t
 
 #System config portion
 Global: ntp server configuration and show it
-    [Tags]                      Config      System_Configuration    ntp     show_ntp
+    [Tags]                      Global      System_Configuration    ntp     show_ntp
     [Documentation]             Execute the ntp & confirm ntp servers are updated & shown
     ${execute}=                 write   top
     ${execute}=                 write   configure
@@ -180,6 +180,7 @@ Global: ntp server configuration and show it
 
 #WAN0
 #make sure to physically plug in an internet connection to the blue WAN port
+#also needs restore after it is done
 WAN0 Configuration: Wan0 Mode and back out via exit & top
     [Tags]                      Config      WAN     wan0    wan_configuration   wan0_in_out
     [Documentation]             Enters the WAN Configuration Mode and retrest to global with top and then repeat but with two exits
@@ -1015,7 +1016,7 @@ Suite Setup            Open Connection And Log In
     sleep                       3
 
 #WLAN 2.4g
-WLAN 2.4g: Enter Wifi 2.4g and then back out to Global
+WLAN 2.4g: Enter  Wifi 2.4g and then back out to Global
     [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> conn
