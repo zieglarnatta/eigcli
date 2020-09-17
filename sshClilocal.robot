@@ -464,7 +464,7 @@ WAN0 static: Execute connect static Wan & then back out
     should not be empty         ${exit}
     should not contain          ${exit}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
 
-
+#NOTE: After this PPPoE is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 #WAN PPPoE
 WAN0 PPPoE: Execute connect PPPoE Wan & then back out
     [Tags]                     Config       PPPoE   conn_pppoe     pppoe_in_out   pppoe_all
@@ -7526,7 +7526,7 @@ LTE Configuration: Get into LTE & then back out to Global
     should not contain          ${exit}   (config-if-lte)#   (config)#
 
 LTE Configuration: Set the APN
-    [Tags]                      Config  LTE    LTE_apn
+    [Tags]                      Global Config  LTE    LTE_apn
     [Documentation]             Execute the apn as Fast.t-mobile.com & make sure it reflects it
     ${execute}=                 write   top    #reset it to ensure we start from global level
     ${execute}=                 write   configure   #system config level
@@ -7542,7 +7542,7 @@ LTE Configuration: Set the APN
     ${exit}=                    write   top    #reset it to ensure we start from global level
 
 LTE Configuration: Set the ip type
-    [Tags]                      Config  LTE    LTE_ip_type
+    [Tags]                      Global  Config  LTE    LTE_ip_type
     [Documentation]             Execute the ip type as ipv4|ipv6|ipv4v6 & make sure it reflects it
     ${execute}=                 write   top    #reset it to ensure we start from global level
     ${execute}=                 write   configure   #system config level
@@ -7578,6 +7578,7 @@ LTE Configuration: Set the ip type
 
 #LAN0 Bridge
 #make sure to physically plug in the internet cable into LAN3 portbefore starting
+#end of LAN0 script will fire off a restore
 LAN0 Bridge: Get into LAN bridge & then back out to Global
     [Tags]                      Global  Config  bridge  LAN  lan_bridge_in_out
     [Documentation]             Execute the LANfrom & then back out to test exit and top comm   ands
@@ -7610,7 +7611,7 @@ LAN0 Bridge: Get into LAN bridge & then back out to Global
     should not contain          ${exit}   (config-if-lan0-dhcp)#  (config-if-lan0)#
 
 LAN0 Bridge: Config LAN IP address
-    [Tags]                      Config  bridge  LAN  lan_bridge_ip
+    [Tags]                      Global  Config  bridge  LAN  lan_bridge_ip
     [Documentation]             Execute the LAN bridge IP address & then ake sure it reflects it
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7628,7 +7629,7 @@ LAN0 Bridge: Config LAN IP address
     ${exit}=                     write   top    #reset & exit from LAN bridge
 
 LAN0 Bridge: Config LAN Net Mask
-    [Tags]                      Config  bridge  LAN  lan_bridge_net_mask
+    [Tags]                      Global  Config  bridge  LAN  lan_bridge_net_mask
     [Documentation]             Execute the net mask IP address & then make sure it reflects it
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7647,7 +7648,7 @@ LAN0 Bridge: Config LAN Net Mask
 
 #LAN0 Bridge DHCP
 LAN0 Bridge DHCP: Get into LAN DHCP & then back out to Global
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_in_out
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_in_out
     [Documentation]             Execute the LAN DHCP & then back out to test exit and top commands
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7682,7 +7683,7 @@ LAN0 Bridge DHCP: Get into LAN DHCP & then back out to Global
     should not contain          ${exit}   (config-if-lan0-dhcp)#  (config-if-lan0)#
 
 LAN0 Bridge DHCP: Disable DHCP
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_disable
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_disable
     [Documentation]             Execute the disable & then check to ensure DHCP is diabled
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7702,7 +7703,7 @@ LAN0 Bridge DHCP: Disable DHCP
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: Enable DHCP
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_enable
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_enable
     [Documentation]             Execute the enable & then ensure that DHCP is enabled
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7725,7 +7726,7 @@ LAN0 Bridge DHCP: Enable DHCP
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: Set DHCP domain name
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_domain
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_domain
     [Documentation]             Execute the domain & then check that domain name is showing
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7749,7 +7750,7 @@ LAN0 Bridge DHCP: Set DHCP domain name
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: Set DNS
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_dns
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_dns
     [Documentation]             Execute the dns & then ensure dns is showing
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7773,7 +7774,7 @@ LAN0 Bridge DHCP: Set DNS
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: Set WINS server
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_wins
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_wins
     [Documentation]             Execute the wins & then ensure wins is showing
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7797,7 +7798,7 @@ LAN0 Bridge DHCP: Set WINS server
 
 #moved these tests higher up since the ip assign del is flakey
 LAN0 Bridge DHCP: ip range
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_ip_range
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_range
     [Documentation]             Execute the ip range to add a range of IPs & ensure that it gets reflected
     ${execute}=                 write   top    #reset it to ensure we start form global level
     sleep                       1
@@ -7823,7 +7824,7 @@ LAN0 Bridge DHCP: ip range
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: lease
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_lease
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_lease
     [Documentation]             Execute the lease to change lease time in seconds (from 24h default) & ensure that it gets reflected
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7846,7 +7847,7 @@ LAN0 Bridge DHCP: lease
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: gateway
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_gateway
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_gateway
     [Documentation]             Execute the gateway to specify the ip gateway & ensure that it gets reflected
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7869,7 +7870,7 @@ LAN0 Bridge DHCP: gateway
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: ip Assign show
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_ip_assign_show
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_assign_show
     [Documentation]             Execute the ip assign show & ensure that it is blank since nothing has been assigned for now. One more will be done once we assign a mac address to the ip
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7891,7 +7892,7 @@ LAN0 Bridge DHCP: ip Assign show
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: ip Assign add
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_ip_assign_add DHCP_ip_assign_combo
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_assign_add DHCP_ip_assign_combo
     [Documentation]             Execute the ip assign add & ensure that it is not blank
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
@@ -7914,7 +7915,7 @@ LAN0 Bridge DHCP: ip Assign add
     ${exit}                     write  top  #reset the command line to global
 
 LAN0 Bridge DHCP: ip Assign delete
-    [Tags]                      Config  bridge  LAN  DHCP   DHCP_ip_assign_del
+    [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_ip_assign_del
     [Documentation]             Execute the ip assign del & ensure that it deletes
     ${execute}=                 write   top    #reset it to ensure we start form global level
     ${execute}=                 write   configure   #system config level
