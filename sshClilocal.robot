@@ -680,7 +680,7 @@ WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
 #ensure that internet is physically plugged into the blue WAN port before startng this test
 #do a system restore after L2TP is done
 WAN0 L2TP: Enter L2TP and then back out to Global
-    [Tags]                      Config       wan0    conn_l2tp  conn_l2tp_in_out    L2TP
+    [Tags]                      Config       conn_l2tp  conn_l2tp_in_out    L2TP
     [Documentation]             Fire off the conn l2tp and then back out via top and then back in and back out via 3 exits
     #configure -> interface ethernet wan0 -> conn l2tp
     ${exit}                     write  top
@@ -726,7 +726,7 @@ WAN0 L2TP: Enter L2TP and then back out to Global
 #ensure that internet is physically plugged into the blue WAN port before startng this test
 #NOTE: After this L2TP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 WAN0 L2TP: Start configuring all one shot & apply   #has problems not showing
-    [Tags]                      Config       wan0  L2TP  conn_l2tp
+    [Tags]                      Config       L2TP  conn_l2tp
     [Documentation]             Fire off all commands and then only show and then only apply adn show again. NOTE: Will need to reset via gui or RESTORE back to DHCP else risk losing Connection
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
