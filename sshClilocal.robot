@@ -467,7 +467,7 @@ WAN0 static: Execute connect static Wan & then back out
 
 #WAN PPPoE
 WAN0 PPPoE: Execute connect PPPoE Wan & then back out
-    [Tags]                     Config       wan0  PPPoE   conn_pppoe     pppoe_in_out   pppoe_all
+    [Tags]                     Config       PPPoE   conn_pppoe     pppoe_in_out   pppoe_all
     [Documentation]            Enters the WAN PPPoE Configuration Mode, then use top & 3 exits to go back to Global Configuration
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -552,7 +552,7 @@ WAN0 PPPoE: Execute connect PPPoE Wan & then back out
 #NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 #also plug in an external internet source to the WAN since this moves it to the PPTP
 WAN0 PPTP: Enter PPTP and then back out to Global
-    [Tags]                      Config       wan0  PPTP  conn_pptp  conn_pptp_in_out
+    [Tags]                      Config       PPTP  conn_pptp  conn_pptp_in_out
     [Documentation]             Fire off the conn pptp and then back out via top and then back in and back out via 3 exits
     #configure -> interface ethernet wan0 -> conn pptp
     ${execute}=                 write   top
@@ -598,7 +598,7 @@ WAN0 PPTP: Enter PPTP and then back out to Global
 #also plug in an external internet source to the WAN since this moves it to the PPTP
 #PPTP
 WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
-   [Tags]                      Config       wan0  PPTP  conn_pptp
+   [Tags]                      Config       PPTP  conn_pptp
     [Documentation]             Fire off all PPTP, show, apply and then show again
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
