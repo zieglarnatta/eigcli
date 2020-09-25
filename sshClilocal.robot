@@ -916,10 +916,11 @@ WLAN 2.4g WPA: Enter security WPA and then back out
     ${output}=                  write  security wpa
     sleep                       1
     ${output}=                  write   exit
+    sleep                       1
     ${output}=                  read
     sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
+    #set client configuration    prompt=#
+    #${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
@@ -1293,8 +1294,8 @@ WLAN Guest 2.4g WPA: Enter security WPA and then back out
     ${output}=                  write   exit
     ${output}=                  read
     sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
+    #set client configuration    prompt=#
+    #${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
@@ -2861,13 +2862,16 @@ WLAN 5g: Enter security WPA and then back out
     ${output}=                  write  security wpa
     sleep                       1
     ${output}=                  write   exit
-    ${output}=                  read
     sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-5g)#
-    should not contain          ${output}   (config-if-wlan-5g-wpa)#     (config)#    (global)#
+    ${yada}=                  read
+    sleep                       1
+    #set client configuration    prompt=#
+    #sleep                       5
+    #${yada}=                  read until prompt
+    #read until prompt
+    should not be empty         ${yada}
+    should contain              ${yada}   (config-if-wlan-5g)#
+    should not contain          ${yada}   (config-if-wlan-5g-wpa)#     (config)#    (global)#
 
 WLAN 5g: Enter security WPA2 and then back out
     [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa2_in_out
@@ -2902,8 +2906,8 @@ WLAN 5g: Enter security WPA2 and then back out
     ${output}=                  write  exit
     ${output}=                  read
     sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
+    #set client configuration    prompt=#
+    #${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#    (global)#
@@ -3244,10 +3248,11 @@ WLAN 5g Guest: Enter security WPA and then back out
     ${output}=                  write  security wpa
     sleep                       1
     ${output}=                  write   exit
+    sleep                       1
     ${output}=                  read
     sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
+    #set client configuration    prompt=#
+    #${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa)#  (config-if-wlan-5g-wpa)#     (config)#    (global)#
@@ -4785,9 +4790,9 @@ WLAN Guest 5g: Enter enable
     #need to incorporate a UI robot to check on this in the admin
     ${exit}                     write  top
 
-#WLAN Guest 5g: Enter  all the security wpa and then back out
-WLAN Guest 5g: Enter security WPA and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
+#WLAN Guest 2.4g: Enter  all the security wpa and then back out
+WLAN Guest 2.4g: Enter security WPA and then back out
+    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4818,8 +4823,8 @@ WLAN Guest 5g: Enter security WPA and then back out
     ${output}=                  write   exit
     ${output}=                  read
     sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
+    #set client configuration    prompt=#
+    #${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
