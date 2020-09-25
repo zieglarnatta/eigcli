@@ -887,7 +887,7 @@ WLAN 2.4g: Enter enable
 
 #enter all the security wpa and then back out
 WLAN 2.4g WPA: Enter security WPA and then back out
-    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa_in_out
+    [Tags]                      Config  WLAN    WLAN_2_4g  WPA  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1262,7 +1262,7 @@ WLAN Guest 2.4g: Enter enable
 
 #enter all the security wpa and then back out
 WLAN Guest 2.4g WPA: Enter security WPA and then back out
-    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
+    [Tags]                      Config  WLAN    WLAN_2_4g  WPA    interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1565,7 +1565,7 @@ WLAN 2.4g WPA12 Mix enterprise: Enter security WPA12 mix enterprise and then bac
 
 #WLAN 2.4g: WPA
 WLAN 2.4g WPA: Enter WPA personal
-    [Tags]                      Config  WLAN  WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_in_out
+    [Tags]                      Config  WLAN  WLAN_2_4g  WPA  interface_wifi_2_4g  interface_wifi_2_4g_wpa_in_out
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa
     ${output}=                  write   top
@@ -1583,7 +1583,7 @@ WLAN 2.4g WPA: Enter WPA personal
 
 
 WLAN 2.4g WPA: Set SSID for WPA Personal WLAN 2.4g
-    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g     interface_wifi_2_4g_wpa_ssid
+    [Tags]                      Config  WLAN    WLAN_2_4g  WPA  interface_wifi_2_4g     interface_wifi_2_4g_wpa_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1601,7 +1601,7 @@ WLAN 2.4g WPA: Set SSID for WPA Personal WLAN 2.4g
     ${exit}=                  write   top
 
 WLAN 2.4g WPA: SSID Hide enabled
-    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_hide
+    [Tags]                      Config  WLAN    WLAN_2_4g  WPA  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_hide
     [Documentation]             Fire off the ssid hide and check that wifi 2.4g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1619,7 +1619,7 @@ WLAN 2.4g WPA: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN 2.4g WPA: SSID broadcast
-    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_broadcast
+    [Tags]                      Config  WLAN    WLAN_2_4g  WPA  interface_wifi_2_4g  interface_wifi_2_4g_wpa_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1637,7 +1637,7 @@ WLAN 2.4g WPA: SSID broadcast
     ${exit}=                  write   top
 
 WLAN 2.4g WPA: Password
-    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_password
+    [Tags]                      Config  WLAN    WLAN_2_4g  WPA  interface_wifi_2_4g  interface_wifi_2_4g_wpa_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1655,7 +1655,7 @@ WLAN 2.4g WPA: Password
     ${exit}=                  write   top
 
 WLAN 2.4g WPA: maxclient
-    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_wpa_maxclient
+    [Tags]                      Config  WLAN    WLAN_2_4g  WPA  interface_wifi_2_4g  interface_wifi_2_4g_wpa_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -1673,7 +1673,7 @@ WLAN 2.4g WPA: maxclient
     ${exit}=                  write   top
 
 WLAN 2.4g WPA: Rekey key rotation interval
-    [Tags]                      Config    WLAN  WLAN_2_4g   interface_wifi_2_4g  interface_wifi_2_4g_wpa_rekey
+    [Tags]                      Config    WLAN  WLAN_2_4g  WPA  interface_wifi_2_4g  interface_wifi_2_4g_wpa_rekey
     [Documentation]             Fire off the rekey and check that it is updated in seconds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -2830,7 +2830,7 @@ WLAN 5g: Enter enable
 
 #5g: Enter all the security wpa and then back out
 WLAN 5g: Enter security WPA and then back out
-    [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_security_wpa_in_out
+    [Tags]                      Config   WLAN  WLAN_5g  WPA  interface_wifi_5g  interface_wifi_5g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                  write   top
@@ -3215,7 +3215,7 @@ WLAN 5g Guest: Enter enable
 
 #WLAN 5g: Enter all the security wpa and then back out
 WLAN 5g Guest: Enter security WPA and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3520,7 +3520,7 @@ WLAN 5g Guest: Enter security WPA12 mix enterprise and then back out
 
 #WLAN 5g WPA Personal
 WLAN 5g WPA personal: Enter WPA personal
-    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa_enter
+    [Tags]                      Config    WLAN  WLAN_5g  WPA  interface_wifi_5g  interface_wifi_5g_wpa_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> security wpa
     ${output}=                  write   top
@@ -3537,7 +3537,7 @@ WLAN 5g WPA personal: Enter WPA personal
 
 
 WLAN 5g WPA personal: Set SSID for WPA Personal WLAN 5g
-    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g     interface_wifi_5g_wpa_ssid
+    [Tags]                      Config    WLAN  WLAN_5g  WPA  interface_wifi_5g     interface_wifi_5g_wpa_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3555,7 +3555,7 @@ WLAN 5g WPA personal: Set SSID for WPA Personal WLAN 5g
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: SSID Hide enabled
-    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa_ssid_hide
+    [Tags]                      Config    WLAN  WLAN_5g  WPA  interface_wifi_5g  interface_wifi_5g_wpa_ssid_hide
     [Documentation]             Fire off the ssid hide and check that wifi 5g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3573,7 +3573,7 @@ WLAN 5g WPA personal: SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: SSID broadcast
-    [Tags]                      Config     WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa_ssid_broadcast
+    [Tags]                      Config     WLAN  WLAN_5g  WPA  interface_wifi_5g  interface_wifi_5g_wpa_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3591,7 +3591,7 @@ WLAN 5g WPA personal: SSID broadcast
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: Password
-    [Tags]                      Config     WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa_password
+    [Tags]                      Config     WLAN  WLAN_5g  WPA  interface_wifi_5g  interface_wifi_5g_wpa_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3609,7 +3609,7 @@ WLAN 5g WPA personal: Password
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: maxclient
-    [Tags]                      Config     WLAN  WLAN_5g     WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa_maxclient
+    [Tags]                      Config     WLAN  WLAN_5g  WPA  interface_wifi_5g  interface_wifi_5g_wpa_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -3627,7 +3627,7 @@ WLAN 5g WPA personal: maxclient
     ${exit}=                  write   top
 
 WLAN 5g WPA personal: Rekey key rotation interval
-    [Tags]                      Config    WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_wpa_rekey
+    [Tags]                      Config    WLAN  WLAN_5g  WPA  interface_wifi_5g  interface_wifi_5g_wpa_rekey
     [Documentation]             Fire off the rekey and check that rekey is updated ins econds
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -4787,7 +4787,7 @@ WLAN Guest 5g: Enter enable
 
 #WLAN Guest 5g: Enter  all the security wpa and then back out
 WLAN Guest 5g: Enter security WPA and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
+    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_security_wpa_in_out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -5092,7 +5092,7 @@ WLAN Guest 2.4g: Enter security WPA12 mix WLAN Guest 2.4g: Enterprise and then b
 
 #WLAN Guest 2.4g: WPA
 WLAN Guest 2.4g: WPA Enter WPA personal
-    [Tags]                      Config    WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_enter
+    [Tags]                      Config    WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_enter
     [Documentation]             Fire off the interface wifi 2.4g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 2.4g -> security wpa
     ${output}=                 write   top
@@ -5110,7 +5110,7 @@ WLAN Guest 2.4g: WPA Enter WPA personal
 
 
 WLAN Guest 2.4g: WPA Set SSID for WPA Personal WLAN Guest 2.4g
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa_ssid
+    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -5128,7 +5128,7 @@ WLAN Guest 2.4g: WPA Set SSID for WPA Personal WLAN Guest 2.4g
     ${exit}=                  write   top
 
 WLAN Guest 2.4g: WPA SSID Hide enabled
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_ssid_hide
+    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_ssid_hide
     [Documentation]             Fire off the disable and check that wifi 2.4g is SSID is hidden disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -5146,7 +5146,7 @@ WLAN Guest 2.4g: WPA SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN Guest 2.4g: WPA SSID broadcast
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_ssid_broadcast
+    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -5164,7 +5164,7 @@ WLAN Guest 2.4g: WPA SSID broadcast
     ${exit}=                  write   top
 
 WLAN Guest 2.4g: WPA Password
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_password
+    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -5182,7 +5182,7 @@ WLAN Guest 2.4g: WPA Password
     ${exit}=                  write   top
 
 WLAN Guest 2.4g: WPA maxclient
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_maxclient
+    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -5200,7 +5200,7 @@ WLAN Guest 2.4g: WPA maxclient
     ${exit}=                  write   top
 
 WLAN Guest 2.4g: WPA Rekey key rotation interval
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_rekey
+    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -5219,7 +5219,7 @@ WLAN Guest 2.4g: WPA Rekey key rotation interval
 
 #exit from WLAN WPA 2.4g
 Exit from WLAN Guest 2.4g WPA
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa_exit
+    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa_exit
     [Documentation]            Exit the WLAN Guest 2.4g Configuration Mode via "top" command and land at Global vonfiguration level
     ${output}=                 write    top
     sleep                       1
@@ -6187,7 +6187,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Rekey key rotation interval
 
 #WLAN Guest 5g: WPA
 WLAN Guest 5g: WPA Enter WPA personal
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_enter
+    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_enter
     [Documentation]             Fire off the interface wifi 5g and then back out via top and then back in and back out via 3 exits
     #configure -> interface wifi 5g -> security wpa
     ${output}=                  write   top
@@ -6205,7 +6205,7 @@ WLAN Guest 5g: WPA Enter WPA personal
 
 
 WLAN Guest 5g: WPA Set SSID for WPA Personal WLAN Guest 5g
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g     interface_wifi_guest_5g_wpa_ssid
+    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g     interface_wifi_guest_5g_wpa_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6223,7 +6223,7 @@ WLAN Guest 5g: WPA Set SSID for WPA Personal WLAN Guest 5g
     ${exit}=                  write   top
 
 WLAN Guest 5g: WPA SSID Hide enabled
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_ssid_hide
+    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_ssid_hide
     [Documentation]             Fire off the ssid hide and check that wifi 5g is SSID is hidden / disabled
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6241,7 +6241,7 @@ WLAN Guest 5g: WPA SSID Hide enabled
     ${exit}=                  write   top
 
 WLAN Guest 5g: WPA SSID broadcast
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_ssid_broadcast
+    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 5g is SSID is now broadcasting
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6259,7 +6259,7 @@ WLAN Guest 5g: WPA SSID broadcast
     ${exit}=                  write   top
 
 WLAN Guest 5g: WPA Password
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_password
+    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_password
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6277,7 +6277,7 @@ WLAN Guest 5g: WPA Password
     ${exit}=                  write   top
 
 WLAN Guest 5g: WPA maxclient
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_maxclient
+    [Tags]                      Config   WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_maxclient
     [Documentation]             Fire off the maxclient and check that max clients is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -6295,7 +6295,7 @@ WLAN Guest 5g: WPA maxclient
     ${exit}=                  write   top
 
 WLAN Guest 5g: WPA Rekey key rotation interval
-    [Tags]                      Config    WLAN  WLAN_guest_5g  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_rekey
+    [Tags]                      Config    WLAN  WLAN_guest_5g  WPA  interface_wifi_guest_5g  interface_wifi_guest_5g_wpa_rekey
     [Documentation]             Fire off the password and check that password is updated
     ${output}=                  write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
