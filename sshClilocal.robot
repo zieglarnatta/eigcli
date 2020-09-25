@@ -459,7 +459,7 @@ WAN0 static: Execute connect static Wan & then back out
     sleep                       1
     #set client configuration  prompt=#
     ${exit}=                    read    #until prompt
-    sleep                       1
+    sleep                       2
     should contain              ${exit}   (global)#
     should not be empty         ${exit}
     should not contain          ${exit}   (config-if-wan0)#   (config)#   (config-if-wan0-static)#
