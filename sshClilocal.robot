@@ -455,10 +455,10 @@ WAN0 static: Execute connect static Wan & then back out
     sleep                       1
     ${exit}=                 write   exit
     sleep                       1
-    ${exit}=                 write   exit
-    sleep                       1
+    #${exit}=                 write   exit
+    #sleep                       1
     #set client configuration  prompt=#
-    ${exit}=                    read    #until prompt
+    ${exit}=                    read  #until prompt
     sleep                       2
     should contain              ${exit}   (global)#
     should not be empty         ${exit}
@@ -7582,7 +7582,7 @@ LTE Configuration: Set the ip type
     ${exit}=                    write   top    #reset it to ensure we start from global level
 
 #LAN0 Bridge
-#make sure to physically plug in the internet cable into LAN3 portbefore starting
+#make sure to physically plug in the internet cable into LAN3 port before starting
 #end of LAN0 script will fire off a restore
 LAN0 Bridge: Get into LAN bridge & then back out to Global
     [Tags]                      Global  Config  bridge  LAN  lan_bridge_in_out
