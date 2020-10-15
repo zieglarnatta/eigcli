@@ -7,9 +7,10 @@ Documentation          This executes the Robot SSH CLI command for various confi
 
 Library                Process
 Library                SSHLibrary
+Library                SeleniumLibrary
 Suite Setup            Open Connection And Log In
 #Suite Teardown         Close All Connections
-Resource            resourceLocal.robot
+Resource               resourceLocal.robot
 
 *** Test Cases ***
 Execute Hello World Echo Command And Verify Output
