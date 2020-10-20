@@ -556,7 +556,6 @@ WAN0 PPTP: Enter PPTP and then back out to Global
     [Tags]                      Config       PPTP  conn_pptp  conn_pptp_in_out
     [Documentation]             Fire off the conn pptp and then back out via top and then back in and back out via 3 exits
     #configure -> interface ethernet wan0 -> conn pptp
-    Open Connection And Log In
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
     #sleep                       1
@@ -593,14 +592,14 @@ WAN0 PPTP: Enter PPTP and then back out to Global
     should contain              ${output}   (global)#
     should not be empty         ${output}
     should not contain          ${output}   (config-if-wan0)#   (config)#   (config-if-wan0-pptp)#
-    #sleep                       5
-    #${restore}=                  write       restore
+    sleep                       1
+    #${restore}=                 write       restore
 
 #NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 #also plug in an external internet source to the WAN since this moves it to the PPTP
 #PPTP
 WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
-   [Tags]                      Config       PPTP  conn_pptp
+   [Tags]                      Config       PPTP  conn_pptp       pptp_all
     [Documentation]             Fire off all PPTP, show, apply and then show again
     ${execute}=                 write   top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
@@ -659,23 +658,26 @@ WAN0 PPTP: Execute All PPTP and then show, followed by apply and then show again
     ${output}=                  write  show
     sleep                       1
     ${output}=                  read
-    should contain              ${output}   MTU=1433  DNS_SERVER1=8.8.8.8  IP_ADDR=192.168.0.204  (config-if-wan0-pptp)#
+    should contain              ${output}   DNS_SERVER1=8.8.8.8  IP_ADDR=192.168.0.204  (config-if-wan0-pptp)#
     should contain              ${output}   NETMASK=255.255.0.0    USER_NAME=paul_dirac    PASSWORD=futurePurplePeopleEater    VPN_Server=symantec.com
     should contain              ${output}   Hostname=yeehaw2    DEFAULT_ROUTE=Enable    encrypt    ADDITIONAL_PPPD_OPTIONS=ttyname
+    should contain              ${output}   MTU=1433
     #apply it
     ${output}=                  write  apply
     sleep                       2
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
+    set client configuration    prompt=#
     ${output}=                  write  show
     sleep                       2
-    ${output}=                  read    #until prompt
-    should contain              ${output}   MTU=1433  DNS_SERVER1=8.8.8.8  IP_ADDR=192.168.0.204  (config-if-wan0-pptp)#
+    ${output}=                  read until prompt
+    should contain              ${output}   DNS_SERVER1=8.8.8.8  IP_ADDR=192.168.0.204  (config-if-wan0-pptp)#
     should contain              ${output}   NETMASK=255.255.0.0    USER_NAME=paul_dirac    PASSWORD=futurePurplePeopleEater    VPN_Server=symantec.com
     should contain              ${output}   Hostname=yeehaw2    DEFAULT_ROUTE=Enable    encrypt    ADDITIONAL_PPPD_OPTIONS=ttyname
+    should contain              ${output}   MTU=1433
 
     should not contain          ${output}   (config-if-wan0)#   (config)#
     ${exit}                     write  top
+    sleep                       2
+    ${restore}                     write  restore
 #NOTE: After this PPTP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
 #L2TP
@@ -797,8 +799,8 @@ WAN0 L2TP: Start configuring all one shot & apply   #has problems not showing
     sleep                       1
     ${output}=                  write  show
     sleep                       1
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should contain              ${output}   MTU=1432    DNS_SERVER1=192.168.0.205    IP_ADDR=192.168.0.206   (config-if-wan0-l2tp)#
     should contain              ${output}   USER_NAME=ziegler_natta    PASSWORD=reduxProcessChemistry  VPN_Server=macaffee.com    Hostname=yeehaw3
     should contain              ${output}   DEFAULT_ROUTE=Enable    ADDITIONAL_PPPD_OPTIONS=ttyname
@@ -808,11 +810,11 @@ WAN0 L2TP: Start configuring all one shot & apply   #has problems not showing
     ${restore}=                  write       restore
 #NOTE: After this L2TP is done, you will need to reset via gui or RESTORE back to DHCP else risk losing Connection
 
-Suite Teardown         Close All Connections
-    sleep                       3
+#Suite Teardown         Close All Connections
+#    sleep                       3
 
-Suite Setup            Open Connection And Log In
-    sleep                       3
+#Suite Setup            Open Connection And Log In
+#    sleep                       3
 
 #WLAN 2.4g
 WLAN 2.4g: Enter Wifi 2.4g and then back out to Global
@@ -919,10 +921,10 @@ WLAN 2.4g WPA: Enter security WPA and then back out
     sleep                       1
     ${output}=                  write   exit
     sleep                       1
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
@@ -996,10 +998,10 @@ WLAN 2.4g WPA3: Enter security WPA3 and then back out
     ${output}=                  write  security wpa3
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
@@ -1034,10 +1036,10 @@ WLAN 2.4g WPA12 mix: Enter security WPA12 Mix and then back out
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#    (global)#
@@ -1072,10 +1074,10 @@ WLAN 2.4g WPA23 Mix: Enter security WPA23 mix and then back out
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#     (config)#    (global)#
@@ -1110,10 +1112,10 @@ WLAN 2.4g WPA2 enterprise: Enter security WPA2 enterprise and then back out
     ${output}=                  write  security wpa2_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#    (global)#
@@ -1148,10 +1150,10 @@ WLAN 2.4g WPA3 enterprise: Enter security WPA3 enterprise and then back out
     ${output}=                  write  security wpa3_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
@@ -1186,10 +1188,10 @@ WLAN 2.4g WPA12 mix enerprise: Enter security WPA12 mix enterprise and then back
     ${output}=                  write  security wpa12_mix_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#    (global)#
@@ -1239,9 +1241,9 @@ WLAN Guest 2.4g: Enter disable
     sleep                       1
     ${output}=                  write  disable
     sleep                       10
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    sleep                       1
     should contain              ${output}  (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config)#   (global)#
     #need to incorporate a UI robot to check on this in the admin
@@ -1256,8 +1258,10 @@ WLAN Guest 2.4g: Enter enable
     sleep                       1
     ${output}=                  write  enable
     sleep                       10
-    ${output}=                  read
-    sleep                       1
+    #${output}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     #should be empty             ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config)#   (global)#
@@ -1295,10 +1299,10 @@ WLAN Guest 2.4g WPA: Enter security WPA and then back out
     ${output}=                  write  security wpa
     sleep                       1
     ${output}=                  write   exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
@@ -1333,10 +1337,10 @@ WLAN Guest 2.4g WPA2: Enter security WPA2 and then back out
     ${output}=                  write  security wpa2
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
@@ -1371,10 +1375,10 @@ WLAN Guest 2.4g WPA3: Enter security WPA3 and then back out
     ${output}=                  write  security wpa3
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3)#    (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
@@ -1407,7 +1411,7 @@ WLAN Guest 2.4g WPA12 Mix: Enter security WPA12 Mix and then back out
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
     set client configuration    prompt=#
     ${output}=                  read until prompt
@@ -1445,10 +1449,10 @@ WLAN Guest 2.4g WPA23 Mix: Enter security WPA23 mix and then back out
     ${output}=                  write  security wpa23_mix
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#    (config-if-wlan-guest-2.4g-wpa23-mix)#     (config)#    (global)#
@@ -1521,10 +1525,10 @@ WLAN Guest 2.4g WPA3 enterprise: Enter security WPA3 enterprise and then back ou
     ${output}=                  write  security wpa3_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3-ent)#     (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
@@ -1559,10 +1563,10 @@ WLAN 2.4g WPA12 Mix enterprise: Enter security WPA12 mix enterprise and then bac
     ${output}=                  write  security wpa12_mix_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-2.4g)#
     should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#    (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#    (global)#
@@ -1704,10 +1708,10 @@ WLAN WPA2 2.4g: wpa2 personal
     ${output}=                 write   interface wifi 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
     ${output}=                  write  security wpa2
     sleep                       1
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-2.4g-wpa2)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
@@ -2765,10 +2769,6 @@ WLAN 2.4g WPA12 mix enterprise: Rekey key rotation interval
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
 
-Suite Teardown         Close All Connections
-
-Suite Setup            Open Connection And Log In
-
 #WLAN 5g
 WLAN 5g: Enter Wifi 5g and then back out to Global
     [Tags]                      Config   WLAN  WLAN_5g    interface_wifi_5g  interface_wifi_5g_in_out
@@ -2816,9 +2816,9 @@ WLAN 5g: Enter disable
     sleep                       1
     ${output}=                  write  disable
     sleep                       10
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
-    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
+    sleep                       1
     should contain              ${output}  (config-if-wlan-5g)#
     should not contain          ${output}   (config)#   (global)#
     #need to incorporate a UI robot to check on this in the admin
@@ -2834,8 +2834,8 @@ WLAN 5g: Enter enable
     sleep                       1
     ${output}=                  write  enable
     sleep                       10
-    #set client configuration    prompt=#
-    ${output}=                  read    #until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     sleep                       1
     #should be empty             ${output}
     should contain              ${output}   (config-if-wlan-5g)#
@@ -2877,11 +2877,11 @@ WLAN 5g: Enter security WPA and then back out
     sleep                       1
     ${output}=                  write   exit
     sleep                       1
-    ${yada}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
+    #${yada}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
     #sleep                       5
-    #${yada}=                  read until prompt
+    ${yada}=                  read until prompt
     #read until prompt
     should not be empty         ${yada}
     should contain              ${yada}   (config-if-wlan-5g)#
@@ -2918,10 +2918,10 @@ WLAN 5g: Enter security WPA2 and then back out
     ${output}=                  write  security wpa2
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#    (global)#
@@ -2957,10 +2957,10 @@ WLAN 5g: Enter security WPA3 and then back out
     ${output}=                  write  security wpa3
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa3)#     (config)#    (global)#
@@ -2996,10 +2996,10 @@ WLAN 5g: Enter security WPA12 Mix and then back out
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#     (config)#    (global)#
@@ -3035,10 +3035,10 @@ WLAN 5g: Enter security WPA23 mix and then back out
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#     (config)#    (global)#
@@ -3074,10 +3074,10 @@ WLAN 5g: Enter security WPA2 enterprise and then back out
     ${output}=                  write  security wpa2_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config)#    (global)#
@@ -3113,10 +3113,10 @@ WLAN 5g: Enter security WPA3 enterprise and then back out
     ${output}=                  write  security wpa3_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa3-ent)#     (config)#    (global)#
@@ -3153,48 +3153,12 @@ WLAN 5g: Enter security WPA12 mix enterprise and then back out
     sleep                       1
     ${output}=                  write  exit
     sleep                       1
-    ${output}=                  read
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa12-mix-ent)#     (config)#    (global)#
-
-#WLAN Guest 5g
-WLAN 5g Guest: Enter WLAN Guest 5g and then back out to Global
-    [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_in_out
-    [Documentation]             Fire off the interface wifi guest 5g and then back out via top and then back in and back out via 3 exits
-    #configure -> interface wifi guest 5g -> conn
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    #sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (config-if-wlan-guest-5g)#
-    should not contain          ${output}   (config)#   (global)#
-    #use top to go all the way back into Global Config
-    ${output}=                  write   top
-    #sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-    should not be empty         ${output}
-    should not contain          ${output}   (config)#   (config-if-wlan-guest-5g)#
-    #use 3 exits to get back to global
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    sleep                       1
-    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 5g
-    sleep                       1
-    ${output}=                 write   exit
-    sleep                       1
-    ${output}=                 write   exit
-    sleep                       1
-    set client configuration  prompt=#
-    ${output}=         read until prompt
-    should contain              ${output}   (global)#
-    should not be empty         ${output}
-    should not contain          ${output}   (config)#   (config-if-wlan-guest-5g)#
 
 WLAN 5g Guest: Enter disable
     [Tags]                      Config   WLAN  WLAN_guest_5g    interface_wifi_guest_5g  interface_wifi_guest_5g_disable
@@ -3263,10 +3227,10 @@ WLAN 5g Guest: Enter security WPA and then back out
     sleep                       1
     ${output}=                  write   exit
     sleep                       1
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    #sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa)#  (config-if-wlan-5g-wpa)#     (config)#    (global)#
@@ -3301,10 +3265,10 @@ WLAN 5g Guest: Enter security WPA2 and then back out
     ${output}=                  write  security wpa2
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    #${output}=                  read
+    Sleep                       1
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa2)#     (config)#    (global)#
@@ -3339,10 +3303,10 @@ WLAN 5g Guest: Enter security WPA3 and then back out
     ${output}=                  write  security wpa3
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa3)#    (config-if-wlan-5g-wpa3)#     (config)#    (global)#
@@ -3377,10 +3341,10 @@ WLAN 5g Guest: Enter security WPA12 Mix and then back out
     ${output}=                  write  security wpa12_mix
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa12-mix)#    (config-if-wlan-5gx)#     (config)#    (global)#
@@ -3415,10 +3379,10 @@ WLAN 5g Guest: Enter security WPA23 mix and then back out
     ${output}=                  write  security wpa23_mix
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa23-mix)#    (config-if-wlan-guest-5g-wpa23-mix)#     (config)#    (global)#
@@ -3453,10 +3417,10 @@ WLAN 5g Guest: Enter security WPA2 enterprise and then back out
     ${output}=                  write  security wpa2_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-5g-wpa2-ent)#     (config-if-wlan-guest-5g-wpa2-ent)#     (config)#    (global)#
@@ -3491,10 +3455,10 @@ WLAN 5g Guest: Enter security WPA3 enterprise and then back out
     ${output}=                  write  security wpa3_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa3-ent)#     (config-if-wlan-5g-wpa3-ent)#     (config)#    (global)#
@@ -3529,10 +3493,10 @@ WLAN 5g Guest: Enter security WPA12 mix enterprise and then back out
     ${output}=                  write  security wpa12_mix_enterprise
     sleep                       1
     ${output}=                  write  exit
-    ${output}=                  read
+    #${output}=                  read
     sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
+    set client configuration    prompt=#
+    ${output}=                  read until prompt
     should not be empty         ${output}
     should contain              ${output}   (config-if-wlan-guest-5g)#
     should not contain          ${output}   (config-if-wlan-guest-5g-wpa12-mix-ent)#    (config-if-wlan-5g-wpa12-mix-ent)#     (config)#    (global)#
@@ -4769,346 +4733,6 @@ WLAN Guest 5g: Enter WLAN Guest 5g and then back out to Global
     should contain              ${output}   (global)#
     should not be empty         ${output}
     should not contain          ${output}   (config)#   (config-if-wlan-guest-2.4g)#
-
-WLAN Guest 5g: Enter disable
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_disable
-    [Documentation]             Fire off the disable and check that wifi 2.4g is disabled
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  disable
-    sleep                       10
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    sleep                       1
-    should contain              ${output}  (config-if-wlan-guest-5g)#
-    should not contain          ${output}   (config)#   (global)#
-    #need to incorporate a UI robot to check on this in the admin
-    ${exit}                     write  top
-
-WLAN Guest 5g: Enter enable
-    [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_enable
-    [Documentation]             Fire off the enable and check that wifi 5g is enabled
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 5g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  enable
-    sleep                       10
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    sleep                       1
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-5g)#
-    should not contain          ${output}   (config)#   (global)#
-    #need to incorporate a UI robot to check on this in the admin
-    ${exit}                     write  top
-
-#WLAN Guest 2.4g: Enter  all the security wpa and then back out
-WLAN Guest 2.4g: Enter security WPA and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g  WPA  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa_in_out
-    [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  security wpa
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#    (config-if-wlan-2.4g-wpa)#
-    #use top to go all the way to global configuration
-    ${output}=                  write  top
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (global)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa)#     (config)#   (config-if-wlan-guest-2.4g)#
-    #use one exit to go back to (config-if-wlan-guest-2.4g)#
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
-    ${output}=                  write  security wpa
-    sleep                       1
-    ${output}=                  write   exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
-    should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa)#  (config-if-wlan-2.4g-wpa)#     (config)#    (global)#
-
-WLAN Guest 2.4g: Enter security WPA2 and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_in_out
-    [Documentation]             Fire off the "security" for wpa2 - WPA2 Personal and then back out
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  security wpa2
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa2)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#
-    #use top to go all the way to global configuration
-    ${output}=                  write  top
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (global)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#   (config-if-wlan-guest-2.4g-wpa2)#
-    #use one exit to go back to (config-if-wlan-guest-2.4g)#
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
-    ${output}=                  write  security wpa2
-    sleep                       1
-    ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa2)#     (config)#    (global)#
-
-WLAN Guest 2.4g: Enter security WPA3 and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_in_out
-    [Documentation]             Fire off the "security" for wpa3 - WPA3 Personal and then back out
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  security wpa3
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa3)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#
-    #use top to go all the way to global configuration
-    ${output}=                  write  top
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (global)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa3)#     (config)#   (config-if-wlan-guest-2.4g-wpa3)#
-    #use one exit to go back to (config-if-wlan-guest-2.4g)#
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
-    ${output}=                  write  security wpa3
-    sleep                       1
-    ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
-    should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3)#    (config-if-wlan-2.4g-wpa3)#     (config)#    (global)#
-
-WLAN Guest 2.4g: Enter security WPA12 Mix and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_in_out
-    [Documentation]             Fire off the "security" for wpa12_mix - WPA/WPA2 Mix Mode Personal and then back out
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  security wpa12_mix
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa12-mix)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g-wpa12-mix)#
-    #use top to go all the way to global configuration
-    ${output}=                  write  top
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (global)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#     (config)#   (config-if-wlan-guest-2.4g-wpa12-mix)#
-    #use one exit to go back to (config-if-wlan-guest-2.4g)#
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
-    ${output}=                  write  security wpa12_mix
-    sleep                       1
-    ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix)#    (config-if-wlan-2.4gx)#     (config)#    (global)#
-
-WLAN Guest 2.4g: Enter security WPA23 mix and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa23_mix_in_out
-    [Documentation]             Fire off the "security" for wpa23_mix - WPA2/WPA3 Mix Mode Personal
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  security wpa23_mix
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa23-mix)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g-wpa23-mix)#
-    #use top to go all the way to global configuration
-    ${output}=                  write  top
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (global)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#     (config)#   (config-if-wlan-guest-2.4g-wpa23-mix)#
-    #use one exit to go back to (config-if-wlan-guest-2.4g)#
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
-    ${output}=                  write  security wpa23_mix
-    sleep                       1
-    ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa23-mix)#    (config-if-wlan-guest-2.4g-wpa23-mix)#     (config)#    (global)#
-
-WLAN Guest 2.4g: Enter security WPA2 WLAN Guest 2.4g: Enterprise and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa2_enterprise_in_out
-    [Documentation]             Fire off the "security" for wpa2_enterprise - WPA2 WLAN Guest 2.4g: Enterprise and then back out
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  security wpa2_enterprise
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa2-ent)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g)#
-    #use top to go all the way to global configuration
-    ${output}=                  write  top
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (global)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#   (config-if-wlan-guest-2.4g)#    (config-if-wlan-guest-2.4g-wpa2-ent)#
-    #use one exit to go back to (config-if-wlan-guest-2.4g)#
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
-    ${output}=                  write  security wpa2_enterprise
-    sleep                       1
-    ${output}=                  write  exit
-    #${output}=                  read
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config-if-wlan-guest-2.4g-wpa2-ent)#     (config)#    (global)#
-
-WLAN Guest 2.4g: Enter security WPA3 WLAN Guest 2.4g: Enterprise and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa3_enterprise_in_out
-    [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 WLAN Guest 2.4g: Enterprise and then back out
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  security wpa3_enterprise
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa3-ent)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g-wpa3-ent)#
-    #use top to go all the way to global configuration
-    ${output}=                  write  top
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (global)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa3-ent)#     (config)#   (config-if-wlan-guest-2.4g)#    (config-if-wlan-guest-2.4g-wpa3-ent)#
-    #use one exit to go back to (config-if-wlan-guest-2.4g)#
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
-    ${output}=                  write  security wpa3_enterprise
-    sleep                       1
-    ${output}=                  write  exit
-    ${output}=                  read
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
-    should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa3-ent)#     (config-if-wlan-2.4g-wpa3-ent)#     (config)#    (global)#
-
-WLAN Guest 2.4g: Enter security WPA12 mix WLAN Guest 2.4g: Enterprise and then back out
-    [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_security_wpa12_mix_enterprise_in_out
-    [Documentation]             Fire off the "security" for wpa12_mix_enterprise - WPA/WPA2 Mix Mode WLAN Guest 2.4g: Enterprise
-    ${exit}                     write  top
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-    sleep                       1
-    ${output}=                  write  security wpa12_mix_enterprise
-    sleep                       1
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#
-    should not contain          ${output}   (global)#     (config)#   (config-if-wlan-guest-2.4g)#  (config-if-wlan-2.4g-wpa12-mix-ent)#
-    #use top to go all the way to global configuration
-    ${output}=                  write  top
-    sleep                       1
-    set client configuration    prompt=#
-    ${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (global)#
-    should not contain          ${output}   (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#   (config-if-wlan-guest-2.4g)#   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#
-    #use one exit to go back to (config-if-wlan-guest-2.4g)#
-    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    #sleep                       1
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> WLAN Guest 2.4g
-    #sleep                       1
-    ${output}=                  write  security wpa12_mix_enterprise
-    sleep                       1
-    ${output}=                  write  exit
-    sleep                       1
-    ${output}=                  read
-    #set client configuration    prompt=#
-    #${output}=                  read until prompt
-    should not be empty         ${output}
-    should contain              ${output}   (config-if-wlan-guest-2.4g)#
-    should not contain          ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#    (config-if-wlan-2.4g-wpa12-mix-ent)#     (config)#    (global)#
 
 #WLAN Guest 2.4g: WPA
 WLAN Guest 2.4g: WPA Enter WPA personal
@@ -7994,30 +7618,9 @@ LAN0 Bridge DHCP: ip Assign delete
     ${exit}                     write  read
     sleep                       1
     ${exit}                     write  top  #reset the command line to global
+    sleep                       1
     ${restore}                  write  restore
 
-
-#Execute template
-#    [Tags]                      template
-#    [Documentation]             Update , apply and then show -
-#    ${exit}                     write  top
-#    ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-#    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
-#    sleep                       1
-#    ${output}=                 write   show
-#    sleep                       1   loglevel=NONE
-#    ${output}=                 write   apply
-#    #sleep                      1
-#    ${output}=                 write   show
-#    sleep                       1   loglevel=NONE
-#    ${output}=                  read
-#    should contain              ${output}   DNS
-#    should not be empty         ${output}
-#    should not contain          ${output}   ©
-#    should not contain          ${output}   ®
-#    should contain              ${output}   DNS
-#    #should contain             ${output}   (config-if-wan0-dhcp)#
-#    ${exit}                     write  top
 
 #Execute reboot
 #    [Tags]              Global     reboot
@@ -8030,6 +7633,7 @@ LAN0 Bridge DHCP: ip Assign delete
 #Execute Restore
 #    [Tags]              Global     restore
 #    [Documentation]     Execute the restore & return all of the processes
+#    ${execute}=          write              top
 #    ${execute}=          write              restore
 #    set client configuration  prompt=#
 #    ${output}=         read until prompt
