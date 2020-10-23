@@ -1,29 +1,37 @@
 *** Settings ***
-Documentation     A test suite with a single Gherkin style test.
-...
-...               This test is functionally identical to the example in
-...               valid_login.robot file.
-Resource          resourceLocal.robot
-Test Teardown     Close Browser
 Documentation     Use this to set the CLI access and also set the admin password to admin
 
-Suite Setup       Open Browser To Login Page
-Suite Teardown    Close Browser
-Test Setup        Go To Login Page
+Suite Setup         Open Browser To Login Page
+Suite Teardown      Close Browser
+#Test Setup        Go To Login Page
+Library             SeleniumLibrary
+Library             SSHLibrary
+Library             Process
 Resource          resourceLocal.robot
 
 
 *** Test Cases ***
-Valid Login
-    Given browser is opened to login page
-    When user "demo" logs in with password "mode"
-    Then
 
-*** Keywords ***
-Browser is opened to login page
-    Open browser to login page
+Admin logs in with factory password
+    [Tags]                   factory_login
+    Input username
+    Input Factory Password
+    Click the Login
 
-User "${username}" logs in with password "${password}"
-    Input username    ${USERNAME}
-    Input password    ${FACTORY PASSWORD}
-    Submit credentials
+Land on Askey EIG GUI
+    [Tags]                   factory_login
+    Click on System Settings
+    Click on Password & Timezone
+    Click on Old Password
+    Click on New Password
+    Click on Confirm Password
+    Click on Save Button
+    Sleep                   8
+
+SSH Keygen
+    [Tags]                  keygen
+    #run process           /Users/ryap/workspace/WebDemo/eigcli/keygen.sh      yes     admin
+    #start process           /workspace/WebDemo/eigcli/keygen.sh      yes     admin
+    Open SSH
+    run process           /Users/ryap/workspace/WebDemo/eigcli/keygen.sh      yes     admin
+    #Send keygen
