@@ -9,4 +9,4 @@ Also optional, download at least the firefrox driver for each OS: https://github
 and chrome driver: https://chromedriver.chromium.org/ for future / accompanying GUI team up verification 
 asides from just pure SSH CLI command line confirmations
 
-NOTE: please ask me for the resourceLocal.robot file sinc eit contains sensitive username & password information which you will need to customize since there is no generic test user accounts for now.
+NOTE: The resourceLocal.robot file sinc eit contains sensitive username & password information which you will need to customize since there is no generic test user accounts for now.
