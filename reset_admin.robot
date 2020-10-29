@@ -1,5 +1,7 @@
 *** Settings ***
-Documentation     Use this to set the CLI access and also set the admin password to admin
+Documentation       Author: Roy Yap
+...                 Created: May 1 2020
+...                 Use this to set the CLI access and also set the admin password to admin
 
 Suite Setup         Open Browser To Login Page
 Suite Teardown      Close Browser
@@ -28,10 +30,11 @@ Land on Askey EIG GUI
     Click on Save Button
     Sleep                   8
 
-SSH Keygen
-    [Tags]                  keygen
+#paused for now since it is not working, may need ot build a python function for this one to tap into shell method
+#SSH Keygen
+#    [Tags]                  keygen
     #run process           /Users/ryap/workspace/WebDemo/eigcli/keygen.sh      yes     admin
     #start process           /workspace/WebDemo/eigcli/keygen.sh      yes     admin
-    Open SSH
-    run process           /Users/ryap/workspace/WebDemo/eigcli/keygen.sh      yes     admin
+#    Open SSH
+#    run process           /Users/ryap/workspace/WebDemo/eigcli/keygen.sh      yes     admin
     #Send keygen

@@ -1,16 +1,18 @@
 *** Settings ***
-Documentation          This executes the Robot SSH CLI command for various configuration in the admin profile on a remote machine (the EIG)
-...                    and getting its output.
+Documentation          Author: Roy Yap
+...                    Created: May 1 2020
+...                    This executes the Robot SSH CLI command for various configuration in the admin profile
+...                    on a remote machine (the EIG) and getting its output.
 ...
 ...                    Notice how connections are handled as part of the suite setup and
 ...                    teardown. This saves some time when executing several test cases.
 
-Library                Process
-Library                SSHLibrary
-Library                SeleniumLibrary
-Suite Setup            Open Connection And Log In
-Suite Teardown         Close All Connections
-Resource               resourceLocal.robot
+Library                Process              #needed to call python for AR ping
+Library                SSHLibrary           #to be able to do all things SSH
+Library                SeleniumLibrary      #to be able to call web gui steps
+Suite Setup            Open Connection And Log In   #opens up the SSH
+Suite Teardown         Close All Connections        #close out teh ssh connection
+Resource               resourceLocal.robot          #call to the varibales, urls, and step details
 
 *** Test Cases ***
 Execute Hello World Echo Command And Verify Output
@@ -1274,7 +1276,7 @@ WLAN Guest 2.4g WPA: Enter security WPA and then back out
     [Documentation]             Fire off the "security" for wpa - WPA Personal and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
-    ${output}=                 write   interface wifi guest 2.4g     #to get into Global Connfiguration -> System configuration -> Ethernet 0
+    ${output}=                 write   interface wifi guest 2.4g         #to get into Global Connfiguration -> System configuration -> Ethernet 0
     sleep                       1
     ${output}=                  write  security wpa
     sleep                       1
@@ -7349,20 +7351,23 @@ LAN0 Bridge DHCP: Disable DHCP
 LAN0 Bridge DHCP: Enable DHCP
     [Tags]                      Global  Config  bridge  LAN  DHCP   DHCP_enable
     [Documentation]             Execute the enable & then ensure that DHCP is enabled
-    ${execute}=                 write   top    #reset it to ensure we start form global level
+    ${execute}=                 write   top    #reset it to ensure we start from global level
     ${execute}=                 write   configure   #system config level
+    sleep                       1
     ${execute}=                 write   interface bridge lan0   #bridge lan0 level
+    sleep                       1
     ${execute}=                 write   dhcp   #dhcp level
     sleep                       1
     ${execute}=                 write   enable     #fire off the enable message
     sleep                       1
-    ${dhcp}=                     write   apply   #show the enable
+    ${enable}=                  write   apply   #apply the enable
     sleep                       1
-    ${dhcp}=                     write   show   #apply it
-    sleep                       1
+    ${enable}=                  write   show   #show it
     #need to consider the "apply" command to make it permanent & how to reset it
-    ${enable}=                 read    #read the result, should be DHCP should be enabled
     sleep                       1
+    #${enable}=                  read    #read the result, DHCP should be enabled
+    set client configuration    prompt=#
+    ${enable}=                  read until prompt
     should not be empty         ${enable}
     should not contain          ${enable}   -ash: ntp: not found    -ash: show ntp: not found   DHCP_Service=Disable
     should not contain          ${enable}   ERROR    error
@@ -7641,11 +7646,13 @@ LAN0 Bridge DHCP: ip Assign delete
 
 #   logout from global configuration CLI by sending "logout"
 
+
+
+
 *** Keywords ***
 
 Suite Setup
     Open Connection And Log In
-
 
 Open Connection And Log In
    Open Connection     ${HOST}
