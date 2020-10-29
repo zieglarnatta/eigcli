@@ -1,21 +1,17 @@
 *** Settings ***
-Documentation
-
-#Suite Setup            Open Connection And Log In
-#Suite Teardown         Close All Connections
-
+Documentation           Author: Roy Yap
+...                     Created: May 1 2020
 
 *** Variables ***
 ${HOST}                10.0.0.9    #192.168.0.1      #100.194.181.123 in case the local IP doesn't work
 ${USERNAME}            admin            #sysconsole
-${PASSWORD}            admin            #15509117
+${PASSWORD}            admin            #15509117 specific to a given device
 ${LOGIN URL}           http://${HOST}/
 ${FACTORY PASSWORD}     42949b79        #specific to my device
 ${BROWSER}              Chrome
 ${DELAY}                1
-#${server}               ~/Users/ryap/workspace/WebDemo/demoapp/server.py
-${server}               ~/workspace/WebDemo/demoapp/server.py       #local python for AR round trip pings
-${endserver}            exit()      #exit form python
+${server}               ~/workspace/WebDemo/demoapp/server.py    #local python for AR round trip pings, make sure you have the WebDemo else obtain it from https://github.com/robotframework/WebDemo
+${endserver}            exit()      #exit from python server
 
 
 *** Keywords ***
@@ -27,28 +23,28 @@ Suite Teardown
     Close All Connections
 
 Open Connection And Log In
-   Open Connection     ${HOST}
-   Login               ${USERNAME}        ${PASSWORD}
+   Open Connection              ${HOST}
+   Login                        ${USERNAME}        ${PASSWORD}
 
 Close All Connections
-    Write               logout
+    Write                       logout
 
 Open Browser To Login Page
-    Open Browser    ${LOGIN URL}    ${BROWSER}
+    Open Browser                ${LOGIN URL}    ${BROWSER}
     Maximize Browser Window
-    Set Selenium Speed    ${DELAY}
+    Set Selenium Speed          ${DELAY}
 
 Input Username
-    Input Text    loginName    ${USERNAME}
+    Input Text                  loginName           ${USERNAME}
 
 Input Password
-    Input Text    loginPWD    ${PASSWORD}
+    Input Text                  loginPWD            ${PASSWORD}
 
 Input Factory Password
-    Input Text    loginPWD    ${FACTORY PASSWORD}
+    Input Text                  loginPWD            ${FACTORY PASSWORD}
 
 Click the Login
-    Click Button    login-submit
+    Click Button                    login-submit
 
 Land on Askey Dashboard page
     Wait until Element is visible           nav-fab
@@ -60,7 +56,7 @@ Click on System Settings
     wait until element is visible           apply
 
 Click on Password & Timezone
-    #Click element                           xapth://*[@id="systemcfg"]/a/span
+    #Click element                           xpath://*[@id="systemcfg"]/a/span
     wait until element is visible           loginName
     wait until element is visible           old_pwd
     wait until element is visible           sysPwd
@@ -86,14 +82,14 @@ Click on Status
     Click element                       status_info
 
 Click on wireless
-    seleniumlibrary.click element    wireless
+    seleniumlibrary.click element       wireless
 
 Click on 2.4g
-    seleniumlibrary.click element    href2_4G
+    seleniumlibrary.click element       href2_4G
 
 Click Expert
-    wait until element is visible   reload_page_expert
-    Click element                   xpath://*[@id="reload_page_expert"]/span
+    wait until element is visible       reload_page_expert
+    Click element                       xpath://*[@id="reload_page_expert"]/span
 
 Click Services
     Click element                   goto_usb
@@ -109,6 +105,7 @@ Click Yes radio button
     Wait until element is visible   xpath://*[@id="collapse-0"]/div/div[1]/div/ul/li[1]/div/label
     Click element                   xpath://*[@id="collapse-0"]/div/div[1]/div/ul/li[1]/div/label
 
+#from reset admin
 Open SSH
     Open Connection     ${HOST}
 
