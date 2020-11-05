@@ -1123,7 +1123,7 @@ WLAN 2.4g WPA2 enterprise: Enter security WPA2 enterprise and then back out
     should not contain          ${output}   (config-if-wlan-2.4g-wpa2-ent)#     (config)#    (global)#
 
 WLAN 2.4g WPA3 enterprise: Enter security WPA3 enterprise and then back out
-    [Tags]                      Config  WLAN    WLAN_2_$g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_enterprise_in_out
+    [Tags]                      Config  WLAN    WLAN_2_4g  interface_wifi_2_4g  interface_wifi_2_4g_security_wpa3_enterprise_in_out
     [Documentation]             Fire off the "security" for wpa3_enterprise - WPA3 Enterprise and then back out
     ${exit}                     write  top
     ${output}=                 write   configure     #to get into Global Connfiguration -> System configuration
