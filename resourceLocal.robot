@@ -1,15 +1,18 @@
 *** Settings ***
 Documentation           Author: Roy Yap
 ...                     Created: May 1 2020
+...                     Last Edited: Mar 16 2021
 
 *** Variables ***
-${HOST}                10.0.0.9    #192.168.0.1      #100.194.181.123 in case the local IP doesn't work
+${HOST}                192.168.0.1   #10.0.0.9      #100.194.181.123 in case the local IP doesn't work
 ${USERNAME}            admin            #sysconsole
-${PASSWORD}            admin            #15509117 specific to a given device
+${PASSWORD}            admin            #specific to a given device look at the white sticker on EIG
 ${LOGIN URL}           http://${HOST}/
-${FACTORY PASSWORD}     42949b79        #specific to my device
-${BROWSER}              Chrome
-${DELAY}                1
+${FACTORY PASSWORD}            #specific to my device
+#${BROWSER}             Firefox  #uncomment this to test via FF
+${BROWSER}             headlessfirefox   #uncomment this to use headlessFF
+#${BROWSER}             Chrome   #uncomment this to test via chrome
+${DELAY}                0.5
 ${server}               ~/workspace/WebDemo/demoapp/server.py    #local python for AR round trip pings, make sure you have the WebDemo else obtain it from https://github.com/robotframework/WebDemo
 ${endserver}            exit()      #exit from python server
 
@@ -19,6 +22,7 @@ ${endserver}            exit()      #exit from python server
 
 Suite Setup
     Open Connection And Log In
+
 Suite Teardown
     Close All Connections
 
@@ -30,7 +34,8 @@ Close All Connections
     Write                       logout
 
 Open Browser To Login Page
-    Open Browser                ${LOGIN URL}    ${BROWSER}
+    #Open Browser                ${LOGIN URL}    ${BROWSER}   #uncomment to use regular, choose only either headless else regular, not both
+    Open Browser                ${LOGIN URL}    ${BROWSER}  add_argument("--headless");add_argument("--start-maximized")   #uncomment to use headless
     Maximize Browser Window
     Set Selenium Speed          ${DELAY}
 

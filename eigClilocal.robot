@@ -12,7 +12,8 @@ Library                SSHLibrary           #to be able to do all things SSH
 Library                SeleniumLibrary      #to be able to call web gui steps
 Suite Setup            Open Connection And Log In   #opens up the SSH
 Suite Teardown         Close All Connections        #close out teh ssh connection
-Resource               resourceLocal.robot          #call to the varibales, urls, and step details
+Resource               resourceLocal.robot          #call to the varibles, urls, and step details
+#Resource               local.robot
 
 *** Test Cases ***
 Execute Hello World Echo Command And Verify Output
@@ -48,7 +49,7 @@ Global: Ping on 8.8.8.8
     [Tags]                  Global     ping        8.8.8.8
     [Documentation]         Execute ping on 8.8.8.8 CLI and return the ping hops
     ...                     The keyword returns the standard output by default.
-    write                   ping 10.0.0.10    #ping 8.8.8.8
+    write                   ping 192.168.0.157      #8.8.8.8   #10.0.0.10
     Sleep                   6
     ${output}=              read until      0% packet loss
     should not be empty     ${output}
@@ -202,7 +203,7 @@ WAN0 Configuration: Wan0 Mode and back out via exit & top
     should not contain          ${output}   (config)#
     should contain              ${output}   (config-if-wan0)#
     should contain              ${output}   DHCP Configuration:
-    should contain              ${output}   DNS_AUTO=Disable
+    should contain              ${output}   DNS_AUTO=Enable
     should contain              ${output}   HOST_NAME=
     should contain              ${output}   QUERY_MODE=Agressive
     should contain              ${output}   MTU_AUTO=Enable
@@ -4665,7 +4666,7 @@ WLAN 5g WPA12 mix enterprise: maxclient
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  MAX_CLIENTS=117
     ${exit}                     write  top
-    
+
 
 WLAN 5g WPA12 mix enterprise: Rekey key rotation interval
     [Tags]                      Config   WLAN  WLAN_5g   interface_wifi_5g  interface_wifi_5g_wpa12_mix_enterprise_rekey
@@ -4698,7 +4699,7 @@ WLAN 5g WPA12 mix enterprise: Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
-    
+
 
 #WLAN Guest 5g
 WLAN Guest 5g: Enter WLAN Guest 5g and then back out to Global
@@ -5660,7 +5661,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Enter wpa12_mix_enterprise
     should contain              ${output}   (config-if-wlan-guest-2.4g-wpa12-mix-ent)#
     should not contain          ${output}   (global)#     (config)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
-    
+
 WLAN Guest 2.4g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g     interface_wifi_guest_2_4g_wpa12_mix_enterprise_ssid
     [Documentation]             Fire off the ssid  and then verify it's reflected
@@ -5695,7 +5696,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: SSID Hide enabled
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-2.4g)#
     ${exit}                     write  top
-    
+
 WLAN Guest 2.4g WPA12 mix enterprise: SSID broadcast
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_ssid_broadcast
     [Documentation]             Fire off the bcast and check that wifi 2.4g is SSID is now broadcasting
@@ -5712,7 +5713,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: SSID broadcast
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}                     write  top
-    
+
 
 WLAN Guest 2.4g WPA12 mix enterprise: Server IP
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_server
@@ -5730,7 +5731,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Server IP
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  SERVER_IP=192.168.0.252
     ${exit}                     write  top
-    
+
 
 WLAN Guest 2.4g WPA12 mix enterprise: Port forwarding
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_port
@@ -5748,7 +5749,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Port forwarding
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  PORT_FORWARD=1808
     ${exit}                     write  top
-    
+
 
 WLAN Guest 2.4g WPA12 mix enterprise: Connection secret
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_secret
@@ -5766,7 +5767,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Connection secret
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  CONNECTION_SECRET=BestUnderwaterLife
     ${exit}                     write  top
-    
+
 
 WLAN Guest 2.4g WPA12 mix enterprise: maxclient
     [Tags]                      Config   WLAN  WLAN_guest_2_4g  interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_maxclient
@@ -5796,7 +5797,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: maxclient
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  MAX_CLIENTS=23
     ${exit}                     write  top
-    
+
 
 WLAN Guest 2.4g WPA12 mix enterprise: Rekey key rotation interval
     [Tags]                      Config   WLAN  WLAN_guest_2_4g   interface_wifi_guest_2_4g  interface_wifi_guest_2_4g_wpa12_mix_enterprise_rekey
@@ -5829,7 +5830,7 @@ WLAN Guest 2.4g WPA12 mix enterprise: Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-2.4g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
-    
+
 
 #WLAN Guest 5g: WPA
 WLAN Guest 5g: WPA Enter WPA personal
@@ -6566,8 +6567,8 @@ WLAN Guest 5g WPA12 mix enterprise: Set SSID for wpa12_mix_enterprise
     should contain              ${output}   SSID=Snorks
     should not contain          ${output}   (config)#   (global)#   (config-if-wlan-5g)#
     ${exit}                     write  top
-    
-    
+
+
 
 WLAN Guest 5g WPA12 mix enterprise: SSID Hide enabled
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_ssid_hide
@@ -6585,8 +6586,8 @@ WLAN Guest 5g WPA12 mix enterprise: SSID Hide enabled
     should contain              ${output}  HIDE_SSID=Enable
     should not contain          ${output}  No match found   Syntax error: Illegal parameter   (global)#   (config-if-wlan-5g)#
     ${exit}                     write  top
-    
-    
+
+
 
 WLAN Guest 5g WPA12 mix enterprise: SSID broadcast
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_ssid_broadcast
@@ -6604,7 +6605,7 @@ WLAN Guest 5g WPA12 mix enterprise: SSID broadcast
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  HIDE_SSID=Disable
     ${exit}                     write  top
-    
+
 
 WLAN Guest 5g WPA12 mix enterprise: Server IP
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_server
@@ -6622,7 +6623,7 @@ WLAN Guest 5g WPA12 mix enterprise: Server IP
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  SERVER_IP=192.168.0.252
     ${exit}                     write  top
-    
+
 
 WLAN Guest 5g WPA12 mix enterprise: Port forwarding
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_port
@@ -6640,7 +6641,7 @@ WLAN Guest 5g WPA12 mix enterprise: Port forwarding
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  PORT_FORWARD=1808
     ${exit}                     write  top
-    
+
 
 WLAN Guest 5g WPA12 mix enterprise: Connection secret
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_secret
@@ -6658,7 +6659,7 @@ WLAN Guest 5g WPA12 mix enterprise: Connection secret
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  CONNECTION_SECRET=BestUnderwaterLife
     ${exit}                     write  top
-    
+
 
 WLAN Guest 5g WPA12 mix enterprise: maxclient
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_maxclient
@@ -6688,7 +6689,7 @@ WLAN Guest 5g WPA12 mix enterprise: maxclient
     should not contain          ${output}  No match found   Syntax error: Illegal parameter  (global)#   (config-if-wlan-5g)#
     should contain              ${output}  MAX_CLIENTS=21
     ${exit}                     write  top
-    
+
 
 WLAN Guest 5g WPA12 mix enterprise: Rekey key rotation interval
     [Tags]                      Config   WLAN  WLAN_guest_5g   interface_wifi_guest_5g  interface_wifi_guest_5g_wpa12_mix_enterprise_rekey
@@ -6721,7 +6722,7 @@ WLAN Guest 5g WPA12 mix enterprise: Rekey key rotation interval
     should not contain          ${output}  No match found   Syntax error: Illegal parameter     (global)#   (config-if-wlan-5g)#
     should contain              ${output}  KEY_ROTATION_INTERVAL=3579s
     ${exit}                     write  top
-    
+
 
 #exit from WLAN wpa12_mix_enterprise 5g
 WLAN Guest 5g WPA12 mix enterprise: Exit from WLAN 5g wpa12_mix_enterprise
